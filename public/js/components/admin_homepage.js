@@ -49,6 +49,80 @@ var LokerJawaBatamSelect = React.createClass({
     }
 });
 
+var RequireDescriptionRow = React.createClass({
+    onClickRemove: function(){
+        let item = this.props.item
+        let requirement = this.props.requirement
+
+        dispatcher.dispatch({
+            actionType: 'post-remove-require-description',
+            key: item.key,
+            requirementKey: requirement.key
+        })
+    },
+    render: function(){
+        let key = this.props.descriptionKey
+        let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
+        let prefixName = this.props.inputName + "[" + key + "]"
+        let requireDescriptionInputName = prefixName + "[description]"
+
+        return(
+            <div className="form-group">
+                <div className="col-sm-3"></div>
+                <label className="col-sm-2">Kualifikasi Pekerjaan :</label>
+                <div className="col-sm-6">
+                    <textarea name={requireDescriptionInputName} className="form-control input-sm" rows="3" required={true}  />
+                </div>
+                <div className="col-sm-1 text-left">
+                    <i style={removeIconStyle} className="fa fa-times" onClick={this.onClickRemove}  />
+                </div>
+            </div>
+        )
+    }
+})
+
+var RequireDescriptions = React.createClass({
+    propTypes: {
+        requireDescriptions: PropTypes.array,
+        requirement: PropTypes.object
+    },
+    onClickAddDescription: function(){
+        let requirement = this.props.requirement
+
+        dispatcher.dispatch({
+            actionType: 'post-add-blank-require-description',
+            requirementKey: requirement.key
+        })
+    },
+    render: function(){
+        let inputName = this.props.inputName
+        let requireDescriptions = this.props.requireDescriptions
+        let requirement = this.props.requirement
+
+        return(
+            <div>
+                {requireDescriptions.map(function(item, key){
+                    return(
+                        <RequireDescriptionRow key={item.key} item={item} 
+                            requirement={requirement}
+                            inputName={inputName} 
+                            descriptionKey={key} />
+                    )
+                })}
+                <div className="form-group">
+                    <div className="col-sm-3"></div>
+                    <div className="col-sm-8">
+                        <button type="button" className="btn btn-warning btn-xs pull-right" 
+                            onClick={this.onClickAddDescription}>
+                            Tambah kualifikasi Pekerjaan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+})
+
 var DescriptionRow = React.createClass({
     onClickRemove: function(){
         let item = this.props.item
@@ -135,16 +209,21 @@ var ItemRequirement = React.createClass({
         let key = this.props.inputKey
         let item = this.props.item
         let workDescriptions = item.workDescriptions
+        let requireDescriptions = item.requireDescriptions
         let educationLevelTypes = this.props.educationLevelTypes
+        let genderOptions = this.props.genderOptions
         let prefixName = this.props.inputName + "[" +  key  + "]"
         let positionInputName = prefixName + "[position_name]"
         let positionIdInputName = prefixName + "[position_id]"
+        let genderInputName = prefixName + "[gender]"
         let ageMinInputName = prefixName + "[age_min]"
         let ageMaxInputName = prefixName + "[age_max]"
+        let experienceInputName = prefixName + "[experience]"
         let educationLevelIdInputName = prefixName + "[education_level_id]"
         let descriptionInputName = prefixName + "[description]"
         let salaryInputName = prefixName + "[salary]"
         let workDescriptionInputName = prefixName + "[work_description]"
+        let requireDescriptionInputName = prefixName + "[require_description]"
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
 
         return (
@@ -166,6 +245,17 @@ var ItemRequirement = React.createClass({
                     <label className="col-sm-1 text-right">Rp.</label>
                     <div className="col-sm-5">
                         <input type="number" step="50000" name={salaryInputName} className="form-control input-sm" />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <div className="col-sm-3"></div>
+                    <label className="col-sm-2">Jenis Kelamin :</label>
+                    <div className="col-sm-2">
+                        <LokerJawaBatamSelect
+                            classNames="form-control input-sm" 
+                            id="gender"
+                            name={genderInputName}
+                            options={genderOptions} />
                     </div>
                 </div>
                 <div className="form-group">
@@ -193,12 +283,18 @@ var ItemRequirement = React.createClass({
                 </div>
                 <div className="form-group">
                     <div className="col-sm-3"></div>
-                    <label className="col-sm-2">Keterangan :</label>
-                    <div className="col-sm-6">
-                        <textarea name={descriptionInputName} className="form-control input-sm" rows="8" required={true} />
+                    <label className="col-sm-2">Pengalaman :</label>
+                    <div className="col-sm-2">
+                        <input type="number" className="form-control" min={0} step={1} 
+                            name={experienceInputName} />
+                    </div>
+                    <div className="col-sm-1">
+                        Tahun
                     </div>
                 </div>
-                <WorkDescription inputName={workDescriptionInputName} 
+                <RequireDescriptions inputName={requireDescriptionInputName} 
+                    requireDescriptions={requireDescriptions} requirement={item} />
+                <WorkDescription inputName={requireDescriptionInputName} 
                     workDescriptions={workDescriptions} requirement={item} />
             </div>
         )
@@ -217,6 +313,7 @@ var Requirement = React.createClass({
     render: function(){
         let requirements = this.props.requirements
         let educationLevelTypes = PostStore.getEducationLevelTypes()
+        let genderOptions = PostStore.getGenderOptions()
         let inputName = "requirements"
         let i = 0
         
@@ -226,7 +323,9 @@ var Requirement = React.createClass({
                     requirements.map(function(item, key) {
                            return(
                             <ItemRequirement key={item.key} item={item} inputKey={key}
-                                educationLevelTypes={educationLevelTypes} inputName={inputName} />
+                                educationLevelTypes={educationLevelTypes} 
+                                genderOptions={genderOptions}
+                                inputName={inputName} />
                         )
                     })
                 }

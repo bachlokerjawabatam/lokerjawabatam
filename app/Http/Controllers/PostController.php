@@ -50,10 +50,13 @@ class PostController extends Controller
             $loker_infos = Post::where('province_id', '<>', 1)->get();
         }else if ($content_type == 'blog'){
             //get blog lists content
+        }else{
+            $loker_infos = Post::where('province_id', 1)->get();
         }
-    	return view('test', [
-    		'content_type' => $content_type,
-    		'loker_infos' => $loker_infos->toJson()
-    	]);
+
+        return view('test', [
+            'content_type' => $content_type,
+            'loker_infos' => $loker_infos->toJson()
+        ]);
     }
 }

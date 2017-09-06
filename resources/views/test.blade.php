@@ -9,11 +9,12 @@
     <script type="text/babel" src="{{URL::asset('js/components/landing_page.js')}}"></script>
     <script type="text/javascript">
         var sessionContentType = "{!! $content_type !!}"
+        let loker_infos = _.isEmpty(sessionContentType) ? [] : {!! $loker_infos !!}
         
         dispatcher.dispatch({
             actionType: 'homepage-initialization',
             contentType: sessionContentType,
-            lokerInfos: {!! $loker_infos!!}
+            lokerInfos: lokerInfos
         })
     </script>
     <script type="text/babel">

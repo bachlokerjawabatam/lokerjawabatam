@@ -11,13 +11,20 @@ var blankItem = {
                     positionId: null,
                     educationLevelIds: null,
                     remark: null,
-                    workDescriptions: []
+                    workDescriptions: [],
+                    requireDescriptions: []
                 }
 
 var blankDescription = {
                     id: null,
                     description: null
                 }
+
+var blankRequireDescription = {
+					id: null,
+					description: null
+				}
+
 var post = {
 				id: null,
 				postDate: null,
@@ -33,6 +40,7 @@ var cities = []
 var companyTypes = []
 var provinceSelected = {}
 var provinceCities = []
+var genderOptions = [{id: 1, name: "Pria"}, {id: 2, name: "Wanita"}]
 
 window.PostStore = _.assign(new EventEmitter(),{ 
 	getPost: function(){ return post },
@@ -41,6 +49,7 @@ window.PostStore = _.assign(new EventEmitter(),{
 	getProvinceSelected: function(){ return provinceSelected },
 	getProvinceCities: function(){ return provinceCities },
 	getCompanyTypes: function(){ return companyTypes },
+	getGenderOptions: function(){ return genderOptions },
 
 	emitChange: function(){
 		return this.emit(CHANGE_EVENT)
@@ -62,11 +71,14 @@ dispatcher.register(
 
 			return PostStore.emitChange()
 		}else if (payload.actionType == 'post-set-initialization'){
+			let _requireDescription = Object.assign({}, blankRequireDescription)
+			_requireDescription.key = keygen.getUniqueKey()
 			let _workDescription = Object.assign({}, blankDescription)
 			_workDescription.key = keygen.getUniqueKey()
 			let _requirement = Object.assign({}, blankItem) 
 			_requirement.key = keygen.getUniqueKey()
 			_requirement.workDescriptions.push(_workDescription)
+			_requirement.requireDescriptions.push(_requireDescription)
 			_.assign(post, {key: keygen.getUniqueKey(), requirements: [ _requirement ]})
 			educationLevelTypes = payload.educationLevelTypes			
 			cities = payload.cities
@@ -109,6 +121,19 @@ dispatcher.register(
 			_requirement.workDescriptions.push(_blankDescription)
 
 			PostStore.emitChange()
+		}else if(payload.actionType == 'post-add-blank-require-description'){
+			//function add blank require description
+			let _blankDescription = Object.assign({}, blankRequireDescription)
+			_blankDescription.key = keygen.getUniqueKey()
+
+			let _requirement = _.find(post.requirements, function(_item){
+				if(_item.key == payload.requirementKey){
+					return true
+				}
+			})
+			_requirement.requireDescriptions.push(_blankDescription)
+
+			PostStore.emitChange()
 		}else if(payload.actionType == 'post-add-blank-requirement'){
 			//function add blank requriement
 			let _requirement = Object.assign({}, blankItem)
@@ -132,6 +157,24 @@ dispatcher.register(
 			})
 
 			let _description = _.remove(_requirement.workDescriptions, function(_item){
+				if(_item.key == _key){
+					return true
+				}
+			})
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-remove-require-description'){
+			//function remove require description
+			let _key = payload.key
+			let _requirementKey = payload.requirementKey
+
+			let _requirement = _.find(post.requirements, function(_item){
+				if(_item.key == _requirementKey){
+					return true
+				}
+			})
+
+			let _description = _.remove(_requirement.requireDescriptions, function(_item){
 				if(_item.key == _key){
 					return true
 				}

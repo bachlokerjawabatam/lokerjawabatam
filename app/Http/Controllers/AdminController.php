@@ -18,6 +18,7 @@ use App\Post;
 use App\Requirement;
 use App\Position;
 use App\WorkDescription;
+use App\RequireDescription;
 
 class AdminController extends Controller
 {
@@ -102,10 +103,12 @@ class AdminController extends Controller
             $_position_name = $params->requirements[$key]['position_name'];
 
             $_requirement = new Requirement;
-            $_requirement->post_id = $post->id; 
+            $_requirement->post_id = $post->id;
+            $_requirement->gender = $params->requirements[$key]['gender']; 
+            $_requirement->experience = $params->requirements[$key]['experience']; 
             $_requirement->age_min = $params->requirements[$key]['age_min'];
             $_requirement->age_max = $params->requirements[$key]['age_max'];
-            $_requirement->description = $params->requirements[$key]['description'];
+            // $_requirement->description = $params->requirements[$key]['description'];
             $_requirement->education_level_id = $params->requirements[$key]['education_level_id'];
 
             if($_position_id){
@@ -123,6 +126,15 @@ class AdminController extends Controller
 
             $_requirement->save();
             $_work_descriptions = $params->requirements[$key]['work_description'];
+            $_require_descriptions = $params->requirements[$key]['require_description'];
+
+            foreach($_require_descriptions as $key => $wd){
+                $_require_description = new RequireDescription;
+                $_require_description->description = $_require_descriptions[$key]['description'];
+                $_require_description->requirement_id = $_requirement->id;
+
+                $_require_description->save();
+            }
 
             foreach($_work_descriptions as $key => $wd){
                 $_work_description = new WorkDescription;

@@ -12,6 +12,7 @@ updated_at
 
 hasMany requirements
 hasMany work_description through requirement
+hasMany require_description through requirement
 belongsTo company
 belongsTo province
 belongsTo city
@@ -31,7 +32,11 @@ class Post extends Model
  	public function work_descriptions(){
  		return $this->hasManyThrough('App\WorkDescription','App\Requirement');
  	}
- 
+    
+    public function require_descriptions(){
+        return $this->hasManyThrough('App\RequireDescription','App\Requirement');
+    }
+
     public function company(){
     	return $this->belongsTo('App\Company');
     }
@@ -46,5 +51,5 @@ class Post extends Model
 
     protected $with = ['requirements', 'company', 'province', 'city'];
     protected $visible = ['id', 'post_date', 'expired_date', 'company_id', 'province_id', 'city_id', 'requirements', 
-                          'province', 'city', 'work_descriptions', 'company', 'created_at'];
+                          'province', 'city', 'company', 'created_at'];
 }
