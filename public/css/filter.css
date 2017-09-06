@@ -1,0 +1,12 @@
+.filter {
+	padding: 3px !important;
+	color: #fff;
+}
+
+.filter .title{
+	font-size: 22px;
+}
+
+.filter span{
+	font-size: 16px;
+}

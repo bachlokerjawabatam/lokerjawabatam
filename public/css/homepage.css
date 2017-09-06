@@ -1,0 +1,136 @@
+.homepage-desktop {
+	font-size: 14px;
+	font-family: segoe ui;
+}
+
+.homepage-desktop .header{ 
+	padding: 0px 0px 10px 20px;
+	background-color: #008c8c;
+	color: #fff;
+}
+.homepage-desktop .strip { height: 4px; width: 100%; background-color: #00c8c8;}
+.homepage-desktop .title { font-size: 55px; margin-left: 20px;}
+.homepage-desktop .sub-title { font-size: 15px; margin: -15px 0px 0px 160px;}
+
+.homepage-desktop .navbar, .filter { 
+	margin: 10px 0px 0px 0px;
+	padding: 10px 0px 0px 30px;
+	min-height: 220px;
+	background-color: #008c8c;
+}
+.homepage-desktop .posting-list { 
+	padding: 0px 20px 0px 0px;
+	margin: 10px 0px 0px -25px;
+	height: 500px;
+	border-right: 2px solid #ededed;
+}
+
+.post-item {
+	width: 100%;
+	margin: 0px 5px 5px 5px;
+	padding: 5px 10px 5px 5px;
+	height: 80px;
+	border: 2px solid #008c8c;
+	border-radius: 3px 3px 20px 3px;
+	cursor: pointer;
+}
+
+.active {
+	background-color: #008c8c;
+	color: #fff;
+}
+
+.post-item .position{
+	font-size: 20px;
+}
+.post-item .company-name{
+	margin-top: -10px;
+	font-size: 14px;
+}
+
+.post-item .location{
+	margin-top: -10px;
+	font-size: 12px;
+}
+
+.post-view .content{
+	font-size: 16px;
+}
+
+.post-view .blank-post{
+	width: 100%;
+	font-size: 120px;
+	padding-top: 100px;
+	text-align: center;
+	color: #008c8c;
+}
+
+.menu-modal-content{
+	width: 800px;
+	margin-left: -100px;
+	margin-top: 150px;
+}
+
+.menu-modal{
+	width: 800px;
+	font-family: segoe ui;
+}
+
+.menu-modal .box-menu-modal{
+	width: 180px;
+	line-height: 100px;
+	border: 2px solid #008c8c;
+	margin: auto;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.menu-modal .title-modal{
+	width: 90%;
+	line-height: 40px;
+	font-size: 28px;
+	padding: 5px;
+	margin: auto;
+	margin-bottom: 30px;
+	margin-top: 20px;
+	text-align: center;
+	border: 2px dashed #008c8c;
+	border-radius: 8px;
+	color: #008c8c;
+}
+
+.menu-modal .box-icon{
+	line-height: 120px;
+	border-radius: 5px 5px 0px 0px;
+}
+
+.menu-modal .box-icon:hover{
+	background-color: #008c8c;
+}
+
+.menu-modal .box-icon:hover i{
+	color: #fff;
+}
+
+.menu-modal .box-icon i{
+	margin-top: 40px;
+	font-size: 60px;
+	color: #008c8c;
+}
+.menu-modal .title{
+	line-height: 50px;
+	font-size: 24px;
+	background-color: #008c8c;
+	color: #fff;
+	border-radius: 0px 0px 5px 5px;
+}
+
+.menu-modal .close-modal i{
+	font-size: 22px;
+	color: #008c8c;
+	cursor: pointer;
+}
+
+.menu-modal .close-modal{
+	float: right;
+}

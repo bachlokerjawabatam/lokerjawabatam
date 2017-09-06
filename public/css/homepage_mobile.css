@@ -1,0 +1,132 @@
+.homepage-mobile{
+	font-family: segoe ui;
+	padding: 0px;
+	width: 100%;
+}
+
+.homepage-mobile .header{
+	width: 100%;
+	padding: 10px 20px 10px 20px;
+	line-height: 100px;
+	font-size: 60px;
+	color: #fff;
+	background-color: #008c8c;
+	z-index: 999;
+}
+
+.homepage-mobile i{
+	margin: 15px 0px 0px 5px;
+	font-size: 70px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.homepage-mobile .navbar-mobile{
+	padding-top: 110px;
+	width: 80%;
+	height: 3000px;
+	background-color: #00bbbb;
+	position: fixed;
+	z-index: 99;
+	margin-left: -100%;
+}
+
+.homepage-mobile .navbar-mobile .menu{
+	margin: 50px 20px 20px 50px;
+	width: 350px;
+	line-height: 90px;
+	font-size: 42px;
+	color: #fff;
+}
+
+.navbar-mobile .search-filter{
+	height: 100%;
+	background-color: #008c8c;
+}
+.navbar-mobile .search{
+	padding: 50px 20px 20px 50px;
+	margin: 100px 0px 50px 0px;
+	line-height: 80px;
+}
+
+.navbar-mobile .search .input-search{
+	margin-right: 50px;
+	width: 	70%;
+	height: 70px;
+	background-color: #008c8c;
+	border: 0px;
+	border-bottom: 2px solid #fff;
+	color: #fff;
+	font-size: 40px;
+}
+
+.navbar-mobile .search-filter .filter-mobile input{
+	width: 70%;
+	margin: 0px 0px 40px 50px;
+}
+
+.job-list-mobile{
+	padding: 130px 20px 20px 20px;
+	background-color: #fff;
+	color: #008c8c;
+	width: 100%;
+	min-height: 3000px;
+}
+
+.job-list-mobile .item-list{
+	margin: 0px 0px 20px 0px;
+	padding: 10px 20px 20px 40px;
+	width:100%;
+	height: 300px;
+	background-color: #00bbbb; 
+	border-radius: 10px 10px 80px 10px;
+	color: #fff;
+}
+
+.job-list-mobile .item-list .company{
+	font-size: 60px;
+}
+
+.job-list-mobile .item-list .position{
+	font-size: 45px;
+}
+
+.job-list-mobile .item-list .location{
+	font-size: 36px;
+}
+
+.job-view-mobile{
+	padding: 120px 20px 20px 20px;
+	width: 100%;
+	height: 2000px;
+	background-color: #fff;
+	color: #008c8c !important;
+	z-index: 9;
+	margin-left: 100%;
+}
+
+.box-job-view{
+	margin-top: 30px;
+	max-height: 1450px;
+	padding: 50px 20px 20px 20px;
+	overflow-y: scroll;
+}
+
+.box-job-view .company{ font-size: 60px; }
+.box-job-view .email{ font-size: 40px; }
+.box-job-view .address{ font-size: 40px; }
+.box-job-view .basa-basi{ margin: 30px 0px 20px 0px;font-size: 35px; }
+.box-job-view .position{ font-size: 55px; }
+.box-job-view .salary{ font-size: 45px; }
+.box-job-view .requirement{ font-size: 40px; }
+.box-job-view .requirement{ font-size: 40px; }
+.box-job-view ul.requirement-list li{ font-size: 35px; }
+
+
+.fixed{
+	position: fixed;
+}
+
+.absolute{
+	position: absolute;
+}

@@ -1,0 +1,78 @@
+.landing-page{
+	width: 100%;
+	height: 600px;
+	margin-top: 25px;
+	font-family: segoe ui;
+	background-image: url('/image/landing_page.jpg');
+	background-repeat: no-repeat;
+	background-size: 100%;
+	color: #fff;
+	padding: 0px;
+}
+
+.landing-page .cover { height: 100%; background-color: rgba(0, 140, 140, 0.3); }
+.landing-page .app-title{ font-size: 90px; background-color: #008c8c;}
+.landing-page .app-subtitle{ font-size: 30px; margin-top: -15px; background-color: #008c8c;}
+.landing-page .timer {
+	margin: 20px 0px 0px 0px;
+	line-height: 200px;
+}
+
+
+.landing-page .message {
+		width: 500px; 
+		line-height: 50px;
+		border: 2px dashed #fff;
+		border-radius: 5px;
+		font-size: 16px;
+		margin: auto;
+	}
+.timer-number{font-size: 120px;}
+.timer-name{font-size: 40px;margin: 0px 50px 0px 0px;}
+.timer-time{font-size: 80px;}
+.timer-semicolon{font-size: 60px; margin: 0px 20px 0px 20px;}
+
+.landing-page-mobile{
+	padding: 10px;
+	font-family: segoe ui;
+	background-color: #008c8c;
+	color: #fff;
+	height: 2000px;
+}
+
+.landing-page-mobile .title{
+	font-size: 50px;
+	padding: 10px 0px 0px 0px;
+}
+
+
+.landing-page-mobile .sub-title{
+	font-size: 24px;
+	padding: 0px 0px 30px 0px;
+}
+
+.landing-page-mobile .picture{
+	height: 250px;
+	background-image: url('/image/landing_page.jpg');
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+.landing-page-mobile .timer {
+	margin: 20px 0px 0px 0px;
+	line-height: 150px;
+}
+
+.landing-page-mobile .message {
+		width: 70%;
+		line-height: 50px;
+		border: 2px dashed #fff;
+		border-radius: 5px;
+		font-size: 24px;
+		margin: auto;
+}
+
+.timer-number-mobile{font-size: 100px;}
+.timer-name-mobile{font-size: 24px;margin: 0px 10px 0px 0px;}
+.timer-time-mobile{font-size: 70px;}
+.timer-semicolon-mobile{font-size: 50px; margin: 0px 5px 0px 5px;}
