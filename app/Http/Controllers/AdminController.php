@@ -62,12 +62,14 @@ class AdminController extends Controller
         $provinces = Province::all()->toJson();
         $cities = City::all()->toJson();
         $company_types = CompanyType::all()->toJson();
-        
+        $session_alert = session('alert');
+
     	return view('admin_post', [
             'education_levels' => $education_levels,
             'provinces' => $provinces,
             'cities' => $cities,
-            'company_types' => $company_types
+            'company_types' => $company_types,
+            'alert' => $session_alert
         ]);
     }
 
@@ -127,8 +129,8 @@ class AdminController extends Controller
             $_requirement->save();
             $_work_descriptions = $params->requirements[$key]['work_description'];
             $_require_descriptions = $params->requirements[$key]['require_description'];
-
-            foreach($_require_descriptions as $key => $wd){
+            
+            foreach($_require_descriptions as $key => $rd){
                 $_require_description = new RequireDescription;
                 $_require_description->description = $_require_descriptions[$key]['description'];
                 $_require_description->requirement_id = $_requirement->id;
@@ -145,5 +147,7 @@ class AdminController extends Controller
             }
         }
 
+        return redirect()->action('AdminController@adminHomepage')
+                         ->with('alert', 'Data Loker Berhasil Di Posting!!');
     }
 }

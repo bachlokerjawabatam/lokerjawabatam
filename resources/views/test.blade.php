@@ -9,12 +9,12 @@
     <script type="text/babel" src="{{URL::asset('js/components/landing_page.js')}}"></script>
     <script type="text/javascript">
         var sessionContentType = "{!! $content_type !!}"
-        let loker_infos = _.isEmpty(sessionContentType) ? [] : {!! $loker_infos !!}
+        let lokerInfoItems = _.isEmpty(sessionContentType) ? [] : {!! $loker_infos !!}
         
         dispatcher.dispatch({
             actionType: 'homepage-initialization',
             contentType: sessionContentType,
-            lokerInfos: lokerInfos
+            lokerInfos: lokerInfoItems
         })
     </script>
     <script type="text/babel">
@@ -70,6 +70,12 @@
                     method: 'get',
                     data: {content_type: contentType},
                     formatType: 'json',
+                    beforeSend: function(){
+                        dispatcher.dispatch({
+                            actionType: 'homepage-change-is-loading-data',
+                            bool: true
+                        })
+                    },
                     success: function(data){
                         let contentType = data.contentType
                         let lokerInfos = data.lokerInfos
@@ -80,6 +86,11 @@
                             lokerInfos: lokerInfos
                         })
                     }
+                }).always(function(){
+                    dispatcher.dispatch({
+                        actionType: 'homepage-change-is-loading-data',
+                        bool: false
+                    })
                 })
             },
             desktopView: function(){

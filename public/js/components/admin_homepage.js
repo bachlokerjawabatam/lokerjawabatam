@@ -251,11 +251,10 @@ var ItemRequirement = React.createClass({
                     <div className="col-sm-3"></div>
                     <label className="col-sm-2">Jenis Kelamin :</label>
                     <div className="col-sm-2">
-                        <LokerJawaBatamSelect
-                            classNames="form-control input-sm" 
-                            id="gender"
-                            name={genderInputName}
-                            options={genderOptions} />
+                        <select className="form-control input-sm" id="gender" name={genderInputName} >
+                            <option key="gender-1" value="Pria">Pria</option>
+                            <option key="gender-2" value="Wanita">Wanita</option>
+                        </select>
                     </div>
                 </div>
                 <div className="form-group">
@@ -294,7 +293,7 @@ var ItemRequirement = React.createClass({
                 </div>
                 <RequireDescriptions inputName={requireDescriptionInputName} 
                     requireDescriptions={requireDescriptions} requirement={item} />
-                <WorkDescription inputName={requireDescriptionInputName} 
+                <WorkDescription inputName={workDescriptionInputName} 
                     workDescriptions={workDescriptions} requirement={item} />
             </div>
         )
@@ -306,6 +305,7 @@ var Requirement = React.createClass({
         requirements: PropTypes.array
     },
     onClickAddRequirement: function(){
+        console.log("harusnya kena")
         dispatcher.dispatch({
             actionType: 'post-add-blank-requirement'
         })

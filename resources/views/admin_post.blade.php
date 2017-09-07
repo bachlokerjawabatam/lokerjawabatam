@@ -12,7 +12,12 @@
 	    var cities = {!! $cities !!}
 	    var companyTypes = {!! $company_types !!}
 	    var csrfToken = $('#dummy-csrf-token').val()
-	    
+	    var flash = "{!! $alert !!}" 
+
+	    if(!_.isEmpty(flash)){
+	    	window.alert("flash");
+	    }
+
 	    dispatcher.dispatch({
 	    	actionType: 'post-set-initialization',
 	    	educationLevelTypes: educationLevels,

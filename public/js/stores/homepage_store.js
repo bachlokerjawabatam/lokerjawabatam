@@ -9,6 +9,7 @@ var lokerList = []
 var lokerInfos = []
 var itemSelected = {}
 var infoSelected = {}
+var isLoadingData = false
 
 window.HomepageStore = _.assign(new EventEmitter(),{ 
 	getContentType: function(){ return contentType },
@@ -16,6 +17,7 @@ window.HomepageStore = _.assign(new EventEmitter(),{
 	getLokerInfos: function(){ return lokerInfos },
 	getItemSelected: function(){ return itemSelected },
 	getInfoSelected: function(){ return infoSelected },
+	getIsLoadingData: function(){ return isLoadingData },
 
 	emitChange: function(){
 		return this.emit(CHANGE_EVENT)
@@ -36,6 +38,7 @@ dispatcher.register(
 			contentType = payload.contentType
 			itemSelected = {}
 			infoSelected = {}
+			
 			lokerInfos = payload.lokerInfos
 			_.each(lokerInfos, function(_item){
 				_.each(_item.requirements, function(_itemRequirement){
@@ -69,6 +72,10 @@ dispatcher.register(
 
 			itemSelected = _itemList
 			infoSelected = _itemInfo
+
+			HomepageStore.emitChange()
+		}else if(payload.actionType == 'homepage-change-is-loading-data'){
+			isLoadingData = payload.bool
 
 			HomepageStore.emitChange()
 		}

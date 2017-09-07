@@ -7,6 +7,12 @@ var NavbarMenu = React.createClass({
                 method: 'get',
                 data: {content_type: contentType},
                 formatType: 'json',
+                beforeSend: function(){
+                    dispatcher.dispatch({
+                        actionType: 'homepage-change-is-loading-data',
+                        bool: true
+                    })
+                },
                 success: function(data){
                     let contentType = data.contentType
                     let lokerInfos = data.lokerInfos
@@ -17,6 +23,11 @@ var NavbarMenu = React.createClass({
                         lokerInfos: lokerInfos
                     })
                 }
+            }).always(function(){
+                dispatcher.dispatch({
+                    actionType: 'homepage-change-is-loading-data',
+                    bool: false
+                })
             })
         }
     },
@@ -123,11 +134,13 @@ var PostingLists = React.createClass({
     propTypes:{
         lokerList: React.PropTypes.array,
         itemSelected: React.PropTypes.object,
-        infoSelected: React.PropTypes.object
+        infoSelected: React.PropTypes.object,
+        isLoadingData: React.PropTypes.bool
     },
     render: function(){
         let lokerList = this.props.lokerList
         let itemSelected = this.props.itemSelected
+        let isLoadingData = this.props.isLoadingData
         
         let postingItem = function(item, key){
             return(
@@ -136,22 +149,35 @@ var PostingLists = React.createClass({
                     itemSelected={itemSelected} />
             )
         }
-        return (
-            <div className="posting-list">
-                {
-                    lokerList.map(postingItem)
-                }
-            </div>
-        )
+
+        if(isLoadingData == true){
+            return (
+                <div className="posting-list">
+                    <div className="loading-data">
+                        <img src="/image/circle_64.gif" className="loading-image" />
+                    </div>
+                </div>
+            )
+        }else{
+            return (
+                <div className="posting-list">
+                    {
+                        lokerList.map(postingItem)
+                    }
+                </div>
+            )
+        }
     }
 });
 
 var PostView = React.createClass({
     propTypes:{
-        infoSelected: React.PropTypes.object
+        infoSelected: React.PropTypes.object,
+        isLoadingData: React.PropTypes.bool
     },
     render: function(){
         let info = this.props.infoSelected
+        let isLoadingData = this.props.isLoadingData
         let company = info.company
         let postDate = info.created_at
         let expiredDate = info.expired_date
@@ -163,29 +189,39 @@ var PostView = React.createClass({
             )
         }
 
-        if(_.isEmpty(info)){
+        if(isLoadingData == true){
             return(
-                <div className="post-view">
-                    <div className="blank-post tex-center">
-                        <i className="fa fa-file-o" />
-                        <h3>Tidak ada file yang di pilih</h3>
+                <div className="post-view text-center">
+                    <div className="loading-data">
+                        <img src="/image/bar_small.gif" className="loading-image" />
                     </div>
                 </div>
             )
         }else{
-            return(
-            <div className="post-view">
-                <h1 className="text-center">{company.name}</h1>
-                <hr/>
-                <p className="date"><label>Post Date:</label>  {postDate}</p>
-                <p className="date"><label>Expired Date:</label>  {expiredDate}</p>
-                <br/>
-                <div className="content">
-                    <p>Kami perusahaan {company.name} sedang membutuhkan tenaga kerja dengan kriteria sebagai berikut:</p>
-                    {requirements.map(postItemView)}
-                </div>
-            </div>
-        )    
+            if(_.isEmpty(info)){
+                return(
+                    <div className="post-view">
+                        <div className="blank-post tex-center">
+                            <i className="fa fa-file-o" />
+                            <h3>Tidak ada file yang di pilih</h3>
+                        </div>
+                    </div>
+                )
+            }else{
+                return(
+                    <div className="post-view">
+                        <h1 className="text-center">{company.name}</h1>
+                        <hr/>
+                        <p className="date"><label>Post Date:</label>  {postDate}</p>
+                        <p className="date"><label>Expired Date:</label>  {expiredDate}</p>
+                        <br/>
+                        <div className="content">
+                            <p>Kami perusahaan {company.name} sedang membutuhkan tenaga kerja dengan kriteria sebagai berikut:</p>
+                            {requirements.map(postItemView)}
+                        </div>
+                    </div>
+               )    
+            }
         }
         
     }
@@ -197,7 +233,8 @@ var HomepageDesktopView = React.createClass({
             lokerList: HomepageStore.getLokerList(),
             lokerInfos: HomepageStore.getLokerInfos(),
             itemSelected: HomepageStore.getItemSelected(),
-            infoSelected: HomepageStore.getInfoSelected()
+            infoSelected: HomepageStore.getInfoSelected(),
+            isLoadingData: HomepageStore.getIsLoadingData()
         }
     },
     componentDidMount: function(){
@@ -211,7 +248,8 @@ var HomepageDesktopView = React.createClass({
             lokerList: HomepageStore.getLokerList(),
             lokerInfos: HomepageStore.getLokerInfos(),
             itemSelected: HomepageStore.getItemSelected(),
-            infoSelected: HomepageStore.getInfoSelected()
+            infoSelected: HomepageStore.getInfoSelected(),
+            isLoadingData: HomepageStore.getIsLoadingData()
         })
     },
     render: function(){
@@ -219,7 +257,8 @@ var HomepageDesktopView = React.createClass({
         let lokerInfo = this.state.lokerInfo
         let itemSelected = this.state.itemSelected
         let infoSelected = this.state.infoSelected
-        
+        let isLoadingData = this.state.isLoadingData
+
         return (
             <div className="container-fluid homepage-desktop">
                 <div className="header">
@@ -237,15 +276,17 @@ var HomepageDesktopView = React.createClass({
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <PostingLists lokerList={lokerList}
-                                 itemSelected={itemSelected} />
+                                 itemSelected={itemSelected} 
+                                 isLoadingData={isLoadingData} />
                         </div>
                         <div className="col-lg-7 col-md-12">
-                            <PostView infoSelected={infoSelected} />
+                            <PostView infoSelected={infoSelected} 
+                                isLoadingData={isLoadingData} />
                         </div>
                     </div>
                 </div>
                 <div className="footer">
-                    contact person
+                    
                 </div>
             </div>
         );
@@ -258,12 +299,15 @@ var PostItemView = React.createClass({
     },
     render: function(){
         let requirement = this.props.requirement
+        let gender = requirement.gender
+        let experience = requirement.experience
         let age_min = requirement.age_min
         let age_max = requirement.age_max
         let position = requirement.position
         let educationLevel = requirement.education_level
         let description = requirement.description
         let workDescriptions = requirement.work_descriptions
+        let requireDescriptions = requirement.require_descriptions
 
         return(
             <div>
@@ -271,15 +315,19 @@ var PostItemView = React.createClass({
                 <div className="row">
                     <div className="col-md-4">
                         <ul>
-                            <li>Jenis Kelamin: Pria/Wanita</li>
+                            <li>Jenis Kelamin: {gender} </li>
                             <li>Usia: {age_min} - {age_max} Tahun</li>
                             <li>Pendidikan: {educationLevel.name}</li>
-                            <li>Berpengalaman: 1 Tahun</li>
+                            <li>Berpengalaman: {experience} Tahun</li>
                         </ul>
                     </div>
                     <div className="col-md-8">
                         <u>Description:</u>
-                        <p>{description}</p>
+                        <ul>
+                            {requireDescriptions.map(function(item, key){
+                                return(<li key={key}>{item.description}</li>)
+                            })}
+                        </ul>
                         <br/>
                         <u>Pekerjaan:</u>
                         <ul>

@@ -25,6 +25,16 @@
 	border-right: 2px solid #ededed;
 }
 
+.homepage-desktop .posting-list .loading-data{
+	text-align: center;
+}
+
+.homepage-desktop .posting-list .loading-data img{
+	margin-top: 200px;
+	width: 48px;
+	height: 48px;
+}
+
 .post-item {
 	width: 100%;
 	margin: 0px 5px 5px 5px;
@@ -65,6 +75,12 @@
 	color: #008c8c;
 }
 
+.post-view .loading-data img{
+	margin: auto;
+	margin-top: 200px;
+	width: 320px;
+	height: 64px;
+}
 .menu-modal-content{
 	width: 800px;
 	margin-left: -100px;

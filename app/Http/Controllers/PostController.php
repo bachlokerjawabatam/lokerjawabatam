@@ -20,8 +20,23 @@ use App\WorkDescription;
 
 class PostController extends Controller
 {
-    public function index(){    	
-    	return view('post');
+    public function index(){   
+        $content_type = session('content_type');
+        
+        if ($content_type == 'loker_batam'){
+            $loker_infos = Post::where('province_id', 1)->get();
+        }else if($content_type == 'loker_jawa'){
+            $loker_infos = Post::where('province_id', '<>', 1)->get();
+        }else if ($content_type == 'blog'){
+            //get blog lists content
+        }else{
+            $loker_infos = Post::where('province_id', 1)->get();
+        }
+
+        return view('post', [
+            'content_type' => $content_type,
+            'loker_infos' => $loker_infos->toJson()
+        ]); 	
     }
 
     public function set_session_content_type(Request $params){

@@ -10,9 +10,7 @@ var blankItem = {
                     ageMax: null, 
                     positionId: null,
                     educationLevelIds: null,
-                    remark: null,
-                    workDescriptions: [],
-                    requireDescriptions: []
+                    remark: null
                 }
 
 var blankDescription = {
@@ -77,6 +75,8 @@ dispatcher.register(
 			_workDescription.key = keygen.getUniqueKey()
 			let _requirement = Object.assign({}, blankItem) 
 			_requirement.key = keygen.getUniqueKey()
+			_requirement.workDescriptions = []
+			_requirement.requireDescriptions = []
 			_requirement.workDescriptions.push(_workDescription)
 			_requirement.requireDescriptions.push(_requireDescription)
 			_.assign(post, {key: keygen.getUniqueKey(), requirements: [ _requirement ]})
@@ -138,9 +138,14 @@ dispatcher.register(
 			//function add blank requriement
 			let _requirement = Object.assign({}, blankItem)
 			_requirement.key = keygen.getUniqueKey()
+			_requirement.workDescriptions = []
+			_requirement.requireDescriptions = []
 			let _blankDescription = Object.assign({}, blankDescription)
+			let _blankRequireDescription = Object.assign({}, blankRequireDescription)
 			_blankDescription.key = keygen.getUniqueKey()
+			_blankRequireDescription.key = keygen.getUniqueKey()
 			_requirement.workDescriptions.push(_blankDescription)
+			_requirement.requireDescriptions.push(_blankRequireDescription)
 			
 			post.requirements.push(_requirement)
 
