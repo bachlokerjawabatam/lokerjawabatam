@@ -84,15 +84,15 @@
 }
 
 .job-list-mobile .item-list .company{
-	font-size: 60px;
-}
-
-.job-list-mobile .item-list .position{
 	font-size: 45px;
 }
 
+.job-list-mobile .item-list .position{
+	font-size: 40px;
+}
+
 .job-list-mobile .item-list .location{
-	font-size: 36px;
+	font-size: 35px;
 }
 
 .job-view-mobile{
@@ -103,6 +103,11 @@
 	color: #008c8c !important;
 	z-index: 9;
 	margin-left: 100%;
+}
+
+.blank-post i{
+	font-size: 50px;
+	margin-top: 100px;
 }
 
 .box-job-view{

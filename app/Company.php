@@ -30,5 +30,5 @@ class Company extends Model
     	return $this->belongsTo('App\CompanyType');
     }
 
-    protected $visible = ['id', 'name'];
+    protected $visible = ['id', 'name', 'email', 'address'];
 }

@@ -15,7 +15,7 @@
 	    var flash = "{!! $alert !!}" 
 
 	    if(!_.isEmpty(flash)){
-	    	window.alert("flash");
+	    	window.alert(flash);
 	    }
 
 	    dispatcher.dispatch({
