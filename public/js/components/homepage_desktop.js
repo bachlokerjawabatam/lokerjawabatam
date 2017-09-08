@@ -36,7 +36,8 @@ var NavbarMenu = React.createClass({
         let arrMenu = [
             {title: 'Loker Jawa', value: 'loker_jawa', icon: 'fa fa-newspaper-o'},
             {title: 'Loker Batam', value: 'loker_batam', icon: 'fa fa-newspaper-o'},
-            {title: 'Blog', value: 'blog', icon: 'fa fa-address-card-o'}
+            {title: 'Blog', value: 'blog', icon: 'fa fa-address-card-o'},
+            {title: 'About Us', value: 'about_us', icon: 'fa fa-briefcase'}
         ]
         let that = this
         let listMenu = function(item, key){
@@ -67,6 +68,8 @@ var NavbarMenu = React.createClass({
 
 var FilterMenu = React.createClass({
     render: function(){
+        let btnFilterStyle = {marginTop: "10px"}
+
         return (
             <div className="panel filter">
                 <div className="panel-heading title text-left">
@@ -83,6 +86,7 @@ var FilterMenu = React.createClass({
                     <input className="form-control input-sm" />
                     <span>Pengalaman</span>
                     <input className="form-control input-sm" />
+                    <button className="btn btn-md btn-success" style={btnFilterStyle}>Filter</button>
                 </div>
             </div>
         )
@@ -308,6 +312,7 @@ var PostItemView = React.createClass({
         let description = requirement.description
         let workDescriptions = requirement.work_descriptions
         let requireDescriptions = requirement.require_descriptions
+        let salary = requirement.salary
 
         return(
             <div>
@@ -319,6 +324,7 @@ var PostItemView = React.createClass({
                             <li>Usia: {age_min} - {age_max} Tahun</li>
                             <li>Pendidikan: {educationLevel.name}</li>
                             <li>Berpengalaman: {experience} Tahun</li>
+                            <li>Gaji: <strong>Rp.{(salary * 1000).toFixed(2)}</strong></li>
                         </ul>
                     </div>
                     <div className="col-md-8">

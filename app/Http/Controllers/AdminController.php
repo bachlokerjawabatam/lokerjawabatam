@@ -110,6 +110,7 @@ class AdminController extends Controller
             $_requirement->experience = $params->requirements[$key]['experience']; 
             $_requirement->age_min = $params->requirements[$key]['age_min'];
             $_requirement->age_max = $params->requirements[$key]['age_max'];
+            $_requirement->salary = $params->requirements[$key]['salary'];
             // $_requirement->description = $params->requirements[$key]['description'];
             $_requirement->education_level_id = $params->requirements[$key]['education_level_id'];
 

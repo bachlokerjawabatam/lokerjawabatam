@@ -28,7 +28,7 @@ class PostController extends Controller
         }else if($content_type == 'loker_jawa'){
             $loker_infos = Post::where('province_id', '<>', 1)->get();
         }else if ($content_type == 'blog'){
-            //get blog lists content
+            $loker_infos = Post::where('province_id', 1)->get();
         }else{
             $loker_infos = Post::where('province_id', 1)->get();
         }
@@ -64,7 +64,7 @@ class PostController extends Controller
         }else if($content_type == 'loker_jawa'){
             $loker_infos = Post::where('province_id', '<>', 1)->get();
         }else if ($content_type == 'blog'){
-            //get blog lists content
+            $loker_infos = Post::where('province_id', 1)->get();
         }else{
             $loker_infos = Post::where('province_id', 1)->get();
         }

@@ -71,7 +71,7 @@ var RequireDescriptionRow = React.createClass({
                 <div className="col-sm-3"></div>
                 <label className="col-sm-2">Kualifikasi Pekerjaan :</label>
                 <div className="col-sm-6">
-                    <textarea name={requireDescriptionInputName} className="form-control input-sm" rows="3" required={true}  />
+                    <textarea name={requireDescriptionInputName} className="form-control input-sm" rows="2" required={true}  />
                 </div>
                 <div className="col-sm-1 text-left">
                     <i style={removeIconStyle} className="fa fa-times" onClick={this.onClickRemove}  />
@@ -144,7 +144,7 @@ var DescriptionRow = React.createClass({
                 <div className="col-sm-3"></div>
                 <label className="col-sm-2">Deskripsi Pekerjaan :</label>
                 <div className="col-sm-6">
-                    <textarea name={workDescriptionInputName} className="form-control input-sm" rows="3" required={true}  />
+                    <textarea name={workDescriptionInputName} className="form-control input-sm" rows="2" required={true}  />
                 </div>
                 <div className="col-sm-1 text-left">
                     <i style={removeIconStyle} className="fa fa-times" onClick={this.onClickRemove}  />
@@ -197,6 +197,11 @@ var WorkDescription = React.createClass({
 });
 
 var ItemRequirement = React.createClass({
+    getInitialState: function(){
+        return {
+            salary: 0
+        }
+    },
     onClickRemove:function(){
         let item = this.props.item
 
@@ -204,6 +209,10 @@ var ItemRequirement = React.createClass({
             actionType: 'post-remove-requirement',
             key: item.key 
         })
+    },
+    onChangeSalary: function(event){
+        let salary = Number(event.target.value) / 1000 
+        this.setState({salary: salary})
     },
     render: function(){
         let key = this.props.inputKey
@@ -225,6 +234,7 @@ var ItemRequirement = React.createClass({
         let workDescriptionInputName = prefixName + "[work_description]"
         let requireDescriptionInputName = prefixName + "[require_description]"
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
+        let salaryValue = this.state.salary
 
         return (
             <div>
@@ -244,7 +254,8 @@ var ItemRequirement = React.createClass({
                     <label className="col-sm-2">Gaji :</label>
                     <label className="col-sm-1 text-right">Rp.</label>
                     <div className="col-sm-5">
-                        <input type="number" step="50000" name={salaryInputName} className="form-control input-sm" />
+                        <input type="number" step="50000" className="form-control input-sm" onChange={this.onChangeSalary} />
+                        <input type="hidden" name={salaryInputName} value={salaryValue} />
                     </div>
                 </div>
                 <div className="form-group">
@@ -305,7 +316,6 @@ var Requirement = React.createClass({
         requirements: PropTypes.array
     },
     onClickAddRequirement: function(){
-        console.log("harusnya kena")
         dispatcher.dispatch({
             actionType: 'post-add-blank-requirement'
         })

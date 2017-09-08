@@ -21,8 +21,9 @@
 .homepage-desktop .posting-list { 
 	padding: 0px 20px 0px 0px;
 	margin: 10px 0px 0px -25px;
-	height: 500px;
+	max-height: 650px;
 	border-right: 2px solid #ededed;
+	overflow-y: auto;
 }
 
 .homepage-desktop .posting-list .loading-data{
@@ -61,6 +62,11 @@
 .post-item .location{
 	margin-top: -10px;
 	font-size: 12px;
+}
+
+.post-view {
+	max-height: 650px;
+	overflow-y: auto; 
 }
 
 .post-view .content{
