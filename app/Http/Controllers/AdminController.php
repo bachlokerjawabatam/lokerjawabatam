@@ -96,6 +96,7 @@ class AdminController extends Controller
         $post->province_id = $params->post['province_id'];
         $post->city_id = $params->post['city_id'];
         $post->expired_date = $params->post['exp_date'];
+        $post->source_link = $params->post['source_link'];
 
         $post->save();
 

@@ -480,6 +480,12 @@ var AdminFormLokerPost = React.createClass({
                         </div>
                     </div>
                     <div className="form-group">
+                        <label className="col-sm-3 control-label"> Sumber / Link :</label>
+                        <div className="col-sm-8">
+                            <input type="text" className="form-control input-sm" name="post[source_link]" />
+                        </div>
+                    </div>
+                    <div className="form-group">
                         <label className="col-sm-3 control-label"> Kebutuhan :</label>
                     </div>
                     <Requirement requirements={requirements} />
