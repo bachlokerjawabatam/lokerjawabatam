@@ -184,9 +184,11 @@ var PostView = React.createClass({
         let isLoadingData = this.props.isLoadingData
         let company = info.company
         let postDate = info.created_at
-        let expiredDate = info.expired_date
+        let expiredDate = info.expired_date 
+        let sourceLink = info.source_link
         let requirements = info.requirements
-        
+        let fileStyle = {fontSize: "120px"}
+
         let postItemView = function(item, key){
             return(
                 <PostItemView key={key} requirement={item} />
@@ -206,7 +208,7 @@ var PostView = React.createClass({
                 return(
                     <div className="post-view">
                         <div className="blank-post tex-center">
-                            <i className="fa fa-file-o" />
+                            <i className="fa fa-file-o" style={fileStyle} />
                             <h3>Tidak ada file yang di pilih</h3>
                         </div>
                     </div>
@@ -218,6 +220,7 @@ var PostView = React.createClass({
                         <hr/>
                         <p className="date"><label>Post Date:</label>  {postDate}</p>
                         <p className="date"><label>Expired Date:</label>  {expiredDate}</p>
+                        <p className="date"><label>Sumber:</label>  <a href={sourceLink}>{sourceLink}</a></p>
                         <br/>
                         <div className="content">
                             <p>Kami perusahaan {company.name} sedang membutuhkan tenaga kerja dengan kriteria sebagai berikut:</p>

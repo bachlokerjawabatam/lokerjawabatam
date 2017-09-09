@@ -9,6 +9,7 @@ city_id fk
 exp_date
 created_at
 updated_at
+source_link
 
 hasMany requirements
 hasMany work_description through requirement
@@ -50,6 +51,6 @@ class Post extends Model
     }
 
     protected $with = ['requirements', 'company', 'province', 'city'];
-    protected $visible = ['id', 'post_date', 'expired_date', 'company_id', 'province_id', 'city_id', 'requirements', 
+    protected $visible = ['id', 'post_date', 'expired_date', 'source_link', 'company_id', 'province_id', 'city_id', 'requirements', 
                           'province', 'city', 'company', 'created_at'];
 }
