@@ -24,24 +24,27 @@
             getInitialState: function(){
                 return{
                     desktopView: true,
-                    contentType: HomepageStore.getContentType()
+                    contentType: HomepageStore.getContentType(),
+                    afterDidMount: false
                 }
             },
             componentDidMount: function(){
-                this.listener = HomepageStore.addChangeListener(this._onChange)
+                let contentType = this.state.contentType
                 this.onWindowResize()
                 let desktopView = ($(window).width() >= TABLET_MAX_SIZE)
                 $(window).on('resize.homepage', $.proxy(this.onWindowResize, this))
-                if (desktopView == true){
-                    $("#menu-modal").modal({
-                        show: true,
-                        keyboard: false,
-                        backdrop: 'static'
-                    });
+                if (_.isEmpty(contentType)){
+                    if(desktopView == true){    
+                        $("#menu-modal").modal({
+                            show: true,
+                            keyboard: false,
+                            backdrop: 'static'
+                        });
+                    }else{
+                        this.setState({afterDidMount: true})
+                    }
                 }
-            },
-            componentWillUnmount: function(){
-                this.listener.remove()
+                this.listener = HomepageStore.addChangeListener(this._onChange)
             },
             _onChange: function(){
                 this.setState({
@@ -54,6 +57,7 @@
             },
             componentWillUnmount: function(){
                 $(window).off('resize.homepage')
+                this.listener.remove()
             },
             onHideModal: function(){
                 $("#menu-modal").modal('hide');
@@ -92,6 +96,19 @@
                         bool: false
                     })
                 })
+            },
+            isShowModal: function(){
+                let contentType = this.state.contentType
+                let afterDidMount = this.state.afterDidMount
+
+                if(_.isEmpty(contentType) && afterDidMount){
+                    $("#menu-modal-mobile").modal({
+                        show: true,
+                        keyboard: false,
+                        backdrop: 'static'
+                    })
+                    this.setState({afterDidMount: false})
+                }
             },
             desktopView: function(){
                 let contentType = this.state.contentType
@@ -151,12 +168,52 @@
                 );
             },
             mobileView: function(){
+                let contentType = this.state.contentType
+                let afterDidMount = this.state.afterDidMount
+                let menuStyle = {fontSize: "72px", marginTop: "10px"}
+
+                let modalHomepageMobile = 
+                    <div className="modal fade" id="menu-modal-mobile" >
+                        <div className="modal-dialog">
+                            <div className="modal-content menu-modal-content">
+                                <div className="modal-body menu-modal text-center">
+                                    <div className="modal-mobile">
+                                        <div className="menu-modal-title">
+                                            Apa yang ingin anda cari ?
+                                        </div>
+                                        <div className="menu-item" onClick={this.onSelectContent.bind(this, 'loker_jawa')}>
+                                            <i style={menuStyle} className="fa fa-leaf pull-left" />
+                                            <span className="pull-right">Loker Jawa</span>
+                                        </div>
+                                        <div className="menu-item" onClick={this.onSelectContent.bind(this, 'loker_batam')}>
+                                            <i style={menuStyle}  className="fa fa-briefcase pull-left" />
+                                            <span className="pull-right">Loker Batam</span>
+                                        </div>
+                                        <div className="menu-item">
+                                            <i style={menuStyle}  className="fa fa-user pull-left" />
+                                            <span className="pull-right">Blog</span>
+                                        </div>
+                                        <div className="menu-item">
+                                            <i style={menuStyle}  className="fa fa-briefcase pull-left" />
+                                            <span className="pull-right">Ide Bisnis</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 return(
-                    <HomepageMobile />
+                    <div>
+                        <HomepageMobile />
+                        {modalHomepageMobile}
+                        {this.isShowModal()}
+                    </div>
                 )
             },
             render: function(){
                 let desktopView = this.state.desktopView
+                let contentType = this.state.contentType
 
                 if (desktopView == true){
                     return this.desktopView()

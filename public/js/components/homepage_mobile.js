@@ -157,46 +157,96 @@ var JobListMobile = React.createClass({
             )
         }
 
-		return(
-			<div className="job-list-mobile text-left">
-				{lokerList.map(jobListItem)}
-			</div>
-		)
+        if(isLoadingData == true){
+        	return (
+        		<div className="job-list-mobile text-center">
+					<div className="loading-data">
+                        <img src="/image/circle_64.gif" className="loading-image" />
+                    </div>
+				</div>
+        	)
+        }else{	
+			return(
+				<div className="job-list-mobile text-left">
+					{lokerList.map(jobListItem)}
+				</div>
+			)
+        }
 	}
 });
 
-
 var NavbarMobile = React.createClass({
-	onClickMenu: function(url){
-		window.location = url
+	onClickMenu: function(strMenu){
+		if(_.includes(['loker_jawa', 'loker_batam'], strMenu)){
+			$.ajax({
+                url: '/homepage/set_session_content_type',
+                method: 'get',
+                data: {content_type: strMenu},
+                formatType: 'json',
+                beforeSend: function(){
+                    dispatcher.dispatch({
+                        actionType: 'homepage-change-is-loading-data',
+                        bool: true
+                    })
+                    dispatcher.dispatch({
+						actionType: 'homepage-change-show-navbar',
+						bool: false
+					})
+										
+					$(".navbar-mobile").animate({
+						marginLeft: '-100%'
+					});
+                },
+                success: function(data){
+                    let contentType = data.contentType
+                    let lokerInfos = data.lokerInfos
+
+                    dispatcher.dispatch({
+                        actionType: 'homepage-initialization',
+                        contentType: contentType,
+                        lokerInfos: lokerInfos
+                    })
+                }
+            }).always(function(){
+                dispatcher.dispatch({
+                    actionType: 'homepage-change-is-loading-data',
+                    bool: false
+                })
+            })
+		}else{
+			window.location = url
+		}
 	},
 	render: function(){
+		let contentType = HomepageStore.getContentType()
 		let btnFilterStyle = {margin: "5px 0px 0px 50px", width: "100px"}
+		let lokerJawaStyle = contentType == 'loker_jawa' ? {fontWeight: "bold"} : null
+		let lokerBatamStyle = contentType == 'loker_batam' ? {fontWeight: "bold"} : null
 
 		return(
 			<div className="navbar-mobile text-left">
 				<div className="menu">
-					<div className="item text-right">
+					<div className="item text-right" onClick={this.onClickMenu.bind(this, "loker_jawa")}>
 						<i className="fa fa fa-newspaper-o fa-4x pull-left" />
-						Loker Jawa
+						<span style={lokerJawaStyle}>Loker Jawa</span>
+					</div>
+					<div className="item text-right" onClick={this.onClickMenu.bind(this, "loker_batam")}>
+						<i className="fa fa fa-newspaper-o fa-4x pull-left" />
+						<span style={lokerBatamStyle}>Loker Batam</span>
 					</div>
 					<div className="item text-right">
-						<i className="fa fa fa-newspaper-o fa-4x pull-left" />
-						Loker Batam
+						<i className="fa fa-address-card fa-4x pull-left" />
+						Blog
 					</div>
-					<div className="item text-right" onClick={this.onClickMenu.bind(this, "/blog")}>
-						<i className="fa fa-user fa-4x pull-left" />
-						Blog Loker
-					</div>
-					<div className="item text-right" onClick={this.onClickMenu.bind(this, "/about_us")}>
-						<i className="fa fa-briefcase fa-4x pull-left" />
+					<div className="item text-right">
+						<i className="fa fa-newspaper-o fa-4x pull-left" />
 						Tentang Kami
 					</div>
 				</div>
 				<div className="search-filter">
 					<div className="search">
 						<input type="text" className="input-search" placeholder="cari disini" />
-						<i className="fa fa-user fa-4x" />
+						<i className="fa fa-search fa-4x" />
 					</div>
 					<div className="filter-mobile">
 						<input type="text" className="form-control input-lg" placeholder="Perusahaan" /> 
@@ -215,7 +265,7 @@ var NavbarMobile = React.createClass({
 var HomepageMobile = React.createClass({
 	getInitialState: function(){
 		return{
-			showNavbar: false,
+			showNavbar: HomepageStore.getShowNavbar(),
 			lokerList: HomepageStore.getLokerList(),
             lokerInfos: HomepageStore.getLokerInfos(),
             itemSelected: HomepageStore.getItemSelected(),
@@ -235,12 +285,16 @@ var HomepageMobile = React.createClass({
             lokerInfos: HomepageStore.getLokerInfos(),
             itemSelected: HomepageStore.getItemSelected(),
             infoSelected: HomepageStore.getInfoSelected(),
-            isLoadingData: HomepageStore.getIsLoadingData()
+            isLoadingData: HomepageStore.getIsLoadingData(),
+            showNavbar: HomepageStore.getShowNavbar()
         })
     },
 	toggleNavbar: function(){
 		let showNavbar = this.state.showNavbar
-		this.setState({showNavbar: !showNavbar})
+		dispatcher.dispatch({
+			actionType: 'homepage-change-show-navbar',
+			bool: !showNavbar
+		})
 		let marginNavbar = !showNavbar? '0px' : '-100%' 
 		
 		$(".navbar-mobile").animate({

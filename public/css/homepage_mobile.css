@@ -15,6 +15,7 @@
 }
 
 .homepage-mobile i{
+
 	margin: 15px 0px 0px 5px;
 	font-size: 70px;
 	color: #fff;
@@ -33,7 +34,7 @@
 
 .homepage-mobile .navbar-mobile .menu{
 	margin: 50px 20px 20px 50px;
-	width: 350px;
+	width: 360px;
 	line-height: 90px;
 	font-size: 42px;
 	color: #fff;
@@ -71,6 +72,19 @@
 	color: #008c8c;
 	width: 100%;
 	min-height: 3000px;
+}
+
+.job-list-mobile .loading-data{
+	margin: auto;
+	margin-top: 200px;
+	width: 100%;
+}
+
+.job-list-mobile .loading-image{
+	margin: auto;
+	margin-top: 300px;
+	height: 180px;
+	width: 180px;
 }
 
 .job-list-mobile .item-list{
@@ -134,4 +148,26 @@
 
 .absolute{
 	position: absolute;
+}
+
+.modal-mobile{
+	padding: 0px 20px 0px 20px;
+}
+
+.modal-mobile .menu-item{
+	padding: 10px 30px;
+	height: 120px;
+	font-size: 64px;
+	color: #fff;
+	background-color: #008c8c;
+	margin-bottom: 40px;
+	border-radius: 10px;
+}
+
+.modal-mobile .menu-modal-title{
+	padding: 10px 30px;
+	height: 120px;
+	font-size: 56px;
+	color: #008c8c;
+	margin: 40px 0px 40px 0px;
 }

@@ -10,6 +10,7 @@ var lokerInfos = []
 var itemSelected = {}
 var infoSelected = {}
 var isLoadingData = false
+var showNavbar = false
 
 window.HomepageStore = _.assign(new EventEmitter(),{ 
 	getContentType: function(){ return contentType },
@@ -18,6 +19,7 @@ window.HomepageStore = _.assign(new EventEmitter(),{
 	getItemSelected: function(){ return itemSelected },
 	getInfoSelected: function(){ return infoSelected },
 	getIsLoadingData: function(){ return isLoadingData },
+	getShowNavbar: function(){ return showNavbar },
 
 	emitChange: function(){
 		return this.emit(CHANGE_EVENT)
@@ -77,6 +79,10 @@ dispatcher.register(
 		}else if(payload.actionType == 'homepage-change-is-loading-data'){
 			isLoadingData = payload.bool
 
+			HomepageStore.emitChange()
+		}else if(payload.actionType == 'homepage-change-show-navbar'){
+			showNavbar = payload.bool
+			
 			HomepageStore.emitChange()
 		}
 	}
