@@ -3,6 +3,8 @@
 @section('title', 'Loker Jawa Batam - blog')
 
 @section('content')
+    <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>
+    <script type="text/babel" src="{{URL::asset('js/components/instagram_menu.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/blog_desktop.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/blog_mobile.js')}}"></script>
     <script type="text/babel">

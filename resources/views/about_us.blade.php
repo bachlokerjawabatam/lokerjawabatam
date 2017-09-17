@@ -3,6 +3,8 @@
 @section('title', 'About Us')
 
 @section('content')
+    <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>
+    <script type="text/babel" src="{{URL::asset('js/components/instagram_menu.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/about_us_desktop.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/about_us_mobile.js')}}"></script>
     <script type="text/babel">

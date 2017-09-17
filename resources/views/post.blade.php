@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Homepage')
+@section('title', 'Beranda')
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/homepage_desktop.js')}}"></script>
@@ -40,25 +40,32 @@
                 }
             },
             componentDidMount: function(){
-                this.listener = HomepageStore.addChangeListener(this._onChange)
+                let contentType = this.state.contentType
                 this.onWindowResize()
                 let desktopView = ($(window).width() >= TABLET_MAX_SIZE)
                 $(window).on('resize.homepage', $.proxy(this.onWindowResize, this))
-                if (desktopView == true){
-                    $("#menu-modal").modal({
-                        show: true,
-                        keyboard: false,
-                        backdrop: 'static'
-                    });
+                if (_.isEmpty(contentType)){
+                    if(desktopView == true){    
+                        $("#menu-modal").modal({
+                            show: true,
+                            keyboard: false,
+                            backdrop: 'static'
+                        });
+                    }else{
+                        setTimeout(function(){ $('#menu-modal-mobile').modal({
+                            show: true, keyboard: false, backdrop: 'static'
+                        }), 300})
+                    }
                 }
+                this.listener = HomepageStore.addChangeListener(this._onChange)
             },
             onWindowResize: function(){
                 let desktopView = ($(window).width() >= TABLET_MAX_SIZE)
                 this.setState({desktopView: desktopView})
             },
             componentWillUnmount: function(){
-                this.listener.remove()
                 $(window).off('resize.homepage')
+                this.listener.remove()
             },
             _onChange: function(){
                 this.setState({
@@ -66,7 +73,12 @@
                 })
             },
             onHideModal: function(){
-                $("#menu-modal").modal('hide');
+                let desktopView = this.state.desktopView
+                if(desktopView){
+                    $("#menu-modal").modal('hide');
+                }else{
+                    $("#menu-modal-mobile").modal('hide');
+                }
             },
             onSelectContent: function(contentType){
                 dispatcher.dispatch({
@@ -80,6 +92,12 @@
                     method: 'get',
                     data: {content_type: contentType},
                     formatType: 'json',
+                    beforeSend: function(){
+                        dispatcher.dispatch({
+                            actionType: 'homepage-change-is-loading-data',
+                            bool: true
+                        })
+                    },
                     success: function(data){
                         let contentType = data.contentType
                         let lokerInfos = data.lokerInfos
@@ -90,6 +108,11 @@
                             lokerInfos: lokerInfos
                         })
                     }
+                }).always(function(){
+                    dispatcher.dispatch({
+                        actionType: 'homepage-change-is-loading-data',
+                        bool: false
+                    })
                 })
             },
             desktopView: function(){
@@ -150,8 +173,46 @@
                 );
             },
             mobileView: function(){
+                let contentType = this.state.contentType
+                let afterDidMount = this.state.afterDidMount
+                let menuStyle = {fontSize: "72px", marginTop: "10px"}
+
+                let modalHomepageMobile = 
+                    <div className="modal fade" id="menu-modal-mobile" >
+                        <div className="modal-dialog">
+                            <div className="modal-content menu-modal-content">
+                                <div className="modal-body menu-modal text-center">
+                                    <div className="modal-mobile">
+                                        <div className="menu-modal-title">
+                                            Apa yang ingin anda cari ?
+                                        </div>
+                                        <div className="menu-item" onClick={this.onSelectContent.bind(this, 'loker_jawa')}>
+                                            <i style={menuStyle} className="fa fa-leaf pull-left" />
+                                            <span className="pull-right">Loker Jawa</span>
+                                        </div>
+                                        <div className="menu-item" onClick={this.onSelectContent.bind(this, 'loker_batam')}>
+                                            <i style={menuStyle}  className="fa fa-briefcase pull-left" />
+                                            <span className="pull-right">Loker Batam</span>
+                                        </div>
+                                        <div className="menu-item">
+                                            <i style={menuStyle}  className="fa fa-user pull-left" />
+                                            <span className="pull-right">Blog</span>
+                                        </div>
+                                        <div className="menu-item">
+                                            <i style={menuStyle}  className="fa fa-briefcase pull-left" />
+                                            <span className="pull-right">Ide Bisnis</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 return(
-                    <HomepageMobile />
+                    <div>
+                        <HomepageMobile />
+                        {_.isEmpty(contentType)? modalHomepageMobile : null}
+                    </div>
                 )
             },
             render: function(){

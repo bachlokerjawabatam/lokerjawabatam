@@ -9,6 +9,7 @@
         <link href="{{URL::asset('css/landing_page.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/homepage.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/homepage_mobile.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{URL::asset('css/blog.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/blog_mobile.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/about_us.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/about_us_mobile.css')}}" rel="stylesheet" type="text/css">

@@ -1,6 +1,3 @@
-//tinggal benerin css style dan jquery untuk handle animasi ketika tombol menu bar di 
-//klik menu navbar muncul dari arah kiri ke kanan menggeser halaman utama
-//daftarka header dan navbar sebagai komponen global sehingga bisa di gunakan di semua halaman
 var owners = [
 	{name: 'Bachtiar Eko Wahyudi', position: 'Application Developer Manager'},
 	{name: 'Prihambodo Trio Agustian', position: 'Company Manager'}
@@ -13,17 +10,6 @@ var menuItems = [
 	{icon: "fa fa-camera", title: "Ide Bisnis", url: "/ide_bisnis"},
 	{icon: "fa fa-file", title: "Tentang Kami", url: "/about_us"}
 ]
-
-var HeaderMobile = React.createClass({
-	render: function(){
-		return(
-			<div className="header-mobile text-center">
-				<img src='/image/logo-lokerjawabatam.png' />
-				<p>Informasi Lowongan kerja terkini daerah jawa dan batam</p>
-			</div>
-		)	
-	}
-})
 
 var WallAboutUsMobile = React.createClass({
 	render: function(){
@@ -131,26 +117,6 @@ var ElegantMobileNavbar = React.createClass({
 		return(
 			<div className="elegant-mobile-menu-navbar">
 				{menuItems.map(function(){menuItem})}
-			</div>
-		)
-	}
-})
-
-var InstagramMenu = React.createClass({
-	onClickMenuItem: function(url){
-		window.location = url
-	},
-	render: function(){
-		let that = this
-		let instagramMenu = function(item, key){
-			return(
-				<i className={item.icon} onClick={that.onClickMenuItem.bind(this, item.url)} />
-			)
-		}
-
-		return(
-			<div className="instagram-menu text-center">
-				{menuItems.map(instagramMenu)}
 			</div>
 		)
 	}

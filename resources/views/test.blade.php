@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Test Homepage')
+@section('title', 'Test Beranda')
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/homepage_desktop.js')}}"></script>
