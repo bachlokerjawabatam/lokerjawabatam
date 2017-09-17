@@ -74,4 +74,8 @@ class PostController extends Controller
             'loker_infos' => $loker_infos->toJson()
         ]);
     }
+
+    public function about_us(){
+        return view('about_us');
+    }
 }

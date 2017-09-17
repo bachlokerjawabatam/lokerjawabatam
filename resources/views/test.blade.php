@@ -24,8 +24,7 @@
             getInitialState: function(){
                 return{
                     desktopView: true,
-                    contentType: HomepageStore.getContentType(),
-                    afterDidMount: false
+                    contentType: HomepageStore.getContentType()
                 }
             },
             componentDidMount: function(){
@@ -41,7 +40,9 @@
                             backdrop: 'static'
                         });
                     }else{
-                        this.setState({afterDidMount: true})
+                        setTimeout(function(){ $('#menu-modal-mobile').modal({
+                            show: true, keyboard: false, backdrop: 'static'
+                        }), 300})
                     }
                 }
                 this.listener = HomepageStore.addChangeListener(this._onChange)
@@ -60,7 +61,12 @@
                 this.listener.remove()
             },
             onHideModal: function(){
-                $("#menu-modal").modal('hide');
+                let desktopView = this.state.desktopView
+                if(desktopView){
+                    $("#menu-modal").modal('hide');
+                }else{
+                    $("#menu-modal-mobile").modal('hide');
+                }
             },
             onSelectContent: function(contentType){
                 dispatcher.dispatch({
@@ -96,19 +102,6 @@
                         bool: false
                     })
                 })
-            },
-            isShowModal: function(){
-                let contentType = this.state.contentType
-                let afterDidMount = this.state.afterDidMount
-
-                if(_.isEmpty(contentType) && afterDidMount){
-                    $("#menu-modal-mobile").modal({
-                        show: true,
-                        keyboard: false,
-                        backdrop: 'static'
-                    })
-                    this.setState({afterDidMount: false})
-                }
             },
             desktopView: function(){
                 let contentType = this.state.contentType
@@ -206,8 +199,7 @@
                 return(
                     <div>
                         <HomepageMobile />
-                        {modalHomepageMobile}
-                        {this.isShowModal()}
+                        {_.isEmpty(contentType)? modalHomepageMobile : null}
                     </div>
                 )
             },

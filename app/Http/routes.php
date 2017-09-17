@@ -25,5 +25,5 @@ Route::get('/test/homepage_bachtiar_rio_2017', 'PostController@test');
 Route::get('/blog', function(){
 	return view('blog');
 });
-
+Route::get('/about_us', 'PostController@about_us');
 Route::get('/homepage/set_session_content_type', 'PostController@set_session_content_type');
