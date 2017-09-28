@@ -1,5 +1,12 @@
+var categories = [
+	{title: "Tips", icon: "fa fa-user"},
+	{title: "Intermezzo", icon: "fa fa-briefcase"},
+	{title: "lain lain", icon: "fa fa-leaf"}
+]
+
 var blogLists = [
-	{title: "Tips Mencari Kerja Dengan Baik Dan Benar"}
+	{title: "Tips Mencari Kerja Dengan Baik Dan Benar"},
+	{title: "asdfsdfsd"}
 ] 
 
 var BlogListItem = React.createClass({
@@ -9,19 +16,45 @@ var BlogListItem = React.createClass({
 	render: function(){
 		let item = this.props.item
 		return(
-			<div className="col-md-6 blog-list-item">
-				<h3>{item.title}</h3>
-				<button className="btn btn-md btn-success">Read More</button>
+			<div className="blog-list-item">
+				<div className="blog-image">
+					<img src="/image/landing_page.jpg" />
+				</div>
+				<h3>TIPS MENCARI KERJA DENGAN BAIK & BENAR</h3>
+				<hr />
+				<p>
+					“Setelah 2 tahun membangun bisnis online, dari profit 500 ribu per bulan, hingga
+					menjadi Rp 5 juta per bulan, kini berhasil melipatgandakan penghasilan menjadi 20
+					juta per bulan... hanya dengan menerapkan prinsip-prinsip sederhana internet
+					marketing. Dan itu masih berlanjut... Saya kira, saya sudah cukup layak untuk
+					memberikan sebagian ilmunya di sini. Selamat membaca.”
+				</p>
+				<p>
+					Saya tanya kepada anda... apa tujuan anda membuat blog?
+					Jawaban anda pasti beragam. Tapi, saya yakin pada satu hal. Bagi anda yang
+					punya produk internet, tujuan blog anda pasti untuk menarik pengunjung dan
+					menjaring lebih banyak pelanggan. Betul?
+				</p>
+				<button className="btn btn-md btn-warning pull-right">Selengkapnya</button>
 			</div>
 		)
 	}
 })
 
-var BlogView = React.createClass({
+var BlogCategories = React.createClass({
 	render: function(){
+		let categoryItem = function(item, key){
+			return(
+				<li key={key}>{item.title} <i className={item.icon} /></li>
+			)
+		}
+
 		return(
-			<div className="blog-view">
-				blog view
+			<div className="blog-categories text-center">
+				<h3>Categories</h3>
+				<ul className="blog-category-item text-right">
+					{categories.map(categoryItem)}
+				</ul>
 			</div>
 		)
 	}
@@ -49,11 +82,11 @@ var BlogDesktop = React.createClass({
 			<div className="blog-mobile">
 				<HeaderDesktop />
 				<div className="row">
-					<div className="col-lg-4 col-md-4">
+					<div className="col-lg-9 col-md-7">
 						<BlogList />
 					</div>
-					<div className="col-lg-4 col-md-4">
-						<BlogView />
+					<div className="col-lg-3 col-md-5">
+						<BlogCategories />
 					</div>
 				</div>
 			</div>
