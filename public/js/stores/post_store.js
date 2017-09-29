@@ -30,6 +30,7 @@ var post = {
 				companyId: null,
 				provinceId: null,
 				cityId: null,
+				pictureUrl: { url: null }
 		   }
 
 var educationLevelTypes = []
@@ -39,6 +40,7 @@ var companyTypes = []
 var provinceSelected = {}
 var provinceCities = []
 var genderOptions = [{id: 1, name: "Pria"}, {id: 2, name: "Wanita"}]
+var menuSelected = "loker"
 
 window.PostStore = _.assign(new EventEmitter(),{ 
 	getPost: function(){ return post },
@@ -48,6 +50,7 @@ window.PostStore = _.assign(new EventEmitter(),{
 	getProvinceCities: function(){ return provinceCities },
 	getCompanyTypes: function(){ return companyTypes },
 	getGenderOptions: function(){ return genderOptions },
+	getMenuSelected: function(){ return menuSelected },
 
 	emitChange: function(){
 		return this.emit(CHANGE_EVENT)
@@ -193,6 +196,16 @@ dispatcher.register(
 					return true
 				}
 			})
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-menu-selected'){
+			//function change menu selected
+			menuSelected = payload.menuSelected
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-picture'){
+			//function change company logo
+			post = Object.assign({}, post, payload.attributes)
 
 			PostStore.emitChange()
 		}

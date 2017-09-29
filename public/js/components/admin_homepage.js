@@ -353,23 +353,37 @@ var Requirement = React.createClass({
 });
 
 var AdminNavbarMenu = React.createClass({
-    onClickLogout: function(){
-        window.location = '/admin/logout'
+    propTypes: {
+        menuSelected: React.PropTypes.string.isRequired
+    },
+    onClickMenu: function(menu){
+        if(_.includes(['loker', 'blog'], menu)){
+            dispatcher.dispatch({
+                actionType: 'post-change-menu-selected',
+                menuSelected: menu
+            })
+        }else if(menu == 'logout'){
+            window.location = '/admin/logout'
+        }
     },
     render: function(){
     	let iconStyle = {margin: "5px 20px 0px 0px", fontSize: "18px"}
+        let menuSelected = this.props.menuSelected
+        let lokerClassName = menuSelected == "loker" ? "menu-option active" : "menu-option"
+        let blogClassName = menuSelected == "blog" ? "menu-option active" : "menu-option"
+
         return(
             <div className="navbar-menu">
-                <div className="menu-option">
-                    <i style={iconStyle} className="fa fa-user" />
+                <div className={lokerClassName} onClick={this.onClickMenu.bind(this, "loker")}>
+                    <i style={iconStyle} className="fa fa-briefcase" />
                         Posting Loker
                 </div>
-                <div className="menu-option">
+                <div className={blogClassName} onClick={this.onClickMenu.bind(this, "blog")} >
                     <i style={iconStyle} className="fa fa-user" />
                         Posting blog
                 </div>
-                <div className="menu-option" onClick={this.onClickLogout}>
-                    <i style={iconStyle} className="fa fa-user" />
+                <div className="menu-option" onClick={this.onClickMenu.bind(this, "logout")}>
+                    <i style={iconStyle} className="fa fa-lock" />
                         Keluar
                 </div>
             </div>
@@ -391,7 +405,7 @@ var AdminFormLokerPost = React.createClass({
         }
     },
     componentDidMount: function(){
-        var listener = PostStore.addChangeListener(this._onChange)
+        this.listener = PostStore.addChangeListener(this._onChange)
     },
     _onChange: function(){
         this.setState({
@@ -409,6 +423,25 @@ var AdminFormLokerPost = React.createClass({
             provinceId: provinceId
         })
     },
+    onClickPicture: function(){
+        $(".post-picture").click()
+    },
+    onChangePicture: function(event){
+        let attachment = event.target.files[0]
+
+        let url = URL.createObjectURL(attachment)
+
+        dispatcher.dispatch({
+            actionType: 'post-change-picture',
+            attributes: { pictureUrl: { url: url } }
+        })
+    },
+    onRemovePicture: function(){
+        dispatcher.dispatch({
+            actionType: "post-change-picture",
+            attributes: { pictureUrl: { url: null } }
+        })
+    },
     render: function(){
         let post = this.state.post
         let provinces = this.state.provinces
@@ -417,6 +450,13 @@ var AdminFormLokerPost = React.createClass({
         let provinceSelected = this.state.provinceSelected
         let csrfToken = this.props.csrfToken
         let requirements = post.requirements
+        let pictureUrl = this.state.post.pictureUrl.url
+
+        if (pictureUrl){
+            var logoDisplay = [<img src={pictureUrl} />,<i className="fa fa-times-circle" onClick={this.onRemovePicture} />]
+        }else{
+            var logoDisplay = <i className="fa fa-photo fa-3x" />
+        }
 
         return(
             <div className="form-loker">
@@ -429,6 +469,19 @@ var AdminFormLokerPost = React.createClass({
                         <div className="col-sm-8">
                             <input type="text" className="form-control input-sm" name="company[name]" required={true} />
                             <input type="hidden" name="post[company_id]" value="" />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-sm-3 control-label"> Logo Perusahaan</label>
+                        <div className="col-sm-8">
+                            <div className="post-picture-view pull-left">
+                                {logoDisplay}
+                            </div>
+                            <a href="javascript:void(0)" className="btn btn-sm btn-success pull-right" onClick={this.onClickPicture}>
+                                <i className="fa fa-camera" />
+                                 Upload Logo
+                            </a>
+                            <input type="file" className="post-picture hidden" name="post[pictures]" onChange={this.onChangePicture} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -499,8 +552,31 @@ var AdminPage = React.createClass({
     propTypes:{
         csrfToken: PropTypes.string.isRequired
     },
+    getInitialState: function(){
+        return{
+            menuSelected: PostStore.getMenuSelected()
+        }
+    },
+    componentDidMount: function(){
+        this.listener = PostStore.addChangeListener(this._onChange)
+    },
+    componentWillUnmount: function(){
+        this.listener.remove()
+    },
+    _onChange: function(){
+        this.setState({
+            menuSelected: PostStore.getMenuSelected()
+        })
+    },
     render: function(){
         let csrfToken = this.props.csrfToken
+        let menuSelected = this.state.menuSelected
+
+        if(menuSelected == "loker"){
+            var formDisplay = <AdminFormLokerPost csrfToken={csrfToken} /> 
+        }else if(menuSelected == "blog"){
+            var formDisplay = <BlogForm csrfToken={csrfToken} />
+        }
 
         return(
             <div className="admin-page text-center">
@@ -511,10 +587,10 @@ var AdminPage = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-lg-3 col-md-2 col-sm-2">
-                        <AdminNavbarMenu />
+                        <AdminNavbarMenu menuSelected={menuSelected} />
                     </div>
                     <div className="col-lg-9 col-md-10 col-sm-10">
-                        <AdminFormLokerPost csrfToken={csrfToken} />
+                        {formDisplay}
                     </div>
                 </div>
             </div>
@@ -522,4 +598,88 @@ var AdminPage = React.createClass({
     }
 });
 
+var BlogForm = React.createClass({
+    getInitialState: function(){
+        return{
+            blog: BlogStore.getBlog()
+        }
+    },
+    componentDidMount: function(){
+        this.listener = BlogStore.addChangeListener(this._onChange)
+    },
+    componentWillUnmount: function(){
+        this.listener.remove()
+    },
+    _onChange: function(){
+        this.setState({
+            blog: BlogStore.getBlog()
+        })
+    },
+    onClickUpload: function()
+    {
+        $('.blog-picture').click()
+    },
+    onChangePicture: function(event){
+        let attachment = event.target.files[0]
+        let url = URL.createObjectURL(attachment)
+
+        dispatcher.dispatch({
+            actionType: "blog-change",
+            attributes: {pictureUrl:{url: url}}
+        })
+    },
+    onRemovePicture: function(){
+        dispatcher.dispatch({
+            actionType: 'blog-change',
+            attributes: { pictureUrl: { url: null } }
+        })
+    },
+    render: function(){
+        let pictureUrl = this.state.blog.pictureUrl
+
+        if (pictureUrl.url) {
+            var pictureBlogDisplay = [<img src={pictureUrl.url} />, <i className="fa fa-times-circle" onClick={this.onRemovePicture} />]
+        }else{
+            var pictureBlogDisplay = <i className="fa fa-photo fa-3x" />
+        }
+
+        return(
+            <div className="form-loker">
+                <h3>Form Blog</h3>
+                <hr/>  
+                <form className="form-horizontal" method="POST" action="/admin/post_loker">
+                    <input type="hidden" name="_token" value={csrfToken} />
+                    <div className="form-group">
+                        <label className="col-sm-3 control-label"> Judul Blog</label>
+                        <div className="col-sm-8">
+                            <input type="text" className="form-control input-sm" name="blog[title]" required={true} />
+                            <input type="hidden" name="post[company_id]" value="" />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-sm-3 control-label"> Picture</label>
+                        <div className="col-sm-8">
+                            <div className="blog-picture-view pull-left">
+                                {pictureBlogDisplay}
+                            </div>
+                            <a href="javascript:void(0)" className="btn btn-sm btn-success pull-right" onClick={this.onClickUpload}>
+                                <i className="fa fa-camera fa-1x" /> Upload Gambar
+                            </a>
+                            <input type="file" className="blog-picture hidden" name="blog[picture]" onChange={this.onChangePicture} />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-sm-3 control-label"> Konten Blog</label>
+                        <div className="col-sm-8">
+                            <textarea rows={30} className="form-control input-sm" name="blog[content]" required={true} />
+                            <input type="hidden" name="post[company_id]" value="" />
+                        </div>
+                    </div>
+                    <button type="submit" className="btn btn-md btn-primary">Submit</button>
+                </form>
+            </div>
+        )
+    }
+})
+window.BlogForm = BlogForm
 window.AdminPage = AdminPage

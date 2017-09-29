@@ -1,8 +1,5 @@
 var blogItems = [
-	{title: "TIPS MENCARI KERJA DENGAN BAIK & BENAR kasd ajsdnfksak "},
-	{title: "Intermezo"},
-	{title: "asdfasdfdsf"},
-	{title: "t4wfsfsvs"}
+	{title: "TIPS MENCARI KERJA DENGAN BAIK & BENAR"}
 ]
 
 var BlogItemMobile = React.createClass({
