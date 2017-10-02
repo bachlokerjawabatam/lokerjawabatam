@@ -131,6 +131,12 @@
 	overflow-y: scroll;
 }
 
+.box-job-view .logo-mobile-view{
+	margin: 30px 20px;
+	width: 200px;
+	height: 150px;
+}
+
 .box-job-view .company{ font-size: 60px; }
 .box-job-view .email{ font-size: 40px; }
 .box-job-view .address{ font-size: 40px; }

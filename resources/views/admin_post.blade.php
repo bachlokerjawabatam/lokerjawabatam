@@ -15,6 +15,9 @@
 	    var csrfToken = $('#dummy-csrf-token').val()
 	    var flash = "{!! $alert !!}" 
 
+	    var categories = {!! $categories !!}
+	    var currentUser = {!! $current_user !!}
+	    
 	    if(!_.isEmpty(flash)){
 	    	window.alert(flash);
 	    }
@@ -25,6 +28,12 @@
 	    	provinces: provinces,
 	    	cities: cities,
 	    	companyTypes: companyTypes
+	    })
+
+	    dispatcher.dispatch({
+	    	actionType: 'blog-set-initialization',
+	    	categories: categories,
+	    	author: currentUser
 	    })
     </script>
     <script type="text/babel">

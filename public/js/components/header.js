@@ -1,4 +1,7 @@
 var HeaderDesktop = React.createClass({
+	onClickMenu: function(menuUrl){
+		window.location.href = menuUrl
+	},
 	render: function(){
 		return(
 			<div className="header-desktop">
@@ -8,19 +11,24 @@ var HeaderDesktop = React.createClass({
 					</div>
 					<div className="col-lg-6 col-md-6 pull-right">
 						<div className="row menu-about-us text-center">
-							<div className="col-sm-6 col-md-2 col-md-offset-2 menu-item">
+							<div className="col-sm-6 col-md-2 col-md-offset-2 menu-item" 
+								onClick={this.onClickMenu.bind(this, "/homepage/loker_jawa")} >
 								Loker Jawa
 							</div>
-							<div className="col-sm-6 col-md-2 menu-item">
+							<div className="col-sm-6 col-md-2 menu-item" 
+								onClick={this.onClickMenu.bind(this, "/homepage/loker_batam")}>
 								Loker Batam
 							</div>
-							<div className="col-sm-6 col-md-2 menu-item">
-								Blog
+							<div className="col-sm-6 col-md-2 menu-item"
+								onClick={this.onClickMenu.bind(this, "/tips_kerja")}>
+								Tips Kerja
 							</div>
-							<div className="col-sm-6 col-md-2 menu-item">
+							<div className="col-sm-6 col-md-2 menu-item"
+								onClick={this.onClickMenu.bind(this, "/tips_kerja")}>
 								Ide Bisnis
 							</div>
-							<div className="col-sm-6 col-md-2 menu-item">
+							<div className="col-sm-6 col-md-2 menu-item"
+								onClick={this.onClickMenu.bind(this, "/tentang_kami")}>
 								Tentang Kami
 							</div>
 						</div>

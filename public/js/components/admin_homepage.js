@@ -380,7 +380,7 @@ var AdminNavbarMenu = React.createClass({
                 </div>
                 <div className={blogClassName} onClick={this.onClickMenu.bind(this, "blog")} >
                     <i style={iconStyle} className="fa fa-user" />
-                        Posting blog
+                        Posting Artikel
                 </div>
                 <div className="menu-option" onClick={this.onClickMenu.bind(this, "logout")}>
                     <i style={iconStyle} className="fa fa-lock" />
@@ -433,13 +433,13 @@ var AdminFormLokerPost = React.createClass({
 
         dispatcher.dispatch({
             actionType: 'post-change-picture',
-            attributes: { pictureUrl: { url: url } }
+            attributes: { logo: url }
         })
     },
     onRemovePicture: function(){
         dispatcher.dispatch({
             actionType: "post-change-picture",
-            attributes: { pictureUrl: { url: null } }
+            attributes: { logo: null }
         })
     },
     render: function(){
@@ -450,7 +450,7 @@ var AdminFormLokerPost = React.createClass({
         let provinceSelected = this.state.provinceSelected
         let csrfToken = this.props.csrfToken
         let requirements = post.requirements
-        let pictureUrl = this.state.post.pictureUrl.url
+        let pictureUrl = this.state.post.logo
 
         if (pictureUrl){
             var logoDisplay = [<img src={pictureUrl} />,<i className="fa fa-times-circle" onClick={this.onRemovePicture} />]
@@ -462,7 +462,7 @@ var AdminFormLokerPost = React.createClass({
             <div className="form-loker">
                 <h3>Form lowongan Kerja</h3>
                 <hr/>  
-                <form className="form-horizontal" method="POST" action="/admin/post_loker">
+                <form className="form-horizontal" method="POST" action="/admin/post_loker" encType="multipart/form-data">
                     <input type="hidden" name="_token" value={csrfToken} />
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Nama Perusahaan</label>
@@ -481,7 +481,7 @@ var AdminFormLokerPost = React.createClass({
                                 <i className="fa fa-camera" />
                                  Upload Logo
                             </a>
-                            <input type="file" className="post-picture hidden" name="post[pictures]" onChange={this.onChangePicture} />
+                            <input type="file" className="post-picture hidden" name="logo" onChange={this.onChangePicture} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -601,7 +601,8 @@ var AdminPage = React.createClass({
 var BlogForm = React.createClass({
     getInitialState: function(){
         return{
-            blog: BlogStore.getBlog()
+            blog: BlogStore.getBlog(),
+            categories: BlogStore.getCategories()
         }
     },
     componentDidMount: function(){
@@ -625,20 +626,25 @@ var BlogForm = React.createClass({
 
         dispatcher.dispatch({
             actionType: "blog-change",
-            attributes: {pictureUrl:{url: url}}
+            attributes: { picture_url: url }
         })
     },
     onRemovePicture: function(){
         dispatcher.dispatch({
             actionType: 'blog-change',
-            attributes: { pictureUrl: { url: null } }
+            attributes: { picture_url: null }
         })
     },
     render: function(){
-        let pictureUrl = this.state.blog.pictureUrl
+        let pictureUrl = this.state.blog.picture_url
+        let userId = this.state.blog.user_id
+        let categories = this.state.categories
+        let titleInputName = "blog[title]"
+        let categoryIdInputName = "blog[category_id]"
+        let sourceLinkInputName = "blog[source_link]"
 
-        if (pictureUrl.url) {
-            var pictureBlogDisplay = [<img src={pictureUrl.url} />, <i className="fa fa-times-circle" onClick={this.onRemovePicture} />]
+        if (pictureUrl) {
+            var pictureBlogDisplay = [<img src={pictureUrl} />, <i className="fa fa-times-circle" onClick={this.onRemovePicture} />]
         }else{
             var pictureBlogDisplay = <i className="fa fa-photo fa-3x" />
         }
@@ -647,13 +653,29 @@ var BlogForm = React.createClass({
             <div className="form-loker">
                 <h3>Form Blog</h3>
                 <hr/>  
-                <form className="form-horizontal" method="POST" action="/admin/post_loker">
+                <form className="form-horizontal" method="POST" action="/admin/post_blog" encType="multipart/form-data">
                     <input type="hidden" name="_token" value={csrfToken} />
+                    <input type="hidden" name="blog[user_id]" value={userId} />
                     <div className="form-group">
-                        <label className="col-sm-3 control-label"> Judul Blog</label>
+                        <label className="col-sm-3 control-label">Judul Artikel</label>
                         <div className="col-sm-8">
-                            <input type="text" className="form-control input-sm" name="blog[title]" required={true} />
-                            <input type="hidden" name="post[company_id]" value="" />
+                            <input type="text" className="form-control input-sm" name={titleInputName} required={true} />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-sm-3 control-label">Kategori</label>
+                        <div className="col-sm-8">
+                            <LokerJawaBatamSelect
+                                classNames="form-control input-sm" 
+                                id="blog-category"
+                                name={categoryIdInputName}
+                                options={categories} />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-sm-3 control-label">Sumber Referensi</label>
+                        <div className="col-sm-8">
+                            <input type="text" className="form-control input-sm" name={sourceLinkInputName} required={true} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -665,11 +687,11 @@ var BlogForm = React.createClass({
                             <a href="javascript:void(0)" className="btn btn-sm btn-success pull-right" onClick={this.onClickUpload}>
                                 <i className="fa fa-camera fa-1x" /> Upload Gambar
                             </a>
-                            <input type="file" className="blog-picture hidden" name="blog[picture]" onChange={this.onChangePicture} />
+                            <input type="file" className="blog-picture hidden" name="picture" onChange={this.onChangePicture} />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className="col-sm-3 control-label"> Konten Blog</label>
+                        <label className="col-sm-3 control-label"> Konten Artikel</label>
                         <div className="col-sm-8">
                             <textarea rows={30} className="form-control input-sm" name="blog[content]" required={true} />
                             <input type="hidden" name="post[company_id]" value="" />

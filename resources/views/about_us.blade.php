@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'About Us')
+@section('title', 'Tentang Kami')
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>

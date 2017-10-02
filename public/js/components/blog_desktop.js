@@ -51,7 +51,7 @@ var BlogCategories = React.createClass({
 
 		return(
 			<div className="blog-categories text-center">
-				<h3>Categories</h3>
+				<h3>Artikel Populer</h3>
 				<ul className="blog-category-item text-right">
 					{categories.map(categoryItem)}
 				</ul>

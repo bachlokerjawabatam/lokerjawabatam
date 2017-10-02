@@ -187,7 +187,12 @@ var PostView = React.createClass({
         let expiredDate = info.expired_date 
         let sourceLink = info.source_link
         let requirements = info.requirements
+        let logoUrl = "/logos/" + info.logo
         let fileStyle = {fontSize: "120px"}
+
+        if (!_.isEmpty(info.logo)){
+            var logoDisplay = <img src={logoUrl} />
+        }
 
         let postItemView = function(item, key){
             return(
@@ -218,12 +223,23 @@ var PostView = React.createClass({
                     <div className="post-view">
                         <h1 className="text-center">{company.name}</h1>
                         <hr/>
-                        <p className="date"><label>Post Date:</label>  {postDate}</p>
-                        <p className="date"><label>Expired Date:</label>  {expiredDate}</p>
-                        <p className="date"><label>Sumber:</label>  <a href={sourceLink}>{sourceLink}</a></p>
+                        <div className="row">
+                            <div className="col-md-8">
+                                <p className="date"><label>Post Date:</label>  {postDate}</p>
+                                <p className="date"><label>Expired Date:</label>  {expiredDate}</p>
+                                <p className="date"><label>Sumber:</label>  <a href={sourceLink}>{sourceLink}</a></p>
+                                <p className="date"><label>Alamat:</label> {info.company.address}</p>
+                            </div>
+                            <div className="col-md-4">
+                                <div className="logo-view">
+                                    {logoDisplay}
+                                </div>
+                            </div>
+                        </div>
                         <br/>
                         <div className="content">
                             <p>Kami perusahaan {company.name} sedang membutuhkan tenaga kerja dengan kriteria sebagai berikut:</p>
+                            <br />
                             {requirements.map(postItemView)}
                         </div>
                     </div>

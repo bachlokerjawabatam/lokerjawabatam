@@ -18,12 +18,13 @@ Route::get('/', 'PostController@index');
 Route::get('/admin', 'AdminController@index');
 Route::get('/admin/homepage', 'AdminController@adminHomepage');
 Route::post('/admin/post_loker','AdminController@postLoker');
+Route::post('/admin/post_blog','AdminController@postBlog');
 Route::get('admin/logout', 'AdminController@logout');
 Route::post('/admin/login','AdminController@login');
 Route::get('/test/homepage_bachtiar_rio_2017', 'PostController@test');
 
-Route::get('/blog', function(){
+Route::get('/tips_kerja', function(){
 	return view('blog');
 });
-Route::get('/about_us', 'PostController@about_us');
+Route::get('/tentang_kami', 'PostController@about_us');
 Route::get('/homepage/set_session_content_type', 'PostController@set_session_content_type');

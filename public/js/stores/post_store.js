@@ -30,7 +30,7 @@ var post = {
 				companyId: null,
 				provinceId: null,
 				cityId: null,
-				pictureUrl: { url: null }
+				logo: null
 		   }
 
 var educationLevelTypes = []

@@ -51,6 +51,11 @@ var JobViewMobile = React.createClass({
         isLoadingData: React.PropTypes.bool
     },
 	closeJobView: function(){
+		dispatcher.dispatch({
+			actionType: 'homepage-chage-show-job-view',
+			show: false
+		})
+
 		$(".job-view-mobile").animate({
 			marginLeft: '100%'
 		})
@@ -63,6 +68,11 @@ var JobViewMobile = React.createClass({
         let postDate = info.created_at
         let expiredDate = info.expired_date
         let requirements = info.requirements
+        let logoUrl = "/logos/" + info.logo
+
+        if (!_.isEmpty(info.logo)){
+        	var logoDisplay = <img src={logoUrl} className="logo-mobile-view" />
+        }
 
         let infoRequirement = function(item, key){
         	return(
@@ -85,6 +95,7 @@ var JobViewMobile = React.createClass({
 					<i className="fa fa-times fa-5x pull-right" style={closeStyle} onClick={this.closeJobView}/>
 					<div className="box-job-view text-left">
 						<p className="company">{company.name}</p>
+						{logoDisplay}
 						<p className="email">{company.email}</p>
 						<p className="address">{company.address}</p>
 						
@@ -176,7 +187,12 @@ var JobListMobile = React.createClass({
 });
 
 var NavbarMobile = React.createClass({
+	propTypes: {
+		showJobView: React.PropTypes.bool
+	},
 	onClickMenu: function(strMenu){
+		var that = this
+
 		if(_.includes(['loker_jawa', 'loker_batam'], strMenu)){
 			$.ajax({
                 url: '/homepage/set_session_content_type',
@@ -196,6 +212,13 @@ var NavbarMobile = React.createClass({
 					$(".navbar-mobile").animate({
 						marginLeft: '-100%'
 					});
+
+					if(that.props.showJobView){
+						$(".job-view-mobile").animate({
+							marginLeft: '100%'
+						})	
+					}
+					
                 },
                 success: function(data){
                     let contentType = data.contentType
@@ -270,7 +293,8 @@ var HomepageMobile = React.createClass({
             lokerInfos: HomepageStore.getLokerInfos(),
             itemSelected: HomepageStore.getItemSelected(),
             infoSelected: HomepageStore.getInfoSelected(),
-            isLoadingData: HomepageStore.getIsLoadingData()
+            isLoadingData: HomepageStore.getIsLoadingData(),
+            showJobView: HomepageStore.getShowJobView()
 		}
 	},
 	componentDidMount: function(){
@@ -286,7 +310,8 @@ var HomepageMobile = React.createClass({
             itemSelected: HomepageStore.getItemSelected(),
             infoSelected: HomepageStore.getInfoSelected(),
             isLoadingData: HomepageStore.getIsLoadingData(),
-            showNavbar: HomepageStore.getShowNavbar()
+            showNavbar: HomepageStore.getShowNavbar(),
+            showJobView: HomepageStore.getShowJobView()
         })
     },
 	toggleNavbar: function(){
@@ -310,6 +335,7 @@ var HomepageMobile = React.createClass({
         let isLoadingData = this.state.isLoadingData
 		let showNavbar = this.state.showNavbar
 		let iconClassName = showNavbar? 'fa fa-times pull-left' : 'fa fa-bars pull-left'
+		let showJobView = this.state.showJobView
 
 		return(
 			<div className="container-fluid homepage-mobile text-center">
@@ -317,7 +343,7 @@ var HomepageMobile = React.createClass({
 					<i className={iconClassName} onClick={this.toggleNavbar} />
 					Lokerjawabatam.com
 				</div>
-				<NavbarMobile />
+				<NavbarMobile showJobView={showJobView} />
 				<JobViewMobile infoSelected={infoSelected} 
 					isLoadingData={isLoadingData}/>
 				<JobListMobile lokerList={lokerList} itemSelected={itemSelected} 

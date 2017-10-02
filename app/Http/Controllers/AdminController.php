@@ -19,6 +19,8 @@ use App\Requirement;
 use App\Position;
 use App\WorkDescription;
 use App\RequireDescription;
+use App\Blog;
+use App\Category;
 
 class AdminController extends Controller
 {
@@ -58,24 +60,57 @@ class AdminController extends Controller
             return view('admin');
         }
         
+        $current_user = auth()->user()->toJson();
         $education_levels = EducationLevel::all()->toJson();
         $provinces = Province::all()->toJson();
         $cities = City::all()->toJson();
         $company_types = CompanyType::all()->toJson();
         $session_alert = session('alert');
+        $categories = Category::all()->toJson();
 
     	return view('admin_post', [
+            'current_user' => $current_user,
             'education_levels' => $education_levels,
             'provinces' => $provinces,
             'cities' => $cities,
             'company_types' => $company_types,
+            'categories' => $categories,
             'alert' => $session_alert
         ]);
+    }
+
+    public function postBlog(Request $params){        
+        $blog = new Blog;
+
+        $picture = $params->file('picture');
+        $picture_filename = time() . '.' . $picture->getClientOriginalExtension();
+        $path = public_path('images/' . $picture_filename);
+
+        $blog->title = $params->blog['title'];
+        $blog->category_id = $params->blog['category_id'];
+        $blog->user_id = $params->blog['user_id'];
+        $blog->content = $params->blog['content'];
+        $blog->source_link = $params->blog['source_link'];
+        $blog->picture_url = $picture_filename; 
+        
+        $blog->save();
+
+        $destinationPath = public_path('images/');        
+        $picture->move($destinationPath, $picture_filename);
+
+        return redirect()->action('AdminController@adminHomepage')
+                         ->with('alert', 'Artikel Berhasil Di Save!!');
+
     }
 
     public function postLoker(Request $params){
         $post = new Post;
 
+        $logo = $params->file('logo');
+        $logo_filename = time() . '.' . $logo->getClientOriginalExtension();
+        $path = public_path('logos/' . $logo_filename);
+        $destinationPath = public_path('logos/');        
+        
         $company_id = $params->post['company_id'];
         if ($company_id){
             if($company = Company::find($company_id)){
@@ -97,8 +132,10 @@ class AdminController extends Controller
         $post->city_id = $params->post['city_id'];
         $post->expired_date = $params->post['exp_date'];
         $post->source_link = $params->post['source_link'];
+        $post->logo = $logo_filename;
 
         $post->save();
+        $logo->move($destinationPath, $logo_filename);
 
         foreach($params->requirements as $key => $requirement){
             //handle to create new position if not position id

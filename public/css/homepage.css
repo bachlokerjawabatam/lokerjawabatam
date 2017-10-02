@@ -69,6 +69,11 @@
 	overflow-y: auto; 
 }
 
+.post-view .logo-view img{
+	width: 150px;
+	height: 150px;
+}
+
 .post-view .content{
 	font-size: 16px;
 }

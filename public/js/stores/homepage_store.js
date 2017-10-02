@@ -11,6 +11,7 @@ var itemSelected = {}
 var infoSelected = {}
 var isLoadingData = false
 var showNavbar = false
+var showJobView = false
 
 window.HomepageStore = _.assign(new EventEmitter(),{ 
 	getContentType: function(){ return contentType },
@@ -20,6 +21,7 @@ window.HomepageStore = _.assign(new EventEmitter(),{
 	getInfoSelected: function(){ return infoSelected },
 	getIsLoadingData: function(){ return isLoadingData },
 	getShowNavbar: function(){ return showNavbar },
+	getShowJobView: function(){ return showJobView},
 
 	emitChange: function(){
 		return this.emit(CHANGE_EVENT)
@@ -74,6 +76,7 @@ dispatcher.register(
 
 			itemSelected = _itemList
 			infoSelected = _itemInfo
+			showJobView = true
 
 			HomepageStore.emitChange()
 		}else if(payload.actionType == 'homepage-change-is-loading-data'){
@@ -83,6 +86,10 @@ dispatcher.register(
 		}else if(payload.actionType == 'homepage-change-show-navbar'){
 			showNavbar = payload.bool
 			
+			HomepageStore.emitChange()
+		}else if(payload.actionType == 'homepage-chage-show-job-view'){
+			showJobView = payload.show
+
 			HomepageStore.emitChange()
 		}
 	}
