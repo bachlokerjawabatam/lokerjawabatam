@@ -1,14 +1,27 @@
 var menuItems = [
-	{icon: "fa fa-home", title: "Loker Jawa", url: "/content_type='loker_jawa'"},
-	{icon: "fa fa-briefcase", title: "Loker Batam", url: "/content_type='loker_batam'"},
-	{icon: "fa fa-user", title: "Blog", url: "/blog"},
-	{icon: "fa fa-camera", title: "Ide Bisnis", url: "/ide_bisnis"},
-	{icon: "fa fa-file", title: "Tentang Kami", url: "/about_us"}
+	{icon: "fa fa-home", title: "Loker Jawa", url: "loker_jawa"},
+	{icon: "fa fa-home", title: "Loker Batam", url: "loker_batam"},
+	{icon: "fa fa-briefcase", title: "Tips Kerja", url: "/tips_kerja"},
+	{icon: "fa fa-leaf", title: "Ide Bisnis", url: "/tips_kerja"},
+	{icon: "fa fa-address-card", title: "Tentang Kami", url: "/tentang_kami"}
 ]
 
 var InstagramMenu = React.createClass({
 	onClickMenuItem: function(url){
-		window.location = url
+		if(_.includes(['loker_jawa', 'loker_batam'], url)){
+			$.ajax({
+                url: '/homepage/set_session_content_type',
+                method: 'get',
+                data: {content_type: url},
+                formatType: 'json',
+                success: function(data){
+                    window.location.href = '/'
+                }
+            })
+		}else{
+			window.location = url
+		}
+
 	},
 	render: function(){
 		let that = this

@@ -237,7 +237,7 @@ var NavbarMobile = React.createClass({
                 })
             })
 		}else{
-			window.location = url
+			window.location = strMenu
 		}
 	},
 	render: function(){
@@ -257,12 +257,16 @@ var NavbarMobile = React.createClass({
 						<i className="fa fa fa-newspaper-o fa-4x pull-left" />
 						<span style={lokerBatamStyle}>Loker Batam</span>
 					</div>
-					<div className="item text-right">
-						<i className="fa fa-address-card fa-4x pull-left" />
-						Blog
+					<div className="item text-right" onClick={this.onClickMenu.bind(this, "/tips_kerja")}>
+						<i className="fa fa-briefcase fa-4x pull-left" />
+						Tips Kerja
 					</div>
-					<div className="item text-right">
-						<i className="fa fa-newspaper-o fa-4x pull-left" />
+					<div className="item text-right" onClick={this.onClickMenu.bind(this, "/tips_kerja")}>
+						<i className="fa fa-leaf fa-4x pull-left" />
+						Ide Bisnis
+					</div>
+					<div className="item text-right" onClick={this.onClickMenu.bind(this, "/tentang_kami")}>
+						<i className="fa fa-address-card fa-4x pull-left" />
 						Tentang Kami
 					</div>
 				</div>

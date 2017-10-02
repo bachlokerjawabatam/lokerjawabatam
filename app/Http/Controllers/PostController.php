@@ -36,12 +36,12 @@ class PostController extends Controller
         return view('post', [
             'content_type' => $content_type,
             'loker_infos' => $loker_infos->toJson()
-        ]); 	
+        ]);     
     }
 
     public function set_session_content_type(Request $params){
-    	$session_content_type = $params->content_type;
-    	session(['content_type' => $session_content_type]);
+        $session_content_type = $params->content_type;
+        session(['content_type' => $session_content_type]);
 
         $content_type = session('content_type');
         
@@ -55,6 +55,17 @@ class PostController extends Controller
         
         return response()->json(['lokerInfos' => $loker_infos, 'contentType' => $session_content_type]);
     }
+
+    public function set_session_loker_content(Request $params){
+        $session_content_type = $params->content_type;
+        session(['content_type' => $session_content_type]);
+
+        $content_type = session('content_type');
+        
+        return response()->json(['content_type' => $content_type]); 
+    }
+
+
 
     public function test(){
     	$content_type = session('content_type');

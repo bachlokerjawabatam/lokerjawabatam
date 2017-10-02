@@ -1,6 +1,18 @@
 var HeaderDesktop = React.createClass({
 	onClickMenu: function(menuUrl){
-		window.location.href = menuUrl
+		if(_.includes(['loker_jawa', 'loker_batam'], menuUrl)){
+			$.ajax({
+                url: '/homepage/set_session_content_type',
+                method: 'get',
+                data: {content_type: menuUrl},
+                formatType: 'json',
+                success: function(data){
+                    window.location.href = '/'
+                }
+            })
+		}else{
+			window.location.href = menuUrl
+		}
 	},
 	render: function(){
 		return(
@@ -12,11 +24,11 @@ var HeaderDesktop = React.createClass({
 					<div className="col-lg-6 col-md-6 pull-right">
 						<div className="row menu-about-us text-center">
 							<div className="col-sm-6 col-md-2 col-md-offset-2 menu-item" 
-								onClick={this.onClickMenu.bind(this, "/homepage/loker_jawa")} >
+								onClick={this.onClickMenu.bind(this, "loker_jawa")} >
 								Loker Jawa
 							</div>
 							<div className="col-sm-6 col-md-2 menu-item" 
-								onClick={this.onClickMenu.bind(this, "/homepage/loker_batam")}>
+								onClick={this.onClickMenu.bind(this, "loker_batam")}>
 								Loker Batam
 							</div>
 							<div className="col-sm-6 col-md-2 menu-item"

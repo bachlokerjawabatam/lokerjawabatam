@@ -1,34 +1,38 @@
 var NavbarMenu = React.createClass({
     onClickItemMenu: function(contentType){
-        let currentContentType = HomepageStore.getContentType()
-        if(currentContentType != contentType){
-            $.ajax({
-                url: '/homepage/set_session_content_type',
-                method: 'get',
-                data: {content_type: contentType},
-                formatType: 'json',
-                beforeSend: function(){
+        if(contentType == 'loker_batam' || contentType == 'loker_jawa'){
+            let currentContentType = HomepageStore.getContentType()
+            if(currentContentType != contentType){
+                $.ajax({
+                    url: '/homepage/set_session_content_type',
+                    method: 'get',
+                    data: {content_type: contentType},
+                    formatType: 'json',
+                    beforeSend: function(){
+                        dispatcher.dispatch({
+                            actionType: 'homepage-change-is-loading-data',
+                            bool: true
+                        })
+                    },
+                    success: function(data){
+                        let contentType = data.contentType
+                        let lokerInfos = data.lokerInfos
+
+                        dispatcher.dispatch({
+                            actionType: 'homepage-initialization',
+                            contentType: contentType,
+                            lokerInfos: lokerInfos
+                        })
+                    }
+                }).always(function(){
                     dispatcher.dispatch({
                         actionType: 'homepage-change-is-loading-data',
-                        bool: true
+                        bool: false
                     })
-                },
-                success: function(data){
-                    let contentType = data.contentType
-                    let lokerInfos = data.lokerInfos
-
-                    dispatcher.dispatch({
-                        actionType: 'homepage-initialization',
-                        contentType: contentType,
-                        lokerInfos: lokerInfos
-                    })
-                }
-            }).always(function(){
-                dispatcher.dispatch({
-                    actionType: 'homepage-change-is-loading-data',
-                    bool: false
                 })
-            })
+            }
+        }else{
+            window.location.href = "/" + contentType
         }
     },
     render: function(){
@@ -36,8 +40,9 @@ var NavbarMenu = React.createClass({
         let arrMenu = [
             {title: 'Loker Jawa', value: 'loker_jawa', icon: 'fa fa-newspaper-o'},
             {title: 'Loker Batam', value: 'loker_batam', icon: 'fa fa-newspaper-o'},
-            {title: 'Blog', value: 'blog', icon: 'fa fa-address-card-o'},
-            {title: 'About Us', value: 'about_us', icon: 'fa fa-briefcase'}
+            {title: 'Tips Kerja', value: 'tips_kerja', icon: 'fa fa-address-card-o'},
+            {title: 'Ide Bisnis', value: 'ide_bisnis', icon: 'fa fa-briefcase'},
+            {title: 'Tentang Kami', value: 'about_us', icon: 'fa fa-user'}
         ]
         let that = this
         let listMenu = function(item, key){
