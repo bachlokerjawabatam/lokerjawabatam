@@ -36,7 +36,7 @@ var HeaderDesktop = React.createClass({
 								Tips Kerja
 							</div>
 							<div className="col-sm-6 col-md-2 menu-item"
-								onClick={this.onClickMenu.bind(this, "/tips_kerja")}>
+								onClick={this.onClickMenu.bind(this, "/ide_bisnis")}>
 								Ide Bisnis
 							</div>
 							<div className="col-sm-6 col-md-2 menu-item"

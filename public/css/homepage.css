@@ -19,9 +19,12 @@
 	background-color: #008c8c;
 }
 .homepage-desktop .posting-list { 
-	padding: 0px 20px 0px 0px;
-	margin: 10px 0px 0px -25px;
-	max-height: 650px;
+	position: fixed;
+	z-index: 99;
+	padding: 80px 0 0px 0px;
+	margin: 0px 0px 0px 0px;
+	height: 650px;
+	width: 500px;
 	border-right: 2px solid #ededed;
 	overflow-y: auto;
 }
@@ -39,10 +42,9 @@
 .post-item {
 	width: 100%;
 	margin: 0px 5px 5px 5px;
-	padding: 5px 10px 5px 5px;
+	padding: 5px 30px 5px 20px;
 	height: 80px;
-	border: 2px solid #008c8c;
-	border-radius: 3px 3px 20px 3px;
+	color: #008c8c;
 	cursor: pointer;
 }
 
@@ -65,8 +67,7 @@
 }
 
 .post-view {
-	max-height: 650px;
-	overflow-y: auto; 
+	margin-top: 100px; 
 }
 
 .post-view .logo-view img{
@@ -104,8 +105,8 @@
 }
 
 .menu-modal .box-menu-modal{
-	width: 180px;
-	line-height: 100px;
+	width: 150px;
+	line-height: 80px;
 	border: 2px solid #008c8c;
 	margin: auto;
 	border-radius: 10px;

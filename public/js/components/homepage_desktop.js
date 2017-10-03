@@ -289,25 +289,16 @@ var HomepageDesktopView = React.createClass({
 
         return (
             <div className="container-fluid homepage-desktop">
-                <div className="header">
-                    <div className="title">Lokerjawabatam.com</div>
-                    <div className="sub-title">
-                        informasi lowongan kerja terkini daerah jawa dan batam
-                    </div>
-                </div>
+                <HeaderDesktop />
                 <div className="strip"></div>
                 <div className="content">
-                    <div className="row">
-                        <div className="col-lg-2 col-md-6">
-                            <NavbarMenu />
-                            <FilterMenu />
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <PostingLists lokerList={lokerList}
+                    <PostingLists lokerList={lokerList}
                                  itemSelected={itemSelected} 
                                  isLoadingData={isLoadingData} />
+                    <div className="row">
+                        <div className="col-lg-5 col-md-7">    
                         </div>
-                        <div className="col-lg-7 col-md-12">
+                        <div className="col-lg-7 col-md-5">
                             <PostView infoSelected={infoSelected} 
                                 isLoadingData={isLoadingData} />
                         </div>

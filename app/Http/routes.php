@@ -23,8 +23,8 @@ Route::get('admin/logout', 'AdminController@logout');
 Route::post('/admin/login','AdminController@login');
 Route::get('/test/homepage_bachtiar_rio_2017', 'PostController@test');
 
-Route::get('/tips_kerja', function(){
-	return view('blog');
-});
 Route::get('/tentang_kami', 'PostController@about_us');
+Route::get('/tips_kerja', 'PostController@tips_kerja');
+Route::get('/ide_bisnis', 'PostController@ide_bisnis');
+
 Route::get('/homepage/set_session_content_type', 'PostController@set_session_content_type');

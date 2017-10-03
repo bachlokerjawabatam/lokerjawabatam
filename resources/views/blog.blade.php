@@ -7,6 +7,15 @@
     <script type="text/babel" src="{{URL::asset('js/components/instagram_menu.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/blog_desktop.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/blog_mobile.js')}}"></script>
+    <script type="text/javascript" src="{{URL::asset('js/stores/blog_store.js')}}"></script>
+    <script type="text/javascript">
+        var blogList = {!! $blogList !!}
+
+        dispatcher.dispatch({
+            actionType: 'blog-set-blog-list',
+            blogList: blogList
+        })
+    </script>
     <script type="text/babel">
         const TABLET_MAX_SIZE = 991
 

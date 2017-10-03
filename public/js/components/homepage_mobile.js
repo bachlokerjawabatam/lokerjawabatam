@@ -343,15 +343,13 @@ var HomepageMobile = React.createClass({
 
 		return(
 			<div className="container-fluid homepage-mobile text-center">
-				<div className="header fixed">
-					<i className={iconClassName} onClick={this.toggleNavbar} />
-					Lokerjawabatam.com
-				</div>
+				<HeaderMobile />
 				<NavbarMobile showJobView={showJobView} />
 				<JobViewMobile infoSelected={infoSelected} 
 					isLoadingData={isLoadingData}/>
 				<JobListMobile lokerList={lokerList} itemSelected={itemSelected} 
 					isLoadingData={isLoadingData} />
+				<InstagramMenu />
 			</div>
 		)
 	}

@@ -31,7 +31,7 @@ class Blog extends Model
     	return $this->belongsTo('App\User');
     }
 
-    protected $with = ['category', 'user'];
+    protected $with = ['category', 'author'];
     protected $visible = ['id', 'title', 'content', 'picture_url', 'source_link', 'category_id', 'user_id',
     					  'category', 'author', 'created_at'];
 }

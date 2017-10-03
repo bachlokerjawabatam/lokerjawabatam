@@ -30,7 +30,7 @@ var ContactUs = React.createClass({
 			<div className="contact-us">
 				<div className="row">
 					<div className="col-sm-4 text-right owner">
-						<img src="/image/owner-1.jpg" />
+						<img src="/image/owner.jpg" />
 					</div>
 					<div className="col-sm-8 text-right owner-name">
 						<h1>Bachtiar Eko Wahyudi</h1>
@@ -39,7 +39,7 @@ var ContactUs = React.createClass({
 				</div>
 				<div className="row">
 					<div className="col-sm-4 text-right owner">
-						<img src="/image/owner-1.jpg" />
+						<img src="/image/owner.jpg" />
 					</div>
 					<div className="col-sm-8 text-right owner-name">
 						<h1>Prihambodo Trio Agustian</h1>

@@ -4,6 +4,8 @@
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/homepage_desktop.js')}}"></script>
+    <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>
+    <script type="text/babel" src="{{URL::asset('js/components/instagram_menu.js')}}"></script>
     <script type="text/javascript" src="{{URL::asset('js/stores/homepage_store.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/homepage_mobile.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/landing_page.js')}}"></script>
@@ -81,39 +83,43 @@
                 }
             },
             onSelectContent: function(contentType){
-                dispatcher.dispatch({
-                    actionType: 'homepage-change-content-type',
-                    contentType: contentType
-                })
+                if(_.includes(['loker_jawa', 'loker_batam'], contentType)){
+                    dispatcher.dispatch({
+                        actionType: 'homepage-change-content-type',
+                        contentType: contentType
+                    })
 
-                this.onHideModal()
-                $.ajax({
-                    url: '/homepage/set_session_content_type',
-                    method: 'get',
-                    data: {content_type: contentType},
-                    formatType: 'json',
-                    beforeSend: function(){
+                    this.onHideModal()
+                    $.ajax({
+                        url: '/homepage/set_session_content_type',
+                        method: 'get',
+                        data: {content_type: contentType},
+                        formatType: 'json',
+                        beforeSend: function(){
+                            dispatcher.dispatch({
+                                actionType: 'homepage-change-is-loading-data',
+                                bool: true
+                            })
+                        },
+                        success: function(data){
+                            let contentType = data.contentType
+                            let lokerInfos = data.lokerInfos
+
+                            dispatcher.dispatch({
+                                actionType: 'homepage-initialization',
+                                contentType: contentType,
+                                lokerInfos: lokerInfos
+                            })
+                        }
+                    }).always(function(){
                         dispatcher.dispatch({
                             actionType: 'homepage-change-is-loading-data',
-                            bool: true
+                            bool: false
                         })
-                    },
-                    success: function(data){
-                        let contentType = data.contentType
-                        let lokerInfos = data.lokerInfos
-
-                        dispatcher.dispatch({
-                            actionType: 'homepage-initialization',
-                            contentType: contentType,
-                            lokerInfos: lokerInfos
-                        })
-                    }
-                }).always(function(){
-                    dispatcher.dispatch({
-                        actionType: 'homepage-change-is-loading-data',
-                        bool: false
                     })
-                })
+                }else{
+                    window.location.href = '/' + contentType
+                }  
             },
             desktopView: function(){
                 let contentType = this.state.contentType
@@ -129,33 +135,43 @@
                                         Apa yang ingin anda cari?
                                     </div>
                                     <div className="row">
-                                        <div className="col-md-4">
+                                        <div className="col-md-3">
                                             <div className="box-menu-modal" onClick={this.onSelectContent.bind(this, 'loker_jawa')}>
                                                 <div className="box-icon">
-                                                    <i className="fa fa-briefcase"/>
+                                                    <i className="fa fa-address-card" />
                                                 </div>
                                                 <div className="title"  onClick={this.onSelectContent.bind(this, 'loker_jawa')}>
                                                     Loker Jawa
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-md-4">
+                                        <div className="col-md-3">
                                             <div className="box-menu-modal">
                                                 <div className="box-icon" onClick={this.onSelectContent.bind(this, 'loker_batam')}>
-                                                    <i className="fa fa-leaf" />
+                                                    <i className="fa fa-address-card-o" />
                                                 </div>
                                                 <div className="title" onClick={this.onSelectContent.bind(this, 'loker_batam')}>
                                                     Loker Batam
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-md-4">
+                                        <div className="col-md-3">
                                             <div className="box-menu-modal">
-                                                <div className="box-icon" onClick={this.onSelectContent.bind(this, 'blog')} >
-                                                    <i className="fa fa-user" />
+                                                <div className="box-icon" onClick={this.onSelectContent.bind(this, 'tips_kerja')}>
+                                                    <i className="fa fa-briefcase" />
                                                 </div>
-                                                <div className="title" onClick={this.onSelectContent.bind(this, 'blog')}>
-                                                    Blog
+                                                <div className="title" onClick={this.onSelectContent.bind(this, 'tips_kerja')}>
+                                                    Tips Kerja
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <div className="box-menu-modal">
+                                                <div className="box-icon" onClick={this.onSelectContent.bind(this, 'tips_kerja')} >
+                                                    <i className="fa fa-lightbulb-o" />
+                                                </div>
+                                                <div className="title" onClick={this.onSelectContent.bind(this, 'tips_kerja')}>
+                                                    Ide Bisnis
                                                 </div>
                                             </div>
                                         </div>
@@ -187,19 +203,19 @@
                                             Apa yang ingin anda cari ?
                                         </div>
                                         <div className="menu-item" onClick={this.onSelectContent.bind(this, 'loker_jawa')}>
-                                            <i style={menuStyle} className="fa fa-leaf pull-left" />
+                                            <i style={menuStyle} className="fa fa-address-card pull-left" />
                                             <span className="pull-right">Loker Jawa</span>
                                         </div>
                                         <div className="menu-item" onClick={this.onSelectContent.bind(this, 'loker_batam')}>
-                                            <i style={menuStyle}  className="fa fa-briefcase pull-left" />
+                                            <i style={menuStyle}  className="fa fa-address-card-o pull-left" />
                                             <span className="pull-right">Loker Batam</span>
                                         </div>
-                                        <div className="menu-item">
-                                            <i style={menuStyle}  className="fa fa-user pull-left" />
-                                            <span className="pull-right">Blog</span>
+                                        <div className="menu-item" onClick={this.onSelectContent.bind(this, 'tips_kerja')}>
+                                            <i style={menuStyle} className="fa fa-briefcase pull-left" />
+                                            <span className="pull-right">Tips Kerja</span>
                                         </div>
-                                        <div className="menu-item">
-                                            <i style={menuStyle}  className="fa fa-briefcase pull-left" />
+                                        <div className="menu-item" onClick={this.onSelectContent.bind(this, 'tips_kerja')}>
+                                            <i style={menuStyle} className="fa fa-lightbulb-o pull-left" />
                                             <span className="pull-right">Ide Bisnis</span>
                                         </div>
                                     </div>

@@ -4,37 +4,22 @@ var categories = [
 	{title: "lain lain", icon: "fa fa-leaf"}
 ]
 
-var blogLists = [
-	{title: "Tips Mencari Kerja Dengan Baik Dan Benar"},
-	{title: "asdfsdfsd"}
-] 
-
 var BlogListItem = React.createClass({
 	propTypes: {
 		item: React.PropTypes.object.isRequired
 	},
 	render: function(){
 		let item = this.props.item
+		let imageUrl = "/images/" + item.picture_url
+
 		return(
 			<div className="blog-list-item">
 				<div className="blog-image">
-					<img src="/image/landing_page.jpg" />
+					<img src={imageUrl} />
 				</div>
-				<h3>TIPS MENCARI KERJA DENGAN BAIK & BENAR</h3>
+				<h3>{item.title}</h3>
 				<hr />
-				<p>
-					“Setelah 2 tahun membangun bisnis online, dari profit 500 ribu per bulan, hingga
-					menjadi Rp 5 juta per bulan, kini berhasil melipatgandakan penghasilan menjadi 20
-					juta per bulan... hanya dengan menerapkan prinsip-prinsip sederhana internet
-					marketing. Dan itu masih berlanjut... Saya kira, saya sudah cukup layak untuk
-					memberikan sebagian ilmunya di sini. Selamat membaca.”
-				</p>
-				<p>
-					Saya tanya kepada anda... apa tujuan anda membuat blog?
-					Jawaban anda pasti beragam. Tapi, saya yakin pada satu hal. Bagi anda yang
-					punya produk internet, tujuan blog anda pasti untuk menarik pengunjung dan
-					menjaring lebih banyak pelanggan. Betul?
-				</p>
+				<p>{item.content}</p>
 				<button className="btn btn-md btn-warning pull-right">Selengkapnya</button>
 			</div>
 		)
@@ -61,7 +46,25 @@ var BlogCategories = React.createClass({
 })
 
 var BlogList = React.createClass({
+	getInitialState: function(){
+		return{
+			blogList: BlogStore.getBlogList()
+		}
+	},
+	componentDidMount: function(){
+		this.listener = BlogStore.addChangeListener(this._onChange)
+	},
+	componentWillUnmount: function(){
+		this.listener.remove()
+	},
+	_onChange: function(){
+		this.setState({
+			blogList: BlogStore.getBlogList()
+		})
+	},
 	render: function(){
+		let blogList = this.state.blogList
+
 		let blogListItem = function(item, key){
 			return(
 				<BlogListItem key={key} item={item} />
@@ -69,7 +72,7 @@ var BlogList = React.createClass({
 		}
 		return(
 			<div className="blog-list">
-				{blogLists.map(blogListItem)}
+				{blogList.map(blogListItem)}
 			</div>
 		)
 	}

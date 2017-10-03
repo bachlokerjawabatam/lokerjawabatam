@@ -1,9 +1,9 @@
 var menuItems = [
-	{icon: "fa fa-home", title: "Loker Jawa", url: "loker_jawa"},
-	{icon: "fa fa-home", title: "Loker Batam", url: "loker_batam"},
+	{icon: "fa fa-address-card", title: "Loker Jawa", url: "loker_jawa"},
+	{icon: "fa fa-address-card-o", title: "Loker Batam", url: "loker_batam"},
 	{icon: "fa fa-briefcase", title: "Tips Kerja", url: "/tips_kerja"},
-	{icon: "fa fa-leaf", title: "Ide Bisnis", url: "/tips_kerja"},
-	{icon: "fa fa-address-card", title: "Tentang Kami", url: "/tentang_kami"}
+	{icon: "fa fa-lightbulb-o", title: "Ide Bisnis", url: "/tips_kerja"},
+	{icon: "fa fa-users", title: "Tentang Kami", url: "/tentang_kami"}
 ]
 
 var InstagramMenu = React.createClass({

@@ -18,9 +18,12 @@ var blog = {
 	category: {}
 }
 
+var blogList = []
+
 window.BlogStore = _.assign(new blogEventEmitter(),{ 
 	getBlog: function(){ return blog },
 	getCategories: function(){ return categories },
+	getBlogList: function(){ return blogList },
 
 	emitChange: function(){
 		return this.emit(BLOG_CHANGE_EVENT)
@@ -45,6 +48,10 @@ dispatcher.register(
 			let author = payload.author
 			blog = Object.assign({}, {user_id: author.id, author: author})
 
+			BlogStore.emitChange()
+		}else if(payload.actionType == 'blog-set-blog-list'){
+			blogList = payload.blogList
+			
 			BlogStore.emitChange()
 		}
 	}

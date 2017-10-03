@@ -17,6 +17,7 @@ use App\Post;
 use App\Requirement;
 use App\Position;
 use App\WorkDescription;
+use App\Blog;
 
 class PostController extends Controller
 {
@@ -65,7 +66,21 @@ class PostController extends Controller
         return response()->json(['content_type' => $content_type]); 
     }
 
+    public function tips_kerja(){
+        $blog_list = Blog::where('category_id', 1)->get();
 
+        return view('blog',[
+            'blogList' => $blog_list 
+        ]);
+    }
+
+    public function ide_bisnis(){
+        $blog_list = Blog::where('category_id', 2)->get();
+
+        return view('blog',[
+            'blogList' => $blog_list 
+        ]);
+    }
 
     public function test(){
     	$content_type = session('content_type');
