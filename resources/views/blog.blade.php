@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Loker Jawa Batam - Tips Kerja')
+@section('title', 'Lokerjawabatam')
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>

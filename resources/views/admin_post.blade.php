@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Halaman Utama')
+@section('title', 'Lokerjawabatam - admin')
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/admin_homepage.js')}}"></script>

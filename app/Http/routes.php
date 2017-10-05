@@ -14,7 +14,8 @@
 use App\Post;
 use Illuminate\Http\Request;
 
-Route::get('/', 'PostController@index');
+Route::get('/', 'PostController@welcome');
+Route::get('/lowongan_kerja', 'PostController@index');
 Route::get('/admin', 'AdminController@index');
 Route::get('/admin/homepage', 'AdminController@adminHomepage');
 Route::post('/admin/post_loker','AdminController@postLoker');
@@ -28,3 +29,4 @@ Route::get('/tips_kerja', 'PostController@tips_kerja');
 Route::get('/ide_bisnis', 'PostController@ide_bisnis');
 
 Route::get('/homepage/set_session_content_type', 'PostController@set_session_content_type');
+Route::get('/welcome', 'PostController@welcome');

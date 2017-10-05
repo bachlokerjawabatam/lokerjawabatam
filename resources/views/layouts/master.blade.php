@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Loker Jawa Batam - @yield('title')</title>
+        <title>@yield('title')</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
@@ -13,6 +13,7 @@
         <link href="{{URL::asset('css/blog_mobile.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/about_us.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/about_us_mobile.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{URL::asset('css/welcome.css')}}" rel="stylesheet" type="text/css">
 
         <link href="{{URL::asset('css/navbar.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/filter.css')}}" rel="stylesheet" type="text/css">
@@ -38,7 +39,8 @@
         <script src="{{URL::asset('js/assets/lodash/lodash.min.js')}}"></script>
         <script src="{{URL::asset('js/assets/flux/flux.js')}}"></script>
         <script src="{{URL::asset('js/assets/flux/fbEmitter.js')}}"></script>
-
+        <script src="{{URL::asset('js/assets/react-bootstrap/react-bootstrap.min.js')}}"></script>
+        
         <script src="{{URL::asset('js/service/key_generator.js')}}"></script>
 
         <script src="{{URL::asset('js/jquery.min.js')}}"></script>

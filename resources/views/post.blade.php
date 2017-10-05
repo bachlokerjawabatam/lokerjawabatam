@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Beranda')
+@section('title', 'Lokerjawabatam')
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/homepage_desktop.js')}}"></script>
@@ -167,10 +167,10 @@
                                         </div>
                                         <div className="col-md-3">
                                             <div className="box-menu-modal">
-                                                <div className="box-icon" onClick={this.onSelectContent.bind(this, 'tips_kerja')} >
+                                                <div className="box-icon" onClick={this.onSelectContent.bind(this, 'ide_bisnis')} >
                                                     <i className="fa fa-lightbulb-o" />
                                                 </div>
-                                                <div className="title" onClick={this.onSelectContent.bind(this, 'tips_kerja')}>
+                                                <div className="title" onClick={this.onSelectContent.bind(this, 'ide_bisnis')}>
                                                     Ide Bisnis
                                                 </div>
                                             </div>

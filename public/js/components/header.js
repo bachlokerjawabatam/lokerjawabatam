@@ -7,7 +7,7 @@ var HeaderDesktop = React.createClass({
                 data: {content_type: menuUrl},
                 formatType: 'json',
                 success: function(data){
-                    window.location.href = '/'
+                    window.location.href = '/lowongan_kerja'
                 }
             })
 		}else{

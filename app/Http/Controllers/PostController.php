@@ -101,6 +101,10 @@ class PostController extends Controller
         ]);
     }
 
+    public function welcome(){
+        return view('welcome');
+    }
+
     public function about_us(){
         return view('about_us');
     }

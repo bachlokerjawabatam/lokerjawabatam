@@ -1,22 +1,44 @@
+var OverlayTrigger = ReactBootstrap.OverlayTrigger
+var Tooltip = ReactBootstrap.Tooltip
+
+var flexibleTooltip = function(texTooltip){
+	return(
+		<Tooltip>{texTooltip}</Tooltip>
+	)
+}
+
 var ContactLink = React.createClass({
+	onClickLink: function(textLink){
+		window.open(textLink, '_blank')
+	},
 	render: function(){
 		return(
 			<div className="contact-link">
 				<div className="row text-center">
 					<div className="col-sm-2">
-						<i className="fa fa-facebook" />
+						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("facebook.lokerjawabatam")}>
+							<i className="fa fa-facebook" onClick={this.onClickLink.bind(this, "http://facebook.lokerjawabatam")} />
+						</OverlayTrigger>
 					</div>
 					<div className="col-sm-2">
-						<i className="fa fa-instagram" />
+						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("instagram.lokerjawabatam")}>
+							<i className="fa fa-instagram" onClick={this.onClickLink.bind(this, "http://instagram.lokerjawabatam")}/>
+						</OverlayTrigger>
 					</div>
 					<div className="col-sm-2">
-						<i className="fa fa-whatsapp" />
+						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("085762635185")}>
+							<i className="fa fa-whatsapp" />
+						</OverlayTrigger>
 					</div>
 					<div className="col-sm-2">
-						<i className="fa fa-phone" />
+						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("085762635185")}>
+							<i className="fa fa-phone" />
+						</OverlayTrigger>
 					</div>
 					<div className="col-sm-2">
-						<i className="fa fa-google" />
+						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("lokerjawabatam@gmail.com")}>
+							<i className="fa fa-google" />
+						</OverlayTrigger>
 					</div>
 				</div>
 			</div>
