@@ -49,6 +49,7 @@
         <script>
             window.dispatcher = new Flux.Dispatcher()
         </script>
+        <meta charset="utf-8" />
     </head>
     <body>
         <div>

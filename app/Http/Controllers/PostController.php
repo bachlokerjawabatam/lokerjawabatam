@@ -74,6 +74,14 @@ class PostController extends Controller
         ]);
     }
 
+    public function update_blog_visits(Request $params){
+        $blog = Blog::where('id', $params->blog_id);
+        $visits = $blog->first()->visits;
+        $blog->update(['visits' => $visits + 1]);
+
+        return response()->json(['visits' => $visits + 1]);
+    }
+
     public function ide_bisnis(){
         $blog_list = Blog::where('category_id', 2)->get();
 

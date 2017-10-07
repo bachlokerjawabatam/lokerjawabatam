@@ -19,7 +19,7 @@ var HeaderDesktop = React.createClass({
 			<div className="header-desktop">
 				<div className="row">
 					<div className="col-lg-6 col-md-6 pull-left logo-web">
-						<img src='/image/logo-lokerjawabatam.png' />
+						<img src='/image/logo-lokerjawabatam.png' onClick={this.onClickMenu.bind(this, '/')} />
 					</div>
 					<div className="col-lg-6 col-md-6 pull-right">
 						<div className="row menu-about-us text-center">

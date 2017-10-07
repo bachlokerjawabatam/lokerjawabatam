@@ -1,4 +1,12 @@
 var PropTypes = React.PropTypes
+var OverlayTrigger = ReactBootstrap.OverlayTrigger
+var Tooltip = ReactBootstrap.Tooltip
+
+var flexibleTooltip = function(textTooltip){
+    return(
+        <Tooltip>{textTooltip}</Tooltip>
+    )
+}
 
 var keygen = new KeyGenerator()
 
@@ -602,7 +610,8 @@ var BlogForm = React.createClass({
     getInitialState: function(){
         return{
             blog: BlogStore.getBlog(),
-            categories: BlogStore.getCategories()
+            categories: BlogStore.getCategories(),
+            contentValue: "<p></p>"
         }
     },
     componentDidMount: function(){
@@ -635,13 +644,38 @@ var BlogForm = React.createClass({
             attributes: { picture_url: null }
         })
     },
+    onChangeContent: function(event){
+        this.setState({
+            contentValue: event.target.value
+        })
+    },
+    onClickAttr: function(attrType){
+        let contentValue = this.state.contentValue
+        if (attrType == 'bold'){
+            contentValue += '<strong></strong>'
+        }else if (attrType == 'italic'){
+            contentValue += '<i></i>'
+        }else if (attrType == 'underline'){
+            contentValue += '<u></u>' 
+        }
+
+        this.setState({contentValue: contentValue})
+    },
+    onChangeTitle: function(event){
+        dispatcher.dispatch({
+            actionType: "blog-change",
+            attributes: { title: event.target.value }
+        })
+    },
     render: function(){
         let pictureUrl = this.state.blog.picture_url
         let userId = this.state.blog.user_id
         let categories = this.state.categories
+        let blogTitle = this.state.blog.title
         let titleInputName = "blog[title]"
         let categoryIdInputName = "blog[category_id]"
         let sourceLinkInputName = "blog[source_link]"
+        let contentValue = this.state.contentValue
 
         if (pictureUrl) {
             var pictureBlogDisplay = [<img src={pictureUrl} />, <i className="fa fa-times-circle" onClick={this.onRemovePicture} />]
@@ -659,7 +693,7 @@ var BlogForm = React.createClass({
                     <div className="form-group">
                         <label className="col-sm-3 control-label">Judul Artikel</label>
                         <div className="col-sm-8">
-                            <input type="text" className="form-control input-sm" name={titleInputName} required={true} />
+                            <input type="text" className="form-control input-sm" name={titleInputName} required={true} onChange={this.onChangeTitle} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -691,17 +725,84 @@ var BlogForm = React.createClass({
                         </div>
                     </div>
                     <div className="form-group">
+                        <label className="col-sm-3 control-label"></label>
+                        <div className="col-sm-8 text-left">
+                            <div className="text-editor-tool">
+                                <a href="javascript:void(0)"className="btn btn-default" onClick={this.onClickAttr.bind(this, 'bold')}>
+                                    <i className="fa fa-bold" />
+                                </a>
+                                <a href="javascript:void(0)" className="btn btn-default" onClick={this.onClickAttr.bind(this, 'italic')}>
+                                    <i className="fa fa-italic" />
+                                </a>
+                                <a href="javascript:void(0)" className="btn btn-default" onClick={this.onClickAttr.bind(this, 'underline')}>
+                                    <i className="fa fa-underline" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
                         <label className="col-sm-3 control-label"> Konten Artikel</label>
                         <div className="col-sm-8">
-                            <textarea rows={30} className="form-control input-sm" name="blog[content]" required={true} />
+                            <textarea rows={30} className="form-control input-sm" 
+                                name="blog[content]" 
+                                required={true} 
+                                value={contentValue}
+                                onChange={this.onChangeContent} />
                             <input type="hidden" name="post[company_id]" value="" />
                         </div>
                     </div>
                     <button type="submit" className="btn btn-md btn-primary">Submit</button>
                 </form>
+                <BlogPreview blogContent={contentValue} title={blogTitle} picture={pictureUrl} />
             </div>
         )
     }
 })
+
+var BlogPreview = React.createClass({
+    propTypes: {
+        blogContent: PropTypes.string,
+        title: PropTypes.string,
+        picture: PropTypes.string
+    },
+    getInitialState: function(){
+        return{
+            showPreview: false
+        }
+    },
+    togglePreview: function(){
+        let showPreview = this.state.showPreview
+        this.setState({showPreview: !showPreview})
+    },
+    render: function(){
+        let blogContent = this.props.blogContent
+        let showPreview = this.state.showPreview
+        let title = this.props.title
+        let picture = this.props.picture
+
+        if(showPreview){
+            var previewComponent = 
+                <div className="box-preview">
+                    <img src={picture} />
+                    <h1>{title}</h1>
+                    <div dangerouslySetInnerHTML={{__html:blogContent}} />
+                </div>
+        }else{
+            var previewComponent = null
+        }
+
+        return(
+            <div className="blog-preview">
+                <OverlayTrigger placement="left" overlay={flexibleTooltip("blog preview")}>
+                    <div className="button-preview" onClick={this.togglePreview}>
+                        <i className="fa fa-search" />
+                    </div>
+                </OverlayTrigger>
+                {previewComponent}
+            </div>
+        )
+    }
+})
+
 window.BlogForm = BlogForm
 window.AdminPage = AdminPage

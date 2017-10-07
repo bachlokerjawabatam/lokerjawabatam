@@ -8,6 +8,10 @@
 	font-family: segoe ui;
 }
 
+.blog-list-item h1{
+	font-size: 40px;
+}
+
 .blog-list-item p{
 	text-align: justify;
 }

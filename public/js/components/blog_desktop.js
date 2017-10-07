@@ -6,21 +6,73 @@ var categories = [
 
 var BlogListItem = React.createClass({
 	propTypes: {
-		item: React.PropTypes.object.isRequired
+		item: React.PropTypes.object.isRequired,
+		completeContent: React.PropTypes.bool
+	},
+	getDefaultProps: function(){
+		return{
+			completeContent: false
+		}
+	},
+	onClickSelectedBlog: function(){
+		let item = this.props.item
+
+		dispatcher.dispatch({
+			actionType: 'blog-change-selected-blog',
+			selectedBlog: this.props.item
+		})
+
+		dispatcher.dispatch({
+			actionType: 'blog-change-show-blog-detail',
+			showBlogDetail: true
+		})
+
+		$.ajax({
+            url: '/tips_kerja/update_blog_visits',
+            method: 'get',
+            data: {blog_id: item.id},
+            formatType: 'json',
+            success: function(data){
+                console.log("success update blog visits")
+            }
+        })
+	},
+	onClickBack: function(){
+		dispatcher.dispatch({
+			actionType: 'blog-change-show-blog-detail',
+			showBlogDetail: false
+		})
 	},
 	render: function(){
 		let item = this.props.item
 		let imageUrl = "/images/" + item.picture_url
+		let itemContent = item.content
+		let completeContent = this.props.completeContent
+		
+		let contentStyle = !completeContent ? {textOverflow: 'ellipsis', height: '50px'} : null   
+
+		if (completeContent){
+			var buttonDisplay = 
+				<button className="btn btn-md btn-success pull-right" onClick={this.onClickSelectedBlog}>
+					Baca selengkapnya  <i className="fa fa-arrow-right fa-1x" />
+				</button>
+		}else{
+			var buttonDisplay =
+				<button className="btn btn-md btn-warning pull-right" onClick={this.onClickBack}>
+					<i className="fa fa-arrow-left fa-1x" /> Kembali Ke daftar Posting
+				</button>
+		}
 
 		return(
 			<div className="blog-list-item">
 				<div className="blog-image">
 					<img src={imageUrl} />
 				</div>
-				<h3>{item.title}</h3>
+				<h1>{item.title}</h1>
+				<div  style={contentStyle} dangerouslySetInnerHTML={{__html:itemContent}} />
+				{buttonDisplay}
+				<br />
 				<hr />
-				<p>{item.content}</p>
-				<button className="btn btn-md btn-warning pull-right">Selengkapnya</button>
 			</div>
 		)
 	}
@@ -48,7 +100,8 @@ var BlogCategories = React.createClass({
 var BlogList = React.createClass({
 	getInitialState: function(){
 		return{
-			blogList: BlogStore.getBlogList()
+			blogList: BlogStore.getBlogList(),
+			showBlogDetail: BlogStore.getShowBlogDetail()
 		}
 	},
 	componentDidMount: function(){
@@ -59,22 +112,36 @@ var BlogList = React.createClass({
 	},
 	_onChange: function(){
 		this.setState({
-			blogList: BlogStore.getBlogList()
+			blogList: BlogStore.getBlogList(),
+			showBlogDetail: BlogStore.getShowBlogDetail(),
+			selectedBlog: BlogStore.getSelectedBlog()
 		})
 	},
 	render: function(){
 		let blogList = this.state.blogList
+		let showBlogDetail = this.state.showBlogDetail
+		let selectedBlog = this.state.selectedBlog
 
 		let blogListItem = function(item, key){
 			return(
-				<BlogListItem key={key} item={item} />
+				<BlogListItem key={key} item={item} completeContent={true} />
 			)
 		}
-		return(
-			<div className="blog-list">
-				{blogList.map(blogListItem)}
-			</div>
-		)
+
+		if (showBlogDetail){
+			return(
+				<div className='blog-list'>
+					<BlogListItem key="selected-blog-1" item={selectedBlog} />		
+				</div>
+			)
+		}else{
+			return(
+				<div className="blog-list">
+					{blogList.map(blogListItem)}
+				</div>
+			)
+		}
+
 	}
 })
 

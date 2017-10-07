@@ -9,6 +9,7 @@ title
 source_link
 picture_url
 content
+visits
 created_at
 updated_at
 
@@ -33,5 +34,5 @@ class Blog extends Model
 
     protected $with = ['category', 'author'];
     protected $visible = ['id', 'title', 'content', 'picture_url', 'source_link', 'category_id', 'user_id',
-    					  'category', 'author', 'created_at'];
+    					  'category', 'author', 'visits', 'created_at'];
 }

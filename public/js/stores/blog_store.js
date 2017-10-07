@@ -19,11 +19,15 @@ var blog = {
 }
 
 var blogList = []
+var showBlogDetail = false
+var selectedBlog = {}
 
 window.BlogStore = _.assign(new blogEventEmitter(),{ 
 	getBlog: function(){ return blog },
 	getCategories: function(){ return categories },
 	getBlogList: function(){ return blogList },
+	getShowBlogDetail: function(){ return showBlogDetail },
+	getSelectedBlog: function(){ return selectedBlog },
 
 	emitChange: function(){
 		return this.emit(BLOG_CHANGE_EVENT)
@@ -52,6 +56,14 @@ dispatcher.register(
 		}else if(payload.actionType == 'blog-set-blog-list'){
 			blogList = payload.blogList
 			
+			BlogStore.emitChange()
+		}else if(payload.actionType == 'blog-change-show-blog-detail'){
+			showBlogDetail = payload.showBlogDetail
+
+			BlogStore.emitChange()
+		}else if(payload.actionType == 'blog-change-selected-blog'){
+			_.assign(selectedBlog, payload.selectedBlog)
+
 			BlogStore.emitChange()
 		}
 	}

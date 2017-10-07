@@ -29,4 +29,5 @@ Route::get('/tips_kerja', 'PostController@tips_kerja');
 Route::get('/ide_bisnis', 'PostController@ide_bisnis');
 
 Route::get('/homepage/set_session_content_type', 'PostController@set_session_content_type');
+Route::get('/tips_kerja/update_blog_visits', 'PostController@update_blog_visits');
 Route::get('/welcome', 'PostController@welcome');

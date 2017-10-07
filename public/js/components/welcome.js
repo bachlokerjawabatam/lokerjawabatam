@@ -56,7 +56,7 @@ var WelcomeDesktop = React.createClass({
 		return(
 			<div className="container-fluid welcome-desktop">
 				<div className="header">
-					<img className="pull-left" src="/image/logo-lokerjawabatam.png" />
+					<img className="pull-left" src="/image/logo-lokerjawabatam.png" onClick={this.onClickMenu.bind(this, '/')} />
 					<div className="welcome-menu pull-right">
 						<div className="row text-center">
 							<div className="col-sm-2 col-sm-offset-2">
