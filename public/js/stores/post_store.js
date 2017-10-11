@@ -41,6 +41,7 @@ var provinceSelected = {}
 var provinceCities = []
 var genderOptions = [{id: 1, name: "Pria"}, {id: 2, name: "Wanita"}]
 var menuSelected = "loker"
+var isNewFormLoker = false
 
 window.PostStore = _.assign(new EventEmitter(),{ 
 	getPost: function(){ return post },
@@ -51,7 +52,8 @@ window.PostStore = _.assign(new EventEmitter(),{
 	getCompanyTypes: function(){ return companyTypes },
 	getGenderOptions: function(){ return genderOptions },
 	getMenuSelected: function(){ return menuSelected },
-
+	isNewFormLoker: function(){ return isNewFormLoker },
+	
 	emitChange: function(){
 		return this.emit(CHANGE_EVENT)
 	},

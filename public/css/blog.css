@@ -12,8 +12,11 @@
 	font-size: 40px;
 }
 
+
 .blog-list-item p{
 	text-align: justify;
+	text-indent: 30px;
+	font-size: 16px;
 }
 
 .blog-image img{
@@ -25,7 +28,7 @@
 	position: fixed;
 	z-index: 99;
 	top: 80;
-	padding: 50px 30px;
+	padding: 60px 10px;
 	background-color: #008c8c;
 	width: 310px;
 	height: 600px;
@@ -34,23 +37,28 @@
 }
 
 .blog-categories h3{
-	margin-top: 50px;
-	margin-bottom: 40px;
+	margin: 30px 30px 10px 0px;
 }
 
 .blog-categories ul{
 	width: 100%;
-	padding: 10px 30px;
+	padding: 10px 20px;
 }
 
 .blog-categories li{
-	padding: 5px;
+	padding: 3px;
 	list-style: none;
-	font-size: 18px;
+	font-size: 12px;
 	cursor: pointer;
+	line-height: 30px;
+}
+
+.blog-categories li:hover, .blog-categories li:hover{
+	background-color: rgba(255, 255, 255, 0.7);
+	color: #008c8c;
 }
 
 .blog-categories li i{
 	margin-left: 20px;
-	font-size: 20px;
+	font-size: 14px;
 }

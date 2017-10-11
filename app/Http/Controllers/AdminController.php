@@ -21,6 +21,7 @@ use App\WorkDescription;
 use App\RequireDescription;
 use App\Blog;
 use App\Category;
+use File;
 
 class AdminController extends Controller
 {
@@ -67,6 +68,7 @@ class AdminController extends Controller
         $company_types = CompanyType::all()->toJson();
         $session_alert = session('alert');
         $categories = Category::all()->toJson();
+        $admin_blog_list = Blog::all()->toJson();
 
     	return view('admin_post', [
             'current_user' => $current_user,
@@ -75,6 +77,7 @@ class AdminController extends Controller
             'cities' => $cities,
             'company_types' => $company_types,
             'categories' => $categories,
+            'admin_blog_list' => $admin_blog_list,
             'alert' => $session_alert
         ]);
     }
@@ -82,24 +85,56 @@ class AdminController extends Controller
     public function postBlog(Request $params){        
         $blog = new Blog;
 
-        $picture = $params->file('picture');
-        $picture_filename = time() . '.' . $picture->getClientOriginalExtension();
-        $path = public_path('images/' . $picture_filename);
+        if($params->hasFile('picture')){
+            $picture = $params->file('picture');
+            $picture_filename = time() . '.' . $picture->getClientOriginalExtension();
+            $path = public_path('images/' . $picture_filename);
+            $blog->picture_url = $picture_filename; 
+        }
 
         $blog->title = $params->blog['title'];
         $blog->category_id = $params->blog['category_id'];
         $blog->user_id = $params->blog['user_id'];
         $blog->content = $params->blog['content'];
         $blog->source_link = $params->blog['source_link'];
-        $blog->picture_url = $picture_filename; 
         
         $blog->save();
 
-        $destinationPath = public_path('images/');        
-        $picture->move($destinationPath, $picture_filename);
+        if($blog->picture_url != null){
+            $destinationPath = public_path('images/');     
+            $picture->move($destinationPath, $picture_filename);
+        }
 
         return redirect()->action('AdminController@adminHomepage')
                          ->with('alert', 'Artikel Berhasil Di Save!!');
+
+    }
+
+    public function updateBlog(Request $params){        
+        $blog = Blog::find($params->blog['id']);
+
+        if($params->hasFile('picture')){
+            File::delete('images/' . $blog->picture_url);
+            $picture = $params->file('picture');
+            $picture_filename = time() . '.' . $picture->getClientOriginalExtension();
+            $path = public_path('images/' . $picture_filename);
+            $blog->picture_url = $picture_filename; 
+        }
+
+        $blog->title = $params->blog['title'];
+        $blog->category_id = $params->blog['category_id'];
+        $blog->user_id = $params->blog['user_id'];
+        $blog->content = $params->blog['content'];
+        $blog->source_link = $params->blog['source_link'];
+        $blog->save();
+
+        if($params->hasFile('picture')){
+            $destinationPath = public_path('images/');     
+            $picture->move($destinationPath, $picture_filename);
+        }
+
+        return redirect()->action('AdminController@adminHomepage')
+                         ->with('alert', 'Artikel Berhasil Di Update!!');
 
     }
 
@@ -189,4 +224,20 @@ class AdminController extends Controller
         return redirect()->action('AdminController@adminHomepage')
                          ->with('alert', 'Data Loker Berhasil Di Posting!!');
     }
+
+    public function editBlog(Request $params){
+        $blog = Blog::find($params->id);
+
+        return response()->json(['blog' => $blog]);
+    }
+
+    public function deleteBlog(Request $params){
+        $blog = Blog::find($params->id);
+        File::delete('images/'. $blog->picture_url);
+        $blog->delete();
+
+        return response()->json(['blog' => $blog]);
+    }
+
+
 }

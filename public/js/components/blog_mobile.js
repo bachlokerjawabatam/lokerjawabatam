@@ -3,7 +3,7 @@ var blogItems = [
 ]
 
 var BlogItemMobile = React.createClass({
-	propTypes:{
+	propTypes: {
 		item: React.PropTypes.object
 	},
 	render: function(){

@@ -67,10 +67,14 @@ class PostController extends Controller
     }
 
     public function tips_kerja(){
-        $blog_list = Blog::where('category_id', 1)->get();
+        $blog_list = Blog::where('category_id', 1)->orderBy('created_at', 'desc')->get();
+        $populer_items = Blog::where('category_id', 1)->orderBy('visits', 'desc')->take(5)->get();
+        $latest_items = Blog::where('category_id', 1)->orderBy('created_at', 'desc')->take(5)->get();
 
         return view('blog',[
-            'blogList' => $blog_list 
+            'blogList' => $blog_list,
+            'populerItems' => $populer_items,
+            'latestItems' => $latest_items
         ]);
     }
 
@@ -84,9 +88,13 @@ class PostController extends Controller
 
     public function ide_bisnis(){
         $blog_list = Blog::where('category_id', 2)->get();
+        $populer_items = Blog::where('category_id', 2)->orderBy('visits', 'desc')->take(5)->get();
+        $latest_items = Blog::where('category_id', 2)->orderBy('created_at', 'desc')->take(5)->get();
 
         return view('blog',[
-            'blogList' => $blog_list 
+            'blogList' => $blog_list ,
+            'populerItems' => $populer_items,
+            'latestItems' => $latest_items
         ]);
     }
 

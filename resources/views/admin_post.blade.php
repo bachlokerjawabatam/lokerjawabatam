@@ -5,7 +5,7 @@
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/admin_homepage.js')}}"></script>
     <script type="text/javascript" src="{{URL::asset('js/stores/post_store.js')}}"></script>
-    <script type="text/javascript" src="{{URL::asset('js/stores/blog_Store.js')}}"></script>
+    <script type="text/javascript" src="{{URL::asset('js/stores/blog_store.js')}}"></script>
     <input type="hidden" id="dummy-csrf-token" value={{ csrf_token() }} />
     <script type="text/javascript">
 	    var educationLevels = {!! $education_levels !!}
@@ -17,6 +17,7 @@
 
 	    var categories = {!! $categories !!}
 	    var currentUser = {!! $current_user !!}
+	    var adminBlogList = {!! $admin_blog_list !!}
 	    
 	    if(!_.isEmpty(flash)){
 	    	window.alert(flash);
@@ -32,6 +33,7 @@
 
 	    dispatcher.dispatch({
 	    	actionType: 'blog-set-initialization',
+	    	adminBlogList: adminBlogList,
 	    	categories: categories,
 	    	author: currentUser
 	    })

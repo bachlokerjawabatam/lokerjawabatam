@@ -10,10 +10,14 @@
     <script type="text/javascript" src="{{URL::asset('js/stores/blog_store.js')}}"></script>
     <script type="text/javascript">
         var blogList = {!! $blogList !!}
-
+        var populerItems = {!! $populerItems !!}
+        var latestItems = {!! $latestItems !!}
+        
         dispatcher.dispatch({
-            actionType: 'blog-set-blog-list',
-            blogList: blogList
+            actionType: 'blog-view-initialization',
+            blogList: blogList,
+            populerItems: populerItems,
+            latestItems: latestItems
         })
     </script>
     <script type="text/babel">

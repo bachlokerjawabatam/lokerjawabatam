@@ -133,7 +133,14 @@
 	padding: 20px 10px;
 	background-color: rgba(256, 256, 256, 0.8);
 	overflow: auto;
+	text-align: justify;
+	font-size: 14;
 }
+
+.blog-preview .box-preview .content p{
+	text-indent: 50px;
+}
+
 
 .blog-preview .box-preview img{
 	width: 100%;
@@ -143,4 +150,38 @@
 .blog-preview .box-preview h1{
 	font-size: 40px;
 	font-family: segoe ui;
+}
+
+.posting-menu{
+	text-align: right;
+	padding: 10px;
+}
+
+.posting-menu button{
+	margin-left: 20px;
+}
+
+.posting-menu button i{
+	margin-right: 10px;
+	font-size: 14px;
+}
+
+.posting-blog-list-item{
+	padding: 5px 10px;
+	line-height: 60px;
+	color: darkgrey;
+	font-weight: 500;
+	border: 2px solid #ededed;
+	margin: 5px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.posting-blog-list-item:hover{
+	background-color: #008c8c;
+	color: #fff;
+}
+
+.posting-blog-list-item button{
+	margin-right: 10px;
 }

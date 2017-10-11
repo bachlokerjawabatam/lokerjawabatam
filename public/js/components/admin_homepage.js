@@ -46,8 +46,10 @@ var LokerJawaBatamSelect = React.createClass({
             <select className={classNames}
                 id={id} name={name} onChange={this.onChangeSelectedOption}>
                 {options.map(function(item, key){
+                    let isSelected = item.id == selected
+
                     return(
-                        <option key={key} value={item.id}>
+                        <option key={key} value={item.id} selected={isSelected}>
                             {item.name}
                         </option>
                     )
@@ -562,28 +564,42 @@ var AdminPage = React.createClass({
     },
     getInitialState: function(){
         return{
-            menuSelected: PostStore.getMenuSelected()
+            menuSelected: PostStore.getMenuSelected(),
+            isNewFormBlog: BlogStore.isNewFormBlog(),
+            isNewFormLoker: PostStore.isNewFormLoker()
         }
     },
     componentDidMount: function(){
         this.listener = PostStore.addChangeListener(this._onChange)
+        this.listener2 = BlogStore.addChangeListener(this._onChange)
     },
     componentWillUnmount: function(){
         this.listener.remove()
+        this.listener2.remove()
     },
     _onChange: function(){
         this.setState({
-            menuSelected: PostStore.getMenuSelected()
+            menuSelected: PostStore.getMenuSelected(),
+            isNewFormBlog: BlogStore.isNewFormBlog(),
+            isNewFormLoker: PostStore.isNewFormLoker()
         })
     },
     render: function(){
         let csrfToken = this.props.csrfToken
         let menuSelected = this.state.menuSelected
+        let isNewFormBlog = this.state.isNewFormBlog
+        let isNewFormLoker = this.state.isNewFormLoker
 
         if(menuSelected == "loker"){
             var formDisplay = <AdminFormLokerPost csrfToken={csrfToken} /> 
+            var menuFormDisplay = <LokerPostMenu />
         }else if(menuSelected == "blog"){
-            var formDisplay = <BlogForm csrfToken={csrfToken} />
+            if(isNewFormBlog){
+                var formDisplay = <BlogForm csrfToken={csrfToken} />
+            }else{
+                var formDisplay = <BlogPostingList csrfToken={csrfToken} />
+            }
+            var menuFormDisplay = <BlogPostMenu />
         }
 
         return(
@@ -598,6 +614,7 @@ var AdminPage = React.createClass({
                         <AdminNavbarMenu menuSelected={menuSelected} />
                     </div>
                     <div className="col-lg-9 col-md-10 col-sm-10">
+                        {menuFormDisplay}
                         {formDisplay}
                     </div>
                 </div>
@@ -610,8 +627,7 @@ var BlogForm = React.createClass({
     getInitialState: function(){
         return{
             blog: BlogStore.getBlog(),
-            categories: BlogStore.getCategories(),
-            contentValue: "<p></p>"
+            categories: BlogStore.getCategories()
         }
     },
     componentDidMount: function(){
@@ -641,12 +657,13 @@ var BlogForm = React.createClass({
     onRemovePicture: function(){
         dispatcher.dispatch({
             actionType: 'blog-change',
-            attributes: { picture_url: null }
+            attributes: { picture_url: null, removePicture: true }
         })
     },
     onChangeContent: function(event){
-        this.setState({
-            contentValue: event.target.value
+        dispatcher.dispatch({
+            actionType: 'blog-change',
+            attributes: { content: event.target.value }
         })
     },
     onClickAttr: function(attrType){
@@ -656,7 +673,7 @@ var BlogForm = React.createClass({
         }else if (attrType == 'italic'){
             contentValue += '<i></i>'
         }else if (attrType == 'underline'){
-            contentValue += '<u></u>' 
+            contentValue += '<u></u>'
         }
 
         this.setState({contentValue: contentValue})
@@ -667,15 +684,31 @@ var BlogForm = React.createClass({
             attributes: { title: event.target.value }
         })
     },
+    onChangeSourceLink: function(event){
+        dispatcher.dispatch({
+            actionType: "blog-change",
+            attributes: { source_link: event.target.value }
+        })
+    },
     render: function(){
-        let pictureUrl = this.state.blog.picture_url
+        let id = this.state.blog.id
         let userId = this.state.blog.user_id
         let categories = this.state.categories
         let blogTitle = this.state.blog.title
+        let sourceLink = this.state.blog.source_link
+        let categoryId = this.state.blog.category_id
+        let picture_url = this.state.blog.picture_url
+        let removePicture = this.state.blog.removePicture
         let titleInputName = "blog[title]"
         let categoryIdInputName = "blog[category_id]"
         let sourceLinkInputName = "blog[source_link]"
-        let contentValue = this.state.contentValue
+        let contentValue = this.state.blog.content
+
+        if (id && picture_url && !removePicture){
+            var pictureUrl = "/images/" + picture_url
+        }else{
+            var pictureUrl = picture_url
+        }
 
         if (pictureUrl) {
             var pictureBlogDisplay = [<img src={pictureUrl} />, <i className="fa fa-times-circle" onClick={this.onRemovePicture} />]
@@ -683,17 +716,23 @@ var BlogForm = React.createClass({
             var pictureBlogDisplay = <i className="fa fa-photo fa-3x" />
         }
 
+        let actionUrl = id ? "/admin/update_blog" : "/admin/post_blog"
+
         return(
             <div className="form-loker">
-                <h3>Form Blog</h3>
+                <h3>{ id ? "Edit Artikel" : "Form Artikel" }</h3>
                 <hr/>  
-                <form className="form-horizontal" method="POST" action="/admin/post_blog" encType="multipart/form-data">
+                <form className="form-horizontal" method="POST" action={actionUrl} encType="multipart/form-data">
                     <input type="hidden" name="_token" value={csrfToken} />
                     <input type="hidden" name="blog[user_id]" value={userId} />
+                    <input type="hidden" name="blog[id]" value={id} />
                     <div className="form-group">
                         <label className="col-sm-3 control-label">Judul Artikel</label>
                         <div className="col-sm-8">
-                            <input type="text" className="form-control input-sm" name={titleInputName} required={true} onChange={this.onChangeTitle} />
+                            <input type="text" className="form-control input-sm" name={titleInputName} 
+                                value={blogTitle} 
+                                required={true}
+                                onChange={this.onChangeTitle} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -703,13 +742,18 @@ var BlogForm = React.createClass({
                                 classNames="form-control input-sm" 
                                 id="blog-category"
                                 name={categoryIdInputName}
-                                options={categories} />
+                                options={categories}
+                                selected={categoryId} />
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="col-sm-3 control-label">Sumber Referensi</label>
                         <div className="col-sm-8">
-                            <input type="text" className="form-control input-sm" name={sourceLinkInputName} required={true} />
+                            <input type="text" className="form-control input-sm" 
+                                name={sourceLinkInputName}
+                                value={sourceLink}
+                                required={true}
+                                onChange={this.onChangeSourceLink} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -785,7 +829,7 @@ var BlogPreview = React.createClass({
                 <div className="box-preview">
                     <img src={picture} />
                     <h1>{title}</h1>
-                    <div dangerouslySetInnerHTML={{__html:blogContent}} />
+                    <div className="content" dangerouslySetInnerHTML={{__html:blogContent}} />
                 </div>
         }else{
             var previewComponent = null
@@ -799,6 +843,174 @@ var BlogPreview = React.createClass({
                     </div>
                 </OverlayTrigger>
                 {previewComponent}
+            </div>
+        )
+    }
+})
+
+var BlogPostingList = React.createClass({
+    getInitialState: function(){
+        return{
+            items: BlogStore.getAdminBlogList()
+        }
+    },
+    componentDidMount: function(){
+        this.listener = BlogStore.addChangeListener(this._onChange)
+    },
+    componentWillUnmount: function(){
+        this.listener.remove()
+    },
+    _onChange: function(){
+        this.setState({
+            items: BlogStore.getAdminBlogList()
+        })
+    },
+    render: function(){
+        let items = this.state.items
+        var that = this
+
+        let item = function(item, key){
+            return(
+                <BlogPostingListItem item={item} csrfToken={that.props.csrfToken} />
+            )
+        }
+
+        return(
+            <div className="form-loker">
+                <h3>Daftar Posting Artikel</h3>
+                <hr />
+                <div>
+                    {items.map(item)}
+                </div>
+            </div>
+        )
+    }
+})
+
+var BlogPostingListItem = React.createClass({
+    onClickEditBlog: function(){
+        let item = this.props.item
+
+        $.ajax({
+            url: "/admin/edit_blog",
+            method: "GET",
+            data: { id: item.id },
+            beforeSend: function(){
+                dispatcher.dispatch({
+                    actionType: 'blog-admin-item-change-requesting',
+                    item: item,
+                    attributes: {requesting: {type: 'edit', status: true}},
+                    requesting: true
+                })
+            },
+            success: function(blog){
+                dispatcher.dispatch({
+                    actionType: 'blog-set-blog',
+                    blog: blog
+                })
+
+                dispatcher.dispatch({
+                    actionType: 'blog-change-is-new-form-blog',
+                    isNewFormBlog: true
+                })
+            },
+            error: function(){
+                console.log("error coy!");
+            }
+        }).always(function(){
+            dispatcher.dispatch({
+                actionType: 'blog-admin-item-change-requesting',
+                item: item,
+                attributes: {requesting: {type: 'edit', status: false}},
+                requesting: false
+            })
+        })
+    },
+    onClickDeleteBlog: function(){
+        let item = this.props.item
+        let csrfToken = this.props.csrfToken
+
+        $.ajax({
+            url: "/admin/delete_blog",
+            method: "DELETE",
+            data: { id: item.id, _token: csrfToken},
+            beforeSend: function(){
+                dispatcher.dispatch({
+                    actionType: 'blog-admin-item-change-requesting',
+                    item: item,
+                    attributes: {requesting: {type: 'delete', status: true}},
+                    requesting: true
+                })
+            },
+            success: function(blog){
+                dispatcher.dispatch({
+                    actionType: 'blog-admin-delete-blog',
+                    item: item
+                })
+            },
+            error: function(){
+                console.log("error coy!");
+            }
+        }).always(function(){
+            dispatcher.dispatch({
+                actionType: 'blog-admin-item-change-requesting',
+                item: item,
+                attributes: {requesting: {type: 'edit', status: false}},
+                requesting: false
+            })
+        })  
+    },
+    render: function(){
+        let item = this.props.item
+
+        return(
+            <div className="posting-blog-list-item">
+                <div className="row">
+                    <div className="col-sm-8 text-left">
+                        {item.title}    
+                    </div>
+                    <div className="col-sm-4 text-right">
+                        <button className="btn-warning btn-xs" onClick={this.onClickEditBlog}><i className="fa fa-check" /> Edit</button>
+                        <button className="btn-danger btn-xs" onClick={this.onClickDeleteBlog}><i className="fa fa-times" /> Hapus</button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+})
+
+var BlogPostMenu = React.createClass({
+    onClickForm: function(){
+        dispatcher.dispatch({actionType: 'blog-reset-blog'
+        })
+
+        dispatcher.dispatch({
+            actionType: 'blog-change-is-new-form-blog',
+            isNewFormBlog: true
+        })
+    },
+    onClickPosting: function(){
+        dispatcher.dispatch({
+            actionType: 'blog-change-is-new-form-blog',
+            isNewFormBlog: false
+        })
+    },
+    render: function(){
+        return(
+            <div className="posting-menu">
+                <button className="btn btn-primary btn-sm" onClick={this.onClickForm}><i className="fa fa-file" /> Posting Baru</button>
+                <button className="btn btn-success btn-sm" onClick={this.onClickPosting}><i className="fa fa-list" /> Daftar Posting</button>
+            </div>
+        )
+    }
+})
+
+var LokerPostMenu = React.createClass({
+    render: function(){
+        return(
+            <div className="posting-menu">
+                <button className="btn btn-primary btn-sm"><i className="fa fa-file" /> Posting Baru</button>
+                <button className="btn btn-success btn-sm"><i className="fa fa-list" /> Daftar Posting</button>
             </div>
         )
     }

@@ -31,3 +31,6 @@ Route::get('/ide_bisnis', 'PostController@ide_bisnis');
 Route::get('/homepage/set_session_content_type', 'PostController@set_session_content_type');
 Route::get('/tips_kerja/update_blog_visits', 'PostController@update_blog_visits');
 Route::get('/welcome', 'PostController@welcome');
+Route::get('/admin/edit_blog', 'AdminController@editBlog');
+Route::post('/admin/update_blog', 'AdminController@updateBlog');
+Route::delete('/admin/delete_blog', 'AdminController@deleteBlog');
