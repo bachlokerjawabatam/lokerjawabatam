@@ -6,10 +6,13 @@ var keygen = new KeyGenerator()
 
 var blankItem = {	
 					id: null,
-                    ageMin: null,
-                    ageMax: null, 
-                    positionId: null,
-                    educationLevelIds: null,
+                    age_min: null,
+                    age_max: null,
+                    position: {},
+                    education_level: {},
+                    education_level_id: null, 
+                    position_id: null,
+                    salary: null,
                     remark: null
                 }
 
@@ -23,16 +26,22 @@ var blankRequireDescription = {
 					description: null
 				}
 
-var post = {
+var blankPost = {
 				id: null,
-				postDate: null,
-				expiredDate: null,
-				companyId: null,
-				provinceId: null,
-				cityId: null,
+				post_date: null,
+				expired_date: null,
+				company_id: null,
+				company: {
+					company_type: {}
+				},
+				province_id: null,
+				city_id: null,
+				province: {},
+				city: {},
 				logo: null
 		   }
 
+var post = {}
 var educationLevelTypes = []
 var provinces = []
 var cities = []
@@ -131,7 +140,7 @@ dispatcher.register(
 					return true
 				}
 			})
-			_requirement.workDescriptions.push(_blankDescription)
+			_requirement.work_descriptions.push(_blankDescription)
 
 			PostStore.emitChange()
 		}else if(payload.actionType == 'post-add-blank-require-description'){
@@ -144,68 +153,95 @@ dispatcher.register(
 					return true
 				}
 			})
-			_requirement.requireDescriptions.push(_blankDescription)
+			_requirement.require_descriptions.push(_blankDescription)
 
 			PostStore.emitChange()
 		}else if(payload.actionType == 'post-add-blank-requirement'){
 			//function add blank requriement
 			let _requirement = Object.assign({}, blankItem)
 			_requirement.key = keygen.getUniqueKey()
-			_requirement.workDescriptions = []
-			_requirement.requireDescriptions = []
+			_requirement.work_descriptions = []
+			_requirement.require_descriptions = []
 			let _blankDescription = Object.assign({}, blankDescription)
 			let _blankRequireDescription = Object.assign({}, blankRequireDescription)
 			_blankDescription.key = keygen.getUniqueKey()
 			_blankRequireDescription.key = keygen.getUniqueKey()
-			_requirement.workDescriptions.push(_blankDescription)
-			_requirement.requireDescriptions.push(_blankRequireDescription)
+			_requirement.work_descriptions.push(_blankDescription)
+			_requirement.require_descriptions.push(_blankRequireDescription)
 			
 			post.requirements.push(_requirement)
 
 			PostStore.emitChange()
 		}else if(payload.actionType == 'post-remove-description'){
 			//function remove description
-			let _key = payload.key
-			let _requirementKey = payload.requirementKey
-
-			let _requirement = _.find(post.requirements, function(_item){
-				if(_item.key == _requirementKey){
+			_requirement = _.find(post.requirements, function(_item){
+				if(_item.key == payload.requirementKey){
 					return true
 				}
 			})
+			
+			if(payload.id){
+				_description = _.find(_requirement.work_descriptions, function(e){
+					if(e.key == payload.key){
+						return true
+					}
+				})
 
-			let _description = _.remove(_requirement.workDescriptions, function(_item){
-				if(_item.key == _key){
-					return true
-				}
-			})
+				_description.destroy = true
+			}else{
+				let _description = _.remove(_requirement.work_descriptions, function(_item){
+					if(_item.key == payload.key){
+						return true
+					}
+				})	
+			}
+			
 
 			PostStore.emitChange()
 		}else if(payload.actionType == 'post-remove-require-description'){
 			//function remove require description
-			let _key = payload.key
-			let _requirementKey = payload.requirementKey
-
-			let _requirement = _.find(post.requirements, function(_item){
-				if(_item.key == _requirementKey){
+			_requirement = _.find(post.requirements, function(_item){
+				if(_item.key == payload.requirementKey){
 					return true
 				}
 			})
-
-			let _description = _.remove(_requirement.requireDescriptions, function(_item){
-				if(_item.key == _key){
-					return true
-				}
-			})
+			
+			if (payload.id){
+				_description = _.find(_requirement.require_descriptions, function(e){
+					if(e.key == payload.key){
+						return true
+					}
+				})
+				
+				_description.destroy = true
+			}else{
+				_description = _.remove(_requirement.require_descriptions, function(_item){
+					if(_item.key == payload.key){
+						return true
+					}	
+				})	
+			}
+			
 
 			PostStore.emitChange()
 		}else if(payload.actionType == 'post-remove-requirement'){
 			//function remove requirement
-			let _requirement = _.remove(post.requirements, function(_item){
-				if(_item.key == payload.key){
-					return true
-				}
-			})
+			if(payload.id){
+				_requirement = _.find(post.requirements, function(e){
+					if(e.key == payload.key){
+						return true
+					}
+				})
+
+				_requirement.destroy = true
+			}else{
+				_requirement = _.remove(post.requirements, function(_item){
+					if(_item.key == payload.key){
+						return true
+					}
+				})	
+			}
+			
 
 			PostStore.emitChange()
 		}else if(payload.actionType == 'post-change-menu-selected'){
@@ -220,6 +256,7 @@ dispatcher.register(
 			PostStore.emitChange()
 		}else if(payload.actionType == 'post-reset-admin-post'){
 			//function reset posting on admin
+			post = blankPost
 
 			let _requireDescription = Object.assign({}, blankRequireDescription)
 			_requireDescription.key = keygen.getUniqueKey()
@@ -227,10 +264,10 @@ dispatcher.register(
 			_workDescription.key = keygen.getUniqueKey()
 			let _requirement = Object.assign({}, blankItem) 
 			_requirement.key = keygen.getUniqueKey()
-			_requirement.workDescriptions = []
-			_requirement.requireDescriptions = []
-			_requirement.workDescriptions.push(_workDescription)
-			_requirement.requireDescriptions.push(_requireDescription)
+			_requirement.work_descriptions = []
+			_requirement.require_descriptions = []
+			_requirement.work_descriptions.push(_workDescription)
+			_requirement.require_descriptions.push(_requireDescription)
 			_.assign(post, {key: keygen.getUniqueKey(), requirements: [ _requirement ]})		
 			
 			PostStore.emitChange()
@@ -245,6 +282,18 @@ dispatcher.register(
 				if (city.province_id == post.province_id){
 					return true
 				}
+			})
+
+			post.key = keygen.getUniqueKey()
+			_.each(post.requirements, function(requirement){
+				requirement.key = keygen.getUniqueKey()
+				_.each(requirement.require_descriptions, function(e){
+					e.key = keygen.getUniqueKey()
+				})
+
+				_.each(requirement.work_descriptions, function(i){
+					i.key = keygen.getUniqueKey()
+				})
 			})
 
 			provinceCities = _provinceCities
@@ -262,7 +311,9 @@ dispatcher.register(
 			_key = payload.id ? 'id' : 'key'
 
 			let requirement = _.find(post.requirements, function(_item){
-				return _item[_key] == payload[_key]
+				if(_item[_key] == payload[_key]){
+					return true
+				}
 			})
 
 			_.assign(requirement, payload.attributes)
@@ -272,10 +323,44 @@ dispatcher.register(
 			_key = payload.id ? 'id' : 'key'
 
 			let requirement = _.find(post.requirements, function(_item){
-				return _item[_key] == payload[_key]
+				if(_item[_key] == payload[_key]){
+					return true
+				}
 			})
 			
 			_.assign(requirement.position, payload.attributes)
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-requirement-description'){
+			_requirement = _.find(post.requirements, function(e){
+				if(e.key == payload.requirementKey){
+					return true
+				}
+			})
+
+			_item = _.find(_requirement.require_descriptions, function(e){
+				if(e.key == payload.itemKey){ 
+					return true
+				}
+			})
+
+			_.assign(_item, payload.attributes)
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-work-description'){
+			_requirement = _.find(post.requirements, function(e){
+				if(e.key == payload.requirementKey){
+					return true
+				}
+			})
+
+			_item = _.find(_requirement.work_descriptions, function(e){
+				if(e.key == payload.itemKey){
+					return true
+				}
+			})
+
+			_.assign(_item, payload.attributes)
 
 			PostStore.emitChange()
 		}

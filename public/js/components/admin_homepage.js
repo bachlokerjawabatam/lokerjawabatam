@@ -63,21 +63,42 @@ var RequireDescriptionRow = React.createClass({
         dispatcher.dispatch({
             actionType: 'post-remove-require-description',
             key: item.key,
+            id: item.id,
             requirementKey: requirement.key
         })
+    },
+    _onDispatchChangeRequirementDescription: function(attributes){
+        let requirement = this.props.requirement
+        let item = this.props.item
+
+        dispatcher.dispatch({
+            actionType: 'post-change-requirement-description',
+            requirementKey: requirement.key,
+            itemKey: item.key,
+            attributes: attributes
+        })
+    },
+    onChangeRequirementDescription: function(event){
+        this._onDispatchChangeRequirementDescription({description: event.target.value})
     },
     render: function(){
         let key = this.props.descriptionKey
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
         let prefixName = this.props.inputName + "[" + key + "]"
         let requireDescriptionInputName = prefixName + "[description]"
+        let item = this.props.item
+        let itemDisplayStyle = item.destroy ? {display: "none"} : null
 
         return(
-            <div className="form-group">
+            <div style={itemDisplayStyle} className="form-group">
                 <div className="col-sm-3"></div>
                 <label className="col-sm-2">Kualifikasi Pekerjaan :</label>
                 <div className="col-sm-6">
-                    <textarea name={requireDescriptionInputName} className="form-control input-sm" rows="2" required={true}  />
+                    <textarea name={requireDescriptionInputName} className="form-control input-sm" 
+                        value={item.description || ''}
+                        rows="2"
+                        required={true}
+                        onChange={this.onChangeRequirementDescription} />
                 </div>
                 <div className="col-sm-1 text-left">
                     <i style={removeIconStyle} className="fa fa-times" onClick={this.onClickRemove}  />
@@ -137,20 +158,42 @@ var DescriptionRow = React.createClass({
         dispatcher.dispatch({
             actionType: 'post-remove-description',
             key: item.key,
+            id: item.id,
             requirementKey: requirement.key
         })
+    },
+    _onDispatchChangeWorkDescription: function(attributes){
+        let requirement = this.props.requirement
+        let item = this.props.item
+
+        dispatcher.dispatch({
+            actionType: 'post-change-work-description',
+            requirementKey: requirement.key,
+            itemKey: item.key,
+            attributes: attributes
+        })
+    },
+    onChangeWorkDescription: function(event){
+        this._onDispatchChangeWorkDescription({description: event.target.value})
     },
     render: function(){
         let key = this.props.descriptionKey
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
         let prefixName = this.props.inputName + "[" + key + "]"
         let workDescriptionInputName = prefixName + "[description]"
+        let item = this.props.item
+        let itemDisplayStyle = item.destroy ? {display: "none"} : null
+
         return(
-            <div className="form-group">
+            <div style={itemDisplayStyle} className="form-group">
                 <div className="col-sm-3"></div>
                 <label className="col-sm-2">Deskripsi Pekerjaan :</label>
                 <div className="col-sm-6">
-                    <textarea name={workDescriptionInputName} className="form-control input-sm" rows="2" required={true}  />
+                    <textarea name={workDescriptionInputName} className="form-control input-sm"
+                        value={item.description || ''}
+                        rows="2"
+                        required={true}
+                        onChange={this.onChangeWorkDescription}  />
                 </div>
                 <div className="col-sm-1 text-left">
                     <i style={removeIconStyle} className="fa fa-times" onClick={this.onClickRemove}  />
@@ -232,7 +275,8 @@ var ItemRequirement = React.createClass({
 
         dispatcher.dispatch({
             actionType: 'post-remove-requirement',
-            key: item.key 
+            key: item.key,
+            id: item.id
         })
     },
     onChangePosition: function(event){
@@ -241,6 +285,21 @@ var ItemRequirement = React.createClass({
     onChangeSalary: function(event){
         let salary = Number(event.target.value) / 1000 
         this._onDispatchChangeRequirement({salary: salary})
+    },
+    onChangeGender: function(event){
+        this._onDispatchChangeRequirement({gender: event.target.value})
+    },
+    onChangeAgeMax: function(event){
+        this._onDispatchChangeRequirement({age_max: event.target.value})
+    },
+    onChangeAgeMin: function(event){
+        this._onDispatchChangeRequirement({age_min: event.target.value})
+    },
+    onChangeEducationValueSelected: function(educationLevelId){
+        this._onDispatchChangeRequirement({education_level_id: educationLevelId})
+    },
+    onChangeExperience: function(event){
+        this._onDispatchChangeRequirement({experience: event.target.value})
     },
     render: function(){
         let key = this.props.inputKey
@@ -262,10 +321,11 @@ var ItemRequirement = React.createClass({
         let workDescriptionInputName = prefixName + "[work_description]"
         let requireDescriptionInputName = prefixName + "[require_description]"
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
-        let salaryDisplay = item.salary * 1000
+        let salaryDisplay = Number(item.salary) * 1000
+        let itemDisplayStyle = item.destroy ? {display: 'none'} : null
         
         return (
-            <div>
+            <div style={itemDisplayStyle}>
                 <div className="form-group">
                     <div className="col-sm-3"></div>
                     <label className="col-sm-2">Posisi :</label>
@@ -295,7 +355,10 @@ var ItemRequirement = React.createClass({
                     <div className="col-sm-3"></div>
                     <label className="col-sm-2">Jenis Kelamin :</label>
                     <div className="col-sm-2">
-                        <select className="form-control input-sm" id="gender" name={genderInputName} value={item.gender} >
+                        <select className="form-control input-sm" id="gender" 
+                            name={genderInputName}
+                            value={item.gender}
+                            onChange={this.onChangeGender} >
                             <option key="gender-1" value="Pria">Pria</option>
                             <option key="gender-2" value="Wanita">Wanita</option>
                         </select>
@@ -306,11 +369,17 @@ var ItemRequirement = React.createClass({
                     <label className="col-sm-2">Usia :</label>
                     <label className="col-sm-1">Min :</label>
                     <div className="col-sm-2">
-                        <input type="number" min={18} max={63} name={ageMinInputName} className="form-control input-sm" required={true} />
+                        <input type="number" min={18} max={63} name={ageMinInputName} 
+                            onChange={this.onChangeAgeMin}
+                            value={item.age_min}
+                            className="form-control input-sm" required={true} />
                     </div>
                     <label className="col-sm-1">Max :</label>
                     <div className="col-sm-2">
-                        <input type="number" min={18} max={63} name={ageMaxInputName} className="form-control input-sm" />
+                        <input type="number" min={18} max={63} name={ageMaxInputName} 
+                            onChange={this.onChangeAgeMax}
+                            value={item.age_max}
+                            className="form-control input-sm" />
                     </div>
                 </div>
                 <div className="form-group">
@@ -321,7 +390,10 @@ var ItemRequirement = React.createClass({
                             classNames="form-control input-sm" 
                             id="education-level-type"
                             name={educationLevelIdInputName}
-                            options={educationLevelTypes} />
+                            options={educationLevelTypes}
+                            useOnChange={true}
+                            selected={item.education_level_id}
+                            onChangeSelected={this.onChangeEducationValueSelected} />
                     </div>
                 </div>
                 <div className="form-group">
@@ -329,7 +401,9 @@ var ItemRequirement = React.createClass({
                     <label className="col-sm-2">Pengalaman :</label>
                     <div className="col-sm-2">
                         <input type="number" className="form-control" min={0} step={1} 
-                            name={experienceInputName} />
+                            name={experienceInputName}
+                            onChange={this.onChangeExperience}
+                            value={item.experience} />
                     </div>
                     <div className="col-sm-1">
                         Tahun
@@ -478,7 +552,7 @@ var AdminFormLokerPost = React.createClass({
     onRemovePicture: function(){
         dispatcher.dispatch({
             actionType: "post-change-picture",
-            attributes: { logo: null }
+            attributes: { logo: null, removePicture: true}
         })
     },
     _onDispatchChangeCompany: function(attributes){
@@ -518,8 +592,13 @@ var AdminFormLokerPost = React.createClass({
         let csrfToken = this.props.csrfToken
         let requirements = post.requirements
         let pictureUrl = this.state.post.logo
+        let removePicture = post.removePicture
 
         if (pictureUrl){
+            if (post.id && pictureUrl && !removePicture){
+                pictureUrl = '/images/' + pictureUrl
+            }
+
             var logoDisplay = [
                 <img src={pictureUrl} key={keygen.getUniqueKey()} />,
                 <i className="fa fa-times-circle" onClick={this.onRemovePicture} key={keygen.getUniqueKey()} />]
@@ -566,7 +645,7 @@ var AdminFormLokerPost = React.createClass({
                         <label className="col-sm-3 control-label"> Alamat Perusahaan</label>
                         <div className="col-sm-8">
                             <textarea className="form-control input-sm" row="5" name="company[address]"
-                                value={company.address}
+                                value={company.address || ''}
                                 onChange={this.onChangeCompanyAddress} required={true} />
                         </div>
                     </div>

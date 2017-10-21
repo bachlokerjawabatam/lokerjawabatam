@@ -50,5 +50,5 @@ class Requirement extends Model
 
     protected $with = ['work_descriptions', 'require_descriptions', 'position', 'education_level'];
     protected $visible = ['id', 'position', 'education_level', 'work_descriptions', 'require_descriptions', 'gender', 
-                            'age_min', 'age_max', 'experience', 'salary', 'description', 'post_id'];
+                            'age_min', 'age_max', 'experience', 'salary', 'description', 'post_id', 'education_level_id'];
 }
