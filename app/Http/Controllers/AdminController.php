@@ -69,6 +69,7 @@ class AdminController extends Controller
         $session_alert = session('alert');
         $categories = Category::all()->toJson();
         $admin_blog_list = Blog::all()->toJson();
+        $admin_loker_list = Post::all()->toJson();
 
     	return view('admin_post', [
             'current_user' => $current_user,
@@ -78,6 +79,7 @@ class AdminController extends Controller
             'company_types' => $company_types,
             'categories' => $categories,
             'admin_blog_list' => $admin_blog_list,
+            'admin_loker_list' => $admin_loker_list,
             'alert' => $session_alert
         ]);
     }
@@ -231,12 +233,30 @@ class AdminController extends Controller
         return response()->json(['blog' => $blog]);
     }
 
+    public function editLoker(Request $params){
+        $post = Post::find($params->id);
+
+        return response()->json(['post' => $post]);
+    }
+
     public function deleteBlog(Request $params){
         $blog = Blog::find($params->id);
         File::delete('images/'. $blog->picture_url);
         $blog->delete();
 
         return response()->json(['blog' => $blog]);
+    }
+
+    public function deleteLoker(Request $params){
+        $post = Post::find($params->id);
+        File::delete('logos/'. $post->picture_url);
+        $post->delete();
+        
+        return response()->json(['loker' => $post]);
+    }
+
+    public function splitItem(){
+        return view('split_item');
     }
 
 

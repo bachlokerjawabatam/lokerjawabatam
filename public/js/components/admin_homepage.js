@@ -37,19 +37,15 @@ var LokerJawaBatamSelect = React.createClass({
         let options = this.props.options
         let name = this.props.name
         let classNames = this.props.classNames
-        let option = function (item, key){
-            return(
-                <option key={key} value={item.id}>{item.name}</option>
-            )
-        }
+        
         return(
-            <select className={classNames}
+            <select className={classNames} value={selected}
                 id={id} name={name} onChange={this.onChangeSelectedOption}>
                 {options.map(function(item, key){
                     let isSelected = item.id == selected
-
+                    
                     return(
-                        <option key={key} value={item.id} selected={isSelected}>
+                        <option key={key} value={item.id}>
                             {item.name}
                         </option>
                     )
@@ -113,7 +109,7 @@ var RequireDescriptions = React.createClass({
             <div>
                 {requireDescriptions.map(function(item, key){
                     return(
-                        <RequireDescriptionRow key={item.key} item={item} 
+                        <RequireDescriptionRow key={key} item={item} 
                             requirement={requirement}
                             inputName={inputName} 
                             descriptionKey={key} />
@@ -186,7 +182,7 @@ var WorkDescription = React.createClass({
             <div>
                 {workDescriptions.map(function(item, key){
                     return(
-                        <DescriptionRow key={item.key} item={item} 
+                        <DescriptionRow key={key} item={item} 
                             requirement={requirement}
                             inputName={inputName} 
                             descriptionKey={key} />
@@ -207,10 +203,29 @@ var WorkDescription = React.createClass({
 });
 
 var ItemRequirement = React.createClass({
-    getInitialState: function(){
-        return {
-            salary: 0
-        }
+    propTypes: {
+        item: PropTypes.object,
+        educationLevelTypes: PropTypes.array, 
+        genderOptions: PropTypes.array,
+        inputName: PropTypes.string
+    },
+    _onDispatchChangeRequirement: function(attributes){
+        let item = this.props.item
+        dispatcher.dispatch({
+            actionType: 'post-change-requirement',
+            id: item.id,
+            key: item.key,
+            attributes: attributes
+        })
+    },
+    _onDispatchChangePosition: function(attributes){
+        let item = this.props.item
+        dispatcher.dispatch({
+            actionType: 'post-change-position',
+            id: item.id,
+            key: item.key,
+            attributes: attributes
+        })
     },
     onClickRemove:function(){
         let item = this.props.item
@@ -220,15 +235,18 @@ var ItemRequirement = React.createClass({
             key: item.key 
         })
     },
+    onChangePosition: function(event){
+        this._onDispatchChangePosition({id: null, name: event.target.value})
+    },
     onChangeSalary: function(event){
         let salary = Number(event.target.value) / 1000 
-        this.setState({salary: salary})
+        this._onDispatchChangeRequirement({salary: salary})
     },
     render: function(){
         let key = this.props.inputKey
         let item = this.props.item
-        let workDescriptions = item.workDescriptions
-        let requireDescriptions = item.requireDescriptions
+        let workDescriptions = item.work_descriptions
+        let requireDescriptions = item.require_descriptions
         let educationLevelTypes = this.props.educationLevelTypes
         let genderOptions = this.props.genderOptions
         let prefixName = this.props.inputName + "[" +  key  + "]"
@@ -244,15 +262,18 @@ var ItemRequirement = React.createClass({
         let workDescriptionInputName = prefixName + "[work_description]"
         let requireDescriptionInputName = prefixName + "[require_description]"
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
-        let salaryValue = this.state.salary
-
+        let salaryDisplay = item.salary * 1000
+        
         return (
             <div>
                 <div className="form-group">
                     <div className="col-sm-3"></div>
                     <label className="col-sm-2">Posisi :</label>
                     <div className="col-sm-6">
-                        <input type="text" name={positionInputName} className="form-control input-sm" required={true} />
+                        <input type="text" name={positionInputName} className="form-control input-sm" 
+                            value={item.position.name}
+                            required={true}
+                            onChange={this.onChangePosition} />
                         <input type="hidden" name={positionIdInputName} />
                     </div>
                     <div className="col-sm-1 text-left">
@@ -264,15 +285,17 @@ var ItemRequirement = React.createClass({
                     <label className="col-sm-2">Gaji :</label>
                     <label className="col-sm-1 text-right">Rp.</label>
                     <div className="col-sm-5">
-                        <input type="number" step="50000" className="form-control input-sm" onChange={this.onChangeSalary} />
-                        <input type="hidden" name={salaryInputName} value={salaryValue} />
+                        <input type="number" step="50000" className="form-control input-sm" 
+                            value={salaryDisplay}
+                            onChange={this.onChangeSalary} />
+                        <input type="hidden" name={salaryInputName} value={item.salary} />
                     </div>
                 </div>
                 <div className="form-group">
                     <div className="col-sm-3"></div>
                     <label className="col-sm-2">Jenis Kelamin :</label>
                     <div className="col-sm-2">
-                        <select className="form-control input-sm" id="gender" name={genderInputName} >
+                        <select className="form-control input-sm" id="gender" name={genderInputName} value={item.gender} >
                             <option key="gender-1" value="Pria">Pria</option>
                             <option key="gender-2" value="Wanita">Wanita</option>
                         </select>
@@ -336,13 +359,13 @@ var Requirement = React.createClass({
         let genderOptions = PostStore.getGenderOptions()
         let inputName = "requirements"
         let i = 0
-        
+
         return (
             <div>
                 {
                     requirements.map(function(item, key) {
                            return(
-                            <ItemRequirement key={item.key} item={item} inputKey={key}
+                            <ItemRequirement key={key} item={item} inputKey={key}
                                 educationLevelTypes={educationLevelTypes} 
                                 genderOptions={genderOptions}
                                 inputName={inputName} />
@@ -433,6 +456,12 @@ var AdminFormLokerPost = React.createClass({
             provinceId: provinceId
         })
     },
+    onChangeCitySelected: function(cityId){
+        dispatcher.dispatch({
+            actionType: 'post-change-city-selected',
+            cityId: cityId
+        })
+    },
     onClickPicture: function(){
         $(".post-picture").click()
     },
@@ -452,10 +481,38 @@ var AdminFormLokerPost = React.createClass({
             attributes: { logo: null }
         })
     },
+    _onDispatchChangeCompany: function(attributes){
+        dispatcher.dispatch({
+            actionType: 'post-change-post-company',
+            attributes: attributes
+        })
+    },
+    _onDispatchChangePost: function(attributes){
+        dispatcher.dispatch({
+            actionType: 'post-change-post',
+            attributes: attributes
+        })
+    },
+    onChangeCompanyName: function(event){
+        this._onDispatchChangeCompany({name: event.target.value})
+    },
+    onChangeCompanyEmail: function(event){
+        this._onDispatchChangeCompany({email: event.target.value})  
+    },
+    onChangeCompanyAddress: function(event){
+        this._onDispatchChangeCompany({address: event.target.value})
+    },
+    onChangeSourceLink: function(event){
+        this._onDispatchChangePost({source_link: event.target.value})
+    },
+    onChangeExpiredDate: function(event){
+        this._onDispatchChangePost({expired_date: event.target.value})
+    },
     render: function(){
         let post = this.state.post
         let provinces = this.state.provinces
         let cities = this.state.cities
+        let company = post.company
         let companyTypes = this.state.companyTypes
         let provinceSelected = this.state.provinceSelected
         let csrfToken = this.props.csrfToken
@@ -463,7 +520,9 @@ var AdminFormLokerPost = React.createClass({
         let pictureUrl = this.state.post.logo
 
         if (pictureUrl){
-            var logoDisplay = [<img src={pictureUrl} />,<i className="fa fa-times-circle" onClick={this.onRemovePicture} />]
+            var logoDisplay = [
+                <img src={pictureUrl} key={keygen.getUniqueKey()} />,
+                <i className="fa fa-times-circle" onClick={this.onRemovePicture} key={keygen.getUniqueKey()} />]
         }else{
             var logoDisplay = <i className="fa fa-photo fa-3x" />
         }
@@ -477,8 +536,9 @@ var AdminFormLokerPost = React.createClass({
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Nama Perusahaan</label>
                         <div className="col-sm-8">
-                            <input type="text" className="form-control input-sm" name="company[name]" required={true} />
-                            <input type="hidden" name="post[company_id]" value="" />
+                            <input type="text" className="form-control input-sm" name="company[name]" value={company.name} 
+                                onChange={this.onChangeCompanyName} required={true} />
+                            <input type="hidden" name="post[company_id]" value={company.id} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -497,13 +557,17 @@ var AdminFormLokerPost = React.createClass({
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Email Perusahaan</label>
                         <div className="col-sm-8">
-                            <input type="email" className="form-control input-sm" name="company[email]" required={true} />
+                            <input type="email" className="form-control input-sm" name="company[email]" 
+                                value={company.email}
+                                onChange={this.onChangeCompanyEmail} required={true} />
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Alamat Perusahaan</label>
                         <div className="col-sm-8">
-                            <textarea className="form-control input-sm" row="5" name="company[address]" required={true} />
+                            <textarea className="form-control input-sm" row="5" name="company[address]"
+                                value={company.address}
+                                onChange={this.onChangeCompanyAddress} required={true} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -513,7 +577,8 @@ var AdminFormLokerPost = React.createClass({
                                 classNames="form-control input-sm" 
                                 id="cities"
                                 name="company[company_type_id]"
-                                options={companyTypes} />
+                                options={companyTypes}
+                                selected={company.company_type.id} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -525,7 +590,8 @@ var AdminFormLokerPost = React.createClass({
                                 name="post[province_id]"
                                 options={provinces}
                                 onChangeSelected={this.onChangeProvinceSelected}
-                                useOnChange={true} />
+                                useOnChange={true}
+                                selected={post.province_id} />
                         </div>
                         <label className="col-sm-2 control-label"> Kota</label>
                         <div className="col-sm-3">
@@ -533,19 +599,27 @@ var AdminFormLokerPost = React.createClass({
                                 classNames="form-control input-sm" 
                                 id="cities"
                                 name="post[city_id]"
-                                options={cities} />
+                                options={cities}
+                                selected={post.city_id}
+                                useOnChange={true}
+                                onChangeSelected={this.onChangeCitySelected} />
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Tanggal Expired :</label>
                         <div className="col-sm-8">
-                            <input type="date" className="form-control" name="post[exp_date]" />
+                            <input type="date" className="form-control" name="post[exp_date]" 
+                                value={post.expired_date}
+                                onChange={this.onChangeExpiredDate} />
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Sumber / Link :</label>
                         <div className="col-sm-8">
-                            <input type="text" className="form-control input-sm" name="post[source_link]" />
+                            <input type="text" className="form-control input-sm" 
+                                name="post[source_link]"
+                                value={post.source_link}
+                                onChange={this.onChangeSourceLink} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -558,6 +632,7 @@ var AdminFormLokerPost = React.createClass({
         )
     }
 })
+
 var AdminPage = React.createClass({
     propTypes:{
         csrfToken: PropTypes.string.isRequired
@@ -591,7 +666,12 @@ var AdminPage = React.createClass({
         let isNewFormLoker = this.state.isNewFormLoker
 
         if(menuSelected == "loker"){
-            var formDisplay = <AdminFormLokerPost csrfToken={csrfToken} /> 
+            if(isNewFormLoker){
+                var formDisplay = <AdminFormLokerPost csrfToken={csrfToken} />
+            }else{
+                var formDisplay = <LokerPostingList csrfToken={csrfToken} />
+            }
+            
             var menuFormDisplay = <LokerPostMenu />
         }else if(menuSelected == "blog"){
             if(isNewFormBlog){
@@ -887,6 +967,45 @@ var BlogPostingList = React.createClass({
     }
 })
 
+var LokerPostingList = React.createClass({
+    getInitialState: function(){
+        return{
+            items: PostStore.getAdminLokerList()
+        }
+    },
+    componentDidMount: function(){
+        this.listener = PostStore.addChangeListener(this._onChange)
+    },
+    componentWillUnmount: function(){
+        this.listener.remove()
+    },
+    _onChange: function(){
+        this.setState({
+            items: PostStore.getAdminLokerList()
+        })
+    },
+    render: function(){
+        let items = this.state.items
+        var that = this
+
+        let item = function(item, key){
+            return(
+                <LokerPostingListItem key={key} item={item} csrfToken={that.props.csrfToken} />
+            )
+        }
+
+        return(
+            <div className="form-loker">
+                <h3>Daftar Posting Lowongan Kerja</h3>
+                <hr />
+                <div>
+                    {items.map(item)}
+                </div>
+            </div>
+        )
+    }
+})
+
 var BlogPostingListItem = React.createClass({
     onClickEditBlog: function(){
         let item = this.props.item
@@ -979,6 +1098,99 @@ var BlogPostingListItem = React.createClass({
     }
 })
 
+
+var LokerPostingListItem = React.createClass({
+    onClickEditLoker: function(){
+        let item = this.props.item
+
+        $.ajax({
+            url: "/admin/edit_loker",
+            method: "GET",
+            data: { id: item.id },
+            beforeSend: function(){
+                dispatcher.dispatch({
+                    actionType: 'post-admin-item-change-requesting',
+                    item: item,
+                    attributes: {requesting: {type: 'edit', status: true}},
+                    requesting: true
+                })
+            },
+            success: function(post){
+                dispatcher.dispatch({
+                    actionType: 'post-set-post-loker',
+                    post: post
+                })
+
+                dispatcher.dispatch({
+                    actionType: 'post-change-is-new-form-loker',
+                    isNewFormLoker: true
+                })
+            },
+            error: function(){
+                console.log("error coy!");
+            }
+        }).always(function(){
+            dispatcher.dispatch({
+                actionType: 'post-admin-item-change-requesting',
+                item: item,
+                attributes: {requesting: {type: 'edit', status: false}},
+                requesting: false
+            })
+        })
+    },
+    onClickDeleteLoker: function(){
+        let item = this.props.item
+        let csrfToken = this.props.csrfToken
+
+        $.ajax({
+            url: "/admin/delete_loker",
+            method: "DELETE",
+            data: { id: item.id, _token: csrfToken},
+            beforeSend: function(){
+                dispatcher.dispatch({
+                    actionType: 'post-admin-item-change-requesting',
+                    item: item,
+                    attributes: {requesting: {type: 'delete', status: true}},
+                    requesting: true
+                })
+            },
+            success: function(loker){
+                dispatcher.dispatch({
+                    actionType: 'post-admin-delete-loker',
+                    item: item
+                })
+            },
+            error: function(){
+                console.log("error coy!");
+            }
+        }).always(function(){
+            dispatcher.dispatch({
+                actionType: 'post-admin-item-change-requesting',
+                item: item,
+                attributes: {requesting: {type: 'edit', status: false}},
+                requesting: false
+            })
+        })  
+    },
+    render: function(){
+        let item = this.props.item
+
+        return(
+            <div className="posting-blog-list-item">
+                <div className="row">
+                    <div className="col-sm-8 text-left">
+                        {item.company.name}    
+                    </div>
+                    <div className="col-sm-4 text-right">
+                        <button key={keygen.getUniqueKey()} className="btn-warning btn-xs" onClick={this.onClickEditLoker}><i className="fa fa-check" /> Edit</button>
+                        <button key={keygen.getUniqueKey()} className="btn-danger btn-xs" onClick={this.onClickDeleteLoker}><i className="fa fa-times" /> Hapus</button>
+                    </div>
+                </div>
+            </div>
+        )
+    }  
+})
+
 var BlogPostMenu = React.createClass({
     onClickForm: function(){
         dispatcher.dispatch({actionType: 'blog-reset-blog'
@@ -1006,11 +1218,26 @@ var BlogPostMenu = React.createClass({
 })
 
 var LokerPostMenu = React.createClass({
+    onClickForm: function(){
+        dispatcher.dispatch({actionType: 'post-reset-admin-post'
+        })
+
+        dispatcher.dispatch({
+            actionType: 'post-change-is-new-form-loker',
+            isNewFormLoker: true
+        })
+    },
+    onClickPosting: function(){
+        dispatcher.dispatch({
+            actionType: 'post-change-is-new-form-loker',
+            isNewFormLoker: false
+        })
+    },
     render: function(){
         return(
             <div className="posting-menu">
-                <button className="btn btn-primary btn-sm"><i className="fa fa-file" /> Posting Baru</button>
-                <button className="btn btn-success btn-sm"><i className="fa fa-list" /> Daftar Posting</button>
+                <button className="btn btn-primary btn-sm" onClick={this.onClickForm}><i className="fa fa-file" /> Posting Baru</button>
+                <button className="btn btn-success btn-sm" onClick={this.onClickPosting}><i className="fa fa-list" /> Daftar Posting</button>
             </div>
         )
     }

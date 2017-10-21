@@ -11,9 +11,9 @@ var WelcomeDesktop = React.createClass({
 	getInitialState: function(){
 		return{
 			images: [
-				"/image/welcome1.jpg",
-				"/image/welcome2.jpg",
-				"/image/welcome3.jpg"
+				{image: "/image/welcome1.jpg", title: 'MAKING YOUR OWN SUCCESS'},
+				{image: "/image/welcome2.jpg", title: 'GREAT ONE FOR INSPIRING ANYONE'},
+				{image: "/image/welcome3.jpg", title: 'GOOD WORK RAISE A GOOD LIFE'}
 			],
 			count: 0
 		}
@@ -27,9 +27,18 @@ var WelcomeDesktop = React.createClass({
 	changeImage: function(){
 		let count = this.state.count + 1
 		var that = this
+		$(".title-animate").animate({
+			marginTop: "-120px",
+			opacity: 0
+		})
 		$(".image-animate").fadeOut(1000);
 		setTimeout(function(){that.setState({count: count})}, 1000)
-		$(".image-animate").fadeIn(1000);
+		$(".image-animate").fadeIn(1000, function(){
+			$(".title-animate").animate({
+				marginTop: "0px",
+				opacity: 1
+			})
+		});
 	},
 	onClickLink: function(textLink){
 		window.open(textLink, '_blank')
@@ -112,7 +121,10 @@ var WelcomeDesktop = React.createClass({
 					</div>
 				</div>
 				<div className="body-image">
-					<img className="image-animate" src={images[arrNumber]} />
+					<img className="image-animate" src={images[arrNumber].image} />
+					<div className="title-animate">
+						<h1>{images[arrNumber].title}</h1>
+					</div>
 				</div>
 			</div>
 		)

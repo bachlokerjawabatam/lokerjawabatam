@@ -34,3 +34,7 @@ Route::get('/welcome', 'PostController@welcome');
 Route::get('/admin/edit_blog', 'AdminController@editBlog');
 Route::post('/admin/update_blog', 'AdminController@updateBlog');
 Route::delete('/admin/delete_blog', 'AdminController@deleteBlog');
+Route::get('/admin/edit_loker', 'AdminController@editLoker');
+Route::post('/admin/update_loker', 'AdminController@updateLoker');
+Route::delete('/admin/delete_loker', 'AdminController@deleteLoker');
+Route::get('/split_item', 'AdminController@splitItem');

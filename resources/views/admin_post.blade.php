@@ -18,6 +18,7 @@
 	    var categories = {!! $categories !!}
 	    var currentUser = {!! $current_user !!}
 	    var adminBlogList = {!! $admin_blog_list !!}
+	    var adminLokerList = {!! $admin_loker_list !!}
 	    
 	    if(!_.isEmpty(flash)){
 	    	window.alert(flash);
@@ -28,7 +29,8 @@
 	    	educationLevelTypes: educationLevels,
 	    	provinces: provinces,
 	    	cities: cities,
-	    	companyTypes: companyTypes
+	    	companyTypes: companyTypes,
+	    	adminLokerList: adminLokerList
 	    })
 
 	    dispatcher.dispatch({

@@ -42,6 +42,7 @@ var provinceCities = []
 var genderOptions = [{id: 1, name: "Pria"}, {id: 2, name: "Wanita"}]
 var menuSelected = "loker"
 var isNewFormLoker = false
+var adminLokerList = []
 
 window.PostStore = _.assign(new EventEmitter(),{ 
 	getPost: function(){ return post },
@@ -53,6 +54,7 @@ window.PostStore = _.assign(new EventEmitter(),{
 	getGenderOptions: function(){ return genderOptions },
 	getMenuSelected: function(){ return menuSelected },
 	isNewFormLoker: function(){ return isNewFormLoker },
+	getAdminLokerList: function(){ return adminLokerList },
 	
 	emitChange: function(){
 		return this.emit(CHANGE_EVENT)
@@ -74,16 +76,18 @@ dispatcher.register(
 
 			return PostStore.emitChange()
 		}else if (payload.actionType == 'post-set-initialization'){
+			adminLokerList = payload.adminLokerList
+
 			let _requireDescription = Object.assign({}, blankRequireDescription)
 			_requireDescription.key = keygen.getUniqueKey()
 			let _workDescription = Object.assign({}, blankDescription)
 			_workDescription.key = keygen.getUniqueKey()
 			let _requirement = Object.assign({}, blankItem) 
 			_requirement.key = keygen.getUniqueKey()
-			_requirement.workDescriptions = []
-			_requirement.requireDescriptions = []
-			_requirement.workDescriptions.push(_workDescription)
-			_requirement.requireDescriptions.push(_requireDescription)
+			_requirement.work_descriptions = []
+			_requirement.require_descriptions = []
+			_requirement.work_descriptions.push(_workDescription)
+			_requirement.require_descriptions.push(_requireDescription)
 			_.assign(post, {key: keygen.getUniqueKey(), requirements: [ _requirement ]})
 			educationLevelTypes = payload.educationLevelTypes			
 			cities = payload.cities
@@ -94,7 +98,7 @@ dispatcher.register(
 				if (city.province_id == _provinceSelected.id){
 					return true
 				}
-			}) 
+			})
 
 			provinceSelected = _provinceSelected
 			provinceCities = _provinceCities
@@ -111,6 +115,10 @@ dispatcher.register(
 			})
 			provinceSelected = _provinceSelected
 			provinceCities = _provinceCities
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-city-selected'){
+			_.assign(post, {city_id: payload.cityId})
 
 			PostStore.emitChange()
 		}else if (payload.actionType == 'post-add-blank-description'){
@@ -208,6 +216,66 @@ dispatcher.register(
 		}else if(payload.actionType == 'post-change-picture'){
 			//function change company logo
 			post = Object.assign({}, post, payload.attributes)
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-reset-admin-post'){
+			//function reset posting on admin
+
+			let _requireDescription = Object.assign({}, blankRequireDescription)
+			_requireDescription.key = keygen.getUniqueKey()
+			let _workDescription = Object.assign({}, blankDescription)
+			_workDescription.key = keygen.getUniqueKey()
+			let _requirement = Object.assign({}, blankItem) 
+			_requirement.key = keygen.getUniqueKey()
+			_requirement.workDescriptions = []
+			_requirement.requireDescriptions = []
+			_requirement.workDescriptions.push(_workDescription)
+			_requirement.requireDescriptions.push(_requireDescription)
+			_.assign(post, {key: keygen.getUniqueKey(), requirements: [ _requirement ]})		
+			
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-is-new-form-loker'){
+			isNewFormLoker = payload.isNewFormLoker
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-set-post-loker'){
+			post = payload.post.post
+			
+			_provinceCities = _.filter(cities, function(city){
+				if (city.province_id == post.province_id){
+					return true
+				}
+			})
+
+			provinceCities = _provinceCities
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-post-company'){
+			_.assign(post.company, payload.attributes)
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-post'){
+			_.assign(post, payload.attributes)
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-requirement'){
+			_key = payload.id ? 'id' : 'key'
+
+			let requirement = _.find(post.requirements, function(_item){
+				return _item[_key] == payload[_key]
+			})
+
+			_.assign(requirement, payload.attributes)
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-change-position'){
+			_key = payload.id ? 'id' : 'key'
+
+			let requirement = _.find(post.requirements, function(_item){
+				return _item[_key] == payload[_key]
+			})
+			
+			_.assign(requirement.position, payload.attributes)
 
 			PostStore.emitChange()
 		}

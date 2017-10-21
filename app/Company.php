@@ -6,6 +6,7 @@ company schema
 id
 company_type_id fk
 name
+email
 exif_thumbnail(filename)
 address
 created_at
@@ -30,5 +31,6 @@ class Company extends Model
     	return $this->belongsTo('App\CompanyType');
     }
 
-    protected $visible = ['id', 'name', 'email', 'address'];
+    protected $with = ['company_type'];
+    protected $visible = ['id', 'name', 'email', 'address', 'company_type'];
 }
