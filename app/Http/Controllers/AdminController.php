@@ -227,6 +227,127 @@ class AdminController extends Controller
                          ->with('alert', 'Data Loker Berhasil Di Posting!!');
     }
 
+    public function updateLoker(Request $params){
+        $post = Post::find($params->post['id']);
+        Log::info("post".$post);
+
+        if($params->hasFile('logo')){
+            File::delete('logos/' . $post->logo);
+            $logo = $params->file('logo');
+            $logo_filename = time() . '.' . $logo->getClientOriginalExtension();
+            $path = public_path('logos/' . $logo_filename);
+            $destinationPath = public_path('logos/');
+            $post->logo = $logo_filename;
+            $logo->move($destinationPath, $logo_filename);
+        }        
+        
+        $company_id = $params->post['company_id'];
+        if ($company_id){
+            if($company = Company::find($company_id)){
+                $post->company_id = $company->id;
+            }else{
+                Log::alert('data tidak valid, perusahaan tidak di temukan!');
+            }
+        }else{
+            $company = new Company;
+            $company->name = $params->company['name'];
+            $company->email = $params->company['email'];
+            $company->address = $params->company['address'];
+            $company->company_type_id = $params->company['company_type_id'];
+            $company->save();
+            $post->company_id = $company->id;
+        }
+
+        $post->province_id = $params->post['province_id'];
+        $post->city_id = $params->post['city_id'];
+        $post->expired_date = $params->post['exp_date'];
+        $post->source_link = $params->post['source_link'];
+
+        $post->save();
+
+        foreach($params->requirements as $key => $requirement){
+            //handle to create new position if not position id
+            $_position_id = $params->requirements[$key]['position_id'];
+            $_position_name = $params->requirements[$key]['position_name'];
+
+            if($params->requirements[$key]['id']){
+                $_requirement = Requirement::find($params->requirements[$key]['id']);
+            }else{
+                $_requirement = new Requirement;
+            }
+
+            $_requirement->post_id = $post->id;
+            $_requirement->gender = $params->requirements[$key]['gender']; 
+            $_requirement->experience = $params->requirements[$key]['experience']; 
+            $_requirement->age_min = $params->requirements[$key]['age_min'];
+            $_requirement->age_max = $params->requirements[$key]['age_max'];
+            $_requirement->salary = $params->requirements[$key]['salary'];
+            // $_requirement->description = $params->requirements[$key]['description'];
+            $_requirement->education_level_id = $params->requirements[$key]['education_level_id'];
+
+            if($_position_id){
+                if(Position::find($_position_id)){
+                    $_requirement->position_id = $_position_id;
+                }else{
+                    Log::alert('data tidak valid, posisi jabatan tidak di temukan!');
+                }
+            }else{
+                $position = new Position;
+                $position->name = $_position_name;
+                $position->save();
+                $_requirement->position_id = $position->id;
+            }
+
+            if($params->requirements[$key]['destroy']){
+                $_requirement->require_descriptions()->delete();
+                $_requirement->work_descriptions()->delete();
+                $_requirement->delete();
+            }else{
+                $_requirement->save();
+                $_work_descriptions = $params->requirements[$key]['work_description'];
+                $_require_descriptions = $params->requirements[$key]['require_description'];
+                
+                foreach($_require_descriptions as $key => $rd){
+                    if($_require_descriptions[$key]['id']){
+                        $_require_description = RequireDescription::find($_require_descriptions[$key]['id']);
+                    }else{
+                        $_require_description = new RequireDescription;
+                    }
+
+                    $_require_description->description = $_require_descriptions[$key]['description'];
+                    $_require_description->requirement_id = $_requirement->id;
+
+                    if($_require_descriptions[$key]['destroy']){
+                        $_require_description->delete();
+                    }else{
+                        $_require_description->save();
+                    }
+                }
+
+                foreach($_work_descriptions as $key => $wd){
+                    if($_work_descriptions[$key]['id']){
+                        $_work_description = WorkDescription::find($_work_descriptions[$key]['id']);
+                    }else{
+                        $_work_description = new WorkDescription;
+                    }
+
+                    $_work_description->description = $_work_descriptions[$key]['description'];
+                    $_work_description->requirement_id = $_requirement->id;
+
+                    if($_work_descriptions[$key]['destroy']){
+                        $_work_description->delete();
+                    }else{
+                        $_work_description->save();
+                    }
+                }
+            }
+        }
+
+        return redirect()->action('AdminController@adminHomepage')
+                         ->with('alert', 'Data Loker Berhasil Di Update!!');
+
+    }
+
     public function editBlog(Request $params){
         $blog = Blog::find($params->id);
 
@@ -241,7 +362,10 @@ class AdminController extends Controller
 
     public function deleteBlog(Request $params){
         $blog = Blog::find($params->id);
-        File::delete('images/'. $blog->picture_url);
+        if($blog->picture_url){
+            File::delete('images/'. $blog->picture_url);
+        }
+
         $blog->delete();
 
         return response()->json(['blog' => $blog]);
@@ -249,7 +373,18 @@ class AdminController extends Controller
 
     public function deleteLoker(Request $params){
         $post = Post::find($params->id);
-        File::delete('logos/'. $post->picture_url);
+
+        if($post->logo){
+            File::delete('logos/'. $post->logo);
+        }
+
+        foreach($post->requirements as $requirement){
+            Log::info("each requirement".$requirement);
+
+            $requirement->require_descriptions()->delete();
+            $requirement->work_descriptions()->delete();
+        }
+        $post->requirements()->delete();
         $post->delete();
         
         return response()->json(['loker' => $post]);

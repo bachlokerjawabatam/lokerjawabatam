@@ -14,6 +14,7 @@
         <link href="{{URL::asset('css/about_us.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/about_us_mobile.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/welcome.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{URL::asset('css/alert.css')}}" rel="stylesheet" type="text/css">
 
         <link href="{{URL::asset('css/navbar.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/filter.css')}}" rel="stylesheet" type="text/css">
@@ -45,14 +46,23 @@
 
         <script src="{{URL::asset('js/jquery.min.js')}}"></script>
         <script src="{{URL::asset('js/bootstrap.min.js')}}"></script>
-
         <script>
             window.dispatcher = new Flux.Dispatcher()
         </script>
+        <script type="text/babel" src="{{URL::asset('js/components/alert.js')}}"></script>
+        <script type="text/javascript" src="{{URL::asset('js/stores/alert_store.js')}}"></script>
         <meta charset="utf-8" />
     </head>
     <body>
         <div>
+            <div id='alert-notification'>
+                <script type="text/babel">
+                    ReactDOM.render(
+                        <AlertApp />,
+                        document.getElementById('alert-notification')
+                      );
+                </script>
+            </div>
             <div id="content" class="content">
                 @yield('content')
             </div>

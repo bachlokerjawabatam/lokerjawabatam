@@ -20,10 +20,6 @@
 	    var adminBlogList = {!! $admin_blog_list !!}
 	    var adminLokerList = {!! $admin_loker_list !!}
 	    
-	    if(!_.isEmpty(flash)){
-	    	window.alert(flash);
-	    }
-
 	    dispatcher.dispatch({
 	    	actionType: 'post-set-initialization',
 	    	educationLevelTypes: educationLevels,
@@ -45,5 +41,9 @@
 		    <AdminPage csrfToken={csrfToken} />,
 		    document.getElementById('content')
 		  );
+    	
+    	if(!_.isEmpty(flash)){
+	    	AlertApp.displaySuccess(flash)
+	    }
     </script>
 @endsection

@@ -85,12 +85,16 @@ var RequireDescriptionRow = React.createClass({
         let key = this.props.descriptionKey
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
         let prefixName = this.props.inputName + "[" + key + "]"
+        let requireDescriptionIdInputName = prefixName + "[id]"
         let requireDescriptionInputName = prefixName + "[description]"
+        let requireDescriptionDestroyInputName = prefixName + "[destroy]"
         let item = this.props.item
         let itemDisplayStyle = item.destroy ? {display: "none"} : null
 
         return(
             <div style={itemDisplayStyle} className="form-group">
+                <input type="hidden" name={requireDescriptionDestroyInputName} value={item.destroy} />
+                <input type="hidden" name={requireDescriptionIdInputName} value={item.id} />
                 <div className="col-sm-3"></div>
                 <label className="col-sm-2">Kualifikasi Pekerjaan :</label>
                 <div className="col-sm-6">
@@ -180,12 +184,16 @@ var DescriptionRow = React.createClass({
         let key = this.props.descriptionKey
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
         let prefixName = this.props.inputName + "[" + key + "]"
+        let workDescriptionIdInputName = prefixName + "[id]"
         let workDescriptionInputName = prefixName + "[description]"
+        let workDescriptionDestroyInputName = prefixName + "[destroy]"
         let item = this.props.item
         let itemDisplayStyle = item.destroy ? {display: "none"} : null
 
         return(
             <div style={itemDisplayStyle} className="form-group">
+                <input type="hidden" name={workDescriptionDestroyInputName} value={item.destroy} />
+                <input type="hidden" name={workDescriptionIdInputName} value={item.id} />
                 <div className="col-sm-3"></div>
                 <label className="col-sm-2">Deskripsi Pekerjaan :</label>
                 <div className="col-sm-6">
@@ -309,6 +317,7 @@ var ItemRequirement = React.createClass({
         let educationLevelTypes = this.props.educationLevelTypes
         let genderOptions = this.props.genderOptions
         let prefixName = this.props.inputName + "[" +  key  + "]"
+        let requirementIdInputName = prefixName + "[id]"
         let positionInputName = prefixName + "[position_name]"
         let positionIdInputName = prefixName + "[position_id]"
         let genderInputName = prefixName + "[gender]"
@@ -320,6 +329,7 @@ var ItemRequirement = React.createClass({
         let salaryInputName = prefixName + "[salary]"
         let workDescriptionInputName = prefixName + "[work_description]"
         let requireDescriptionInputName = prefixName + "[require_description]"
+        let requirementDestroyInputName = prefixName + "[destroy]"
         let removeIconStyle = {fontSize: "18px", cursor: "pointer"}
         let salaryDisplay = Number(item.salary) * 1000
         let itemDisplayStyle = item.destroy ? {display: 'none'} : null
@@ -335,6 +345,8 @@ var ItemRequirement = React.createClass({
                             required={true}
                             onChange={this.onChangePosition} />
                         <input type="hidden" name={positionIdInputName} />
+                        <input type="hidden" name={requirementDestroyInputName} value={item.destroy} />
+                        <input type="hidden" name={requirementIdInputName} value={item.id} />
                     </div>
                     <div className="col-sm-1 text-left">
                         <i style={removeIconStyle} className="fa fa-times" onClick={this.onClickRemove}  />
@@ -596,7 +608,7 @@ var AdminFormLokerPost = React.createClass({
 
         if (pictureUrl){
             if (post.id && pictureUrl && !removePicture){
-                pictureUrl = '/images/' + pictureUrl
+                pictureUrl = '/logos/' + pictureUrl
             }
 
             var logoDisplay = [
@@ -606,12 +618,15 @@ var AdminFormLokerPost = React.createClass({
             var logoDisplay = <i className="fa fa-photo fa-3x" />
         }
 
+        let actionUrl = post.id ? "/admin/update_loker" : "/admin/post_loker"
+
         return(
             <div className="form-loker">
                 <h3>Form lowongan Kerja</h3>
                 <hr/>  
-                <form className="form-horizontal" method="POST" action="/admin/post_loker" encType="multipart/form-data">
+                <form className="form-horizontal" method="POST" action={actionUrl} encType="multipart/form-data">
                     <input type="hidden" name="_token" value={csrfToken} />
+                    <input type="hidden" name="post[id]" value={post.id} />
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Nama Perusahaan</label>
                         <div className="col-sm-8">
@@ -1028,19 +1043,25 @@ var BlogPostingList = React.createClass({
         let items = this.state.items
         var that = this
 
-        let item = function(item, key){
+        var item = function(item, key){
             return(
                 <BlogPostingListItem item={item} csrfToken={that.props.csrfToken} />
             )
         }
 
+        if(items.length > 0){
+            var itemDisplay = <div>{items.map(item)}</div>
+        }else{
+            var itemDisplay = <div className="blank-posting">
+                Tidak Ada Posting
+            </div>
+        }
+         
         return(
             <div className="form-loker">
                 <h3>Daftar Posting Artikel</h3>
                 <hr />
-                <div>
-                    {items.map(item)}
-                </div>
+                {itemDisplay}
             </div>
         )
     }
@@ -1067,19 +1088,23 @@ var LokerPostingList = React.createClass({
         let items = this.state.items
         var that = this
 
-        let item = function(item, key){
+        var item = function(item, key){
             return(
                 <LokerPostingListItem key={key} item={item} csrfToken={that.props.csrfToken} />
             )
+        }
+
+        if(items.length > 0){
+            var itemDisplay = <div>{items.map(item)}</div>
+        }else{
+            var itemDisplay = <div className="blank-posting">Tidak Ada Posting</div>
         }
 
         return(
             <div className="form-loker">
                 <h3>Daftar Posting Lowongan Kerja</h3>
                 <hr />
-                <div>
-                    {items.map(item)}
-                </div>
+                {itemDisplay}
             </div>
         )
     }
@@ -1145,9 +1170,10 @@ var BlogPostingListItem = React.createClass({
                     actionType: 'blog-admin-delete-blog',
                     item: item
                 })
+                AlertApp.displaySuccess("Posting Blog Berhasil Di Hapus!")
             },
             error: function(){
-                console.log("error coy!");
+                AlertApp.displayError("Posting Blog Gagal di hapus!")
             }
         }).always(function(){
             dispatcher.dispatch({
@@ -1190,7 +1216,7 @@ var LokerPostingListItem = React.createClass({
                 dispatcher.dispatch({
                     actionType: 'post-admin-item-change-requesting',
                     item: item,
-                    attributes: {requesting: {type: 'edit', status: true}},
+                    attributes: {   requesting: {type: 'edit', status: true}},
                     requesting: true
                 })
             },
@@ -1238,9 +1264,10 @@ var LokerPostingListItem = React.createClass({
                     actionType: 'post-admin-delete-loker',
                     item: item
                 })
+                AlertApp.displaySuccess("Posting Loker Berhasil Di Hapus!")
             },
             error: function(){
-                console.log("error coy!");
+                AlertApp.displayError("Posting Loker Gagal Di Hapus!")
             }
         }).always(function(){
             dispatcher.dispatch({

@@ -89,12 +89,12 @@ dispatcher.register(
 			BlogStore.emitChange()
 		}else if(payload.actionType == 'blog-admin-item-change-requesting'){
 			requesting = payload.requesting
-			blog = _.find(adminBlogList, function(_item){ 
+			_blog = _.find(adminBlogList, function(_item){ 
 				return _item.id == payload.item.id
 			})
-
-			_.assign(blog, payload.attributes)
-
+			
+			_.assign(_blog, payload.attributes)
+			
 			BlogStore.emitChange()
 		}else if(payload.actionType == 'blog-set-blog'){
 			blog = payload.blog

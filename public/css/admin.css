@@ -185,3 +185,12 @@
 .posting-blog-list-item button{
 	margin-right: 10px;
 }
+
+.blank-posting{
+	width: 100%;
+	line-height: 200px;
+	font-size: 32px;
+	font-weight: 400;
+	color: darkgrey;
+	text-align: center;
+}

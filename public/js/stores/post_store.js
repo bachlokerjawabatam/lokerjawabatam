@@ -363,6 +363,21 @@ dispatcher.register(
 			_.assign(_item, payload.attributes)
 
 			PostStore.emitChange()
+		}else if(payload.actionType == 'post-admin-item-change-requesting'){
+			requesting = payload.requesting
+			_post = _.find(adminLokerList, function(_item){ 
+				return _item.id == payload.item.id
+			})
+
+			_.assign(_post, payload.attributes)
+
+			PostStore.emitChange()
+		}else if(payload.actionType == 'post-admin-delete-loker'){
+			_.remove(adminLokerList, function(_item){
+				return _item.id == payload.item.id
+			})
+
+			PostStore.emitChange()
 		}
 	}
 );
