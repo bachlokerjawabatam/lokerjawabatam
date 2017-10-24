@@ -558,7 +558,7 @@ var AdminFormLokerPost = React.createClass({
 
         dispatcher.dispatch({
             actionType: 'post-change-picture',
-            attributes: { logo: url }
+            attributes: { logo: url, removePicture: true }
         })
     },
     onRemovePicture: function(){
@@ -594,6 +594,38 @@ var AdminFormLokerPost = React.createClass({
     onChangeExpiredDate: function(event){
         this._onDispatchChangePost({expired_date: event.target.value})
     },
+    isDataValid: function(){
+        let isDataValid = {message: null, status: true}
+        let post = this.state.post
+        if (_.isEmpty(_.filter(post.requirements, function(_e){ return (!_e.destroy || _e.destroy == undefined) }))){
+            isDataValid = { message: "Minimal Memiliki 1 Kebutuhan Pekerjaan", status: false }
+            return isDataValid
+        }else{
+            _.each(_.filter(post.requirements, function(_k){return (!_k.destroy || _k.destroy == undefined)}), function(e){
+                if(_.isEmpty(_.filter(e.require_descriptions, function(_i){ return (!_i.destroy || _i.destroy == undefined) }))){
+                    isDataValid = { message: "Minimal Memiliki 1 Kualifikasi Pekerjaan", status: false }
+                    return isDataValid
+                }
+
+                if(_.isEmpty(_.filter(e.work_descriptions, function(_j){ return (!_j.destroy || _j.destroy == undefined) }))){
+                    isDataValid  = { message: "Minimal Memiliki 1 Deskripsi Pekerjaan", status: false }
+                    return isDataValid
+                }
+
+            })
+        }
+
+        return isDataValid
+    },
+    onClickLokerSubmit: function(){
+        let isValid = this.isDataValid()
+
+        if(isValid.status){
+            $("#button-submit-loker").click()
+        }else{
+            AlertApp.displayWarning(isValid.message)
+        }
+    },
     render: function(){
         let post = this.state.post
         let provinces = this.state.provinces
@@ -624,7 +656,7 @@ var AdminFormLokerPost = React.createClass({
             <div className="form-loker">
                 <h3>Form lowongan Kerja</h3>
                 <hr/>  
-                <form className="form-horizontal" method="POST" action={actionUrl} encType="multipart/form-data">
+                <form id="loker-form" className="form-horizontal" method="POST" action={actionUrl} encType="multipart/form-data">
                     <input type="hidden" name="_token" value={csrfToken} />
                     <input type="hidden" name="post[id]" value={post.id} />
                     <div className="form-group">
@@ -720,7 +752,8 @@ var AdminFormLokerPost = React.createClass({
                         <label className="col-sm-3 control-label"> Kebutuhan :</label>
                     </div>
                     <Requirement requirements={requirements} />
-                    <button type="submit" className="btn btn-md btn-primary">Submit</button>
+                    <button type="button" className="btn btn-md btn-primary" onClick={this.onClickLokerSubmit}>Submit</button>
+                    <input type="submit" id="button-submit-loker" className="hide" />
                 </form>
             </div>
         )
@@ -825,7 +858,7 @@ var BlogForm = React.createClass({
 
         dispatcher.dispatch({
             actionType: "blog-change",
-            attributes: { picture_url: url }
+            attributes: { picture_url: url , removePicture: true }
         })
     },
     onRemovePicture: function(){
