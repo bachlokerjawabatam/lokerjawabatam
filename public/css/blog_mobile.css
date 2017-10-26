@@ -21,10 +21,28 @@
 }
 
 .blog-item-body p{
-	font-size: 50px;
+	font-size: 40px;
 	font-family: segoe ui;
 	text-align: justify;
+	text-indent: 40px;
 }
+
+.blog-item-body span.title{
+	font-size: 85px;
+	font-family: segoe ui;
+	text-align: left;
+	font-weight: 400;
+}
+
+.blog-item-body button{
+	margin-top: 40px;
+	width: 100%;
+	height: 140px;
+	font-size: 50px;
+	font-family: segoe ui;
+	margin-bottom: 30px;
+}
+
 
 .blog-image-mobile{
 	width: 100%;

@@ -14,6 +14,7 @@
         <link href="{{URL::asset('css/about_us.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/about_us_mobile.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/welcome.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{URL::asset('css/welcome_mobile.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/alert.css')}}" rel="stylesheet" type="text/css">
 
         <link href="{{URL::asset('css/navbar.css')}}" rel="stylesheet" type="text/css">

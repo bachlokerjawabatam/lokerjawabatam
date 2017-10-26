@@ -1162,7 +1162,7 @@ var BlogPostingListItem = React.createClass({
             success: function(blog){
                 dispatcher.dispatch({
                     actionType: 'blog-set-blog',
-                    blog: blog
+                    blog: blog.blog
                 })
 
                 dispatcher.dispatch({

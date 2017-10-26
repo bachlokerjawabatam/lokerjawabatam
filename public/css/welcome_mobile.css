@@ -1,0 +1,69 @@
+.welcome-mobile .greet-wall{
+	width: 100%;
+	line-height: 250px;
+	padding: 80px 50px 50px 50px;
+	text-align: center;
+	color: #fff;
+	background-color: #008c8c;
+	top: 80px;
+}
+
+.welcome-mobile .greet-wall span{
+	font-size: 70px;
+	font-family: segoe ui;
+	font-weight: 400;
+}
+
+.welcome-mobile .greet-wall p{
+	font-size: 30px;
+	font-family: segoe ui;
+	font-weight: 400;
+	margin-top: -180px;
+}
+
+.welcome-mobile .metro-menu{
+	background-color: #222;
+	text-align: center;
+}
+
+.welcome-mobile .metro-menu .row .col-xs-6{
+	padding: 0px;
+}
+
+.welcome-mobile .metro-menu .row .col-xs-6 .box-menu{
+	width: 80%;
+	height: 500px;
+	background-color: #fff;
+	color: #008c8c;
+	border-radius: 3px;
+	border: 7px solid #ededed;
+	margin: auto;
+	margin-top: 30px;
+	padding: 50px 20px;
+}
+
+.welcome-mobile .metro-menu .row .col-xs-6 .box-menu i{
+	font-size: 100px;
+	margin-top: 120px;
+}
+
+.welcome-mobile .metro-menu .row .col-xs-6 .box-menu span{
+	font-size: 40px;
+	font-weight: 400;
+	font-family: segoe ui;
+}
+
+.welcome-mobile .social-link{
+	width: 100%;
+	background-color: #008c8c;
+}
+
+.welcome-mobile .social-link .row .col-xs-2{
+	padding: 20px;
+	line-height: 70px;
+}
+
+.welcome-mobile .social-link .row .col-xs-2 i{
+	font-size: 60px;
+	color: #fff;
+}

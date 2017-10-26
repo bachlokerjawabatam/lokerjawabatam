@@ -1,3 +1,12 @@
+var OverlayTrigger = ReactBootstrap.OverlayTrigger
+var Tooltip = ReactBootstrap.Tooltip
+
+var flexibleTooltip = function(texTooltip){
+	return(
+		<Tooltip>{texTooltip}</Tooltip>
+	)
+}
+
 var BlogListItem = React.createClass({
 	propTypes: {
 		item: React.PropTypes.object.isRequired,
@@ -129,11 +138,14 @@ var ItemSideBar = React.createClass({
 	},
 	render: function(){
 		let item = this.props.item
+		let titleDisplay = item.title.length > 30 ? item.title.substr(0, 30) + "..." : item.title
 
 		return(
-			<li onClick={this.onClickSelectedBlog} >
-				{item.title} <i className="fa fa-check" />
-			</li>
+			<OverlayTrigger placement="bottom" overlay={flexibleTooltip(item.title)}>
+				<li onClick={this.onClickSelectedBlog} >
+					{titleDisplay} <i className="fa fa-check" />
+				</li>
+			</OverlayTrigger>
 		)
 	}
 })
@@ -142,7 +154,8 @@ var BlogList = React.createClass({
 	getInitialState: function(){
 		return{
 			blogList: BlogStore.getBlogList(),
-			showBlogDetail: BlogStore.getShowBlogDetail()
+			showBlogDetail: BlogStore.getShowBlogDetail(),
+			selectedBlog: BlogStore.getSelectedBlog()
 		}
 	},
 	componentDidMount: function(){

@@ -2,7 +2,7 @@ var menuItems = [
 	{icon: "fa fa-address-card", title: "Loker Jawa", url: "loker_jawa"},
 	{icon: "fa fa-address-card-o", title: "Loker Batam", url: "loker_batam"},
 	{icon: "fa fa-briefcase", title: "Tips Kerja", url: "/tips_kerja"},
-	{icon: "fa fa-lightbulb-o", title: "Ide Bisnis", url: "/tips_kerja"},
+	{icon: "fa fa-lightbulb-o", title: "Ide Bisnis", url: "/ide_bisnis"},
 	{icon: "fa fa-users", title: "Tentang Kami", url: "/tentang_kami"}
 ]
 
@@ -15,7 +15,7 @@ var InstagramMenu = React.createClass({
                 data: {content_type: url},
                 formatType: 'json',
                 success: function(data){
-                    window.location.href = '/'
+                    window.location.href = '/lowongan_kerja'
                 }
             })
 		}else{

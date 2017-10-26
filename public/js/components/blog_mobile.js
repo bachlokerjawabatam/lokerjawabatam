@@ -1,40 +1,68 @@
-var blogItems = [
-	{title: "TIPS MENCARI KERJA DENGAN BAIK & BENAR"}
-]
-
 var BlogItemMobile = React.createClass({
 	propTypes: {
-		item: React.PropTypes.object
+		item: React.PropTypes.object,
+		completeContent: React.PropTypes.bool
+	},
+	onClickSelectedBlog: function(){
+		let item = this.props.item
+
+		dispatcher.dispatch({
+			actionType: 'blog-change-selected-blog',
+			selectedBlog: this.props.item
+		})
+
+		dispatcher.dispatch({
+			actionType: 'blog-change-show-blog-detail',
+			showBlogDetail: true
+		})
+
+		$.ajax({
+            url: '/tips_kerja/update_blog_visits',
+            method: 'get',
+            data: {blog_id: item.id},
+            formatType: 'json',
+            success: function(data){
+                console.log("success update blog visits")
+            }
+        })
+	},
+	onClickBack: function(){
+		dispatcher.dispatch({
+			actionType: 'blog-change-show-blog-detail',
+			showBlogDetail: false
+		})
 	},
 	render: function(){
 		let item = this.props.item
+		let blogPicture = "/images/" + item.picture_url
+		let itemContent = item.content
+		let contentStyle = {marginTop: "50px"}
+		let completeContent = this.props.completeContent
+
+		if (completeContent){
+			contentStyle.display = "block"
+			var buttonDisplay =
+				<button className="btn btn-md btn-warning" onClick={this.onClickBack}>
+					<i className="fa fa-arrow-left fa-1x" /> Kembali Ke daftar Posting
+				</button>
+		}else{
+			contentStyle.display = "none"
+			var buttonDisplay = 
+				<button className="btn btn-lg btn-success" onClick={this.onClickSelectedBlog}>
+					Baca selengkapnya  <i className="fa fa-arrow-right fa-1x" />
+				</button>
+		}
 
 		return(
 			<div className="blog-item-content">
-				<div className="blog-item-header">
-					<p>{item.title}</p>
-				</div>
 				<div className="blog-item-body">
 					<div className="blog-image-mobile">
-						<img src="/image/landing_page.jpg" />
+						<img src={blogPicture} />
 					</div>
-					<p>
-						“Setelah 2 tahun membangun bisnis online, dari profit 500 ribu per bulan, hingga
-						menjadi Rp 5 juta per bulan, kini berhasil melipatgandakan penghasilan menjadi 20
-						juta per bulan... hanya dengan menerapkan prinsip-prinsip sederhana internet
-						marketing. Dan itu masih berlanjut... Saya kira, saya sudah cukup layak untuk
-						memberikan sebagian ilmunya di sini. Selamat membaca.”
-					</p>
-					<p>
-						Saya tanya kepada anda... apa tujuan anda membuat blog?
-						Jawaban anda pasti beragam. Tapi, saya yakin pada satu hal. Bagi anda yang
-						punya produk internet, tujuan blog anda pasti untuk menarik pengunjung dan
-						menjaring lebih banyak pelanggan. Betul?
-					</p>
-					<div className="blog-item-more text-center">
-						<h4>Selengkapnya..</h4>
-						<i className="fa fa-chevron-down" />
-					</div>
+					<br />
+					<span className="title">{item.title}</span>
+					<div style={contentStyle} dangerouslySetInnerHTML={{__html:itemContent}} />
+					{buttonDisplay}
 				</div>
 			</div>
 		)
@@ -42,18 +70,54 @@ var BlogItemMobile = React.createClass({
 })
 
 var BlogContentMobile = React.createClass({
+	getInitialState: function(){
+		return{
+			blogList: BlogStore.getBlogList(),
+			showBlogDetail: BlogStore.getShowBlogDetail()
+		}
+	},
+	componentDidMount: function(){
+		this.listener = BlogStore.addChangeListener(this._onChange)
+	},
+	componentWillUnmount: function(){
+		this.listener.remove()
+	},
+	_onChange: function(){
+		this.setState({
+			blogList: BlogStore.getBlogList(),
+			showBlogDetail: BlogStore.getShowBlogDetail(),
+			selectedBlog: BlogStore.getSelectedBlog()
+		})
+	},
 	render: function(){
+		let blogList = this.state.blogList
+		let showBlogDetail = this.state.showBlogDetail
+		let selectedBlog = this.state.selectedBlog
+
 		let item = function(item, key){
 			return(
 				<BlogItemMobile item={item} key={key} />
 			)
 		}
 
-		return(
-			<div className="blog-content-mobile">
-				{blogItems.map(item)}
-			</div>
-		)
+		let blankDivStyle = {width: "100%", height: "400px"}
+
+		if (showBlogDetail){
+			return(
+				<div className='blog-content-mobile'>
+					<BlogItemMobile item={selectedBlog} key='selected-blog-1' completeContent={true} />
+					<div style={blankDivStyle} />
+				</div>
+			)
+		}else{
+			return(
+				<div className="blog-content-mobile">
+					{blogList.map(item)}
+					<div style={blankDivStyle} />
+				</div>
+			)
+		}
+
 	}
 })
 

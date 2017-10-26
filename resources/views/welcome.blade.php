@@ -4,8 +4,9 @@
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/welcome.js')}}"></script>
+    <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>
     <script type="text/babel">
-        const TABLET_MAX_SIZE = 941
+        const TABLET_MAX_SIZE = 991
 
         var Welcome = React.createClass({
             getInitialState: function(){
@@ -16,7 +17,9 @@
             componentDidMount: function(){
                 this.onWindowResize()
                 let desktopView = ($(window).width() >= TABLET_MAX_SIZE)
-                $("#menu-modal").modal('show');
+                if(desktopView){
+                    $("#menu-modal").modal('show');
+                }
             },
             onWindowResize: function(){
                 let desktopView = ($(window).width() >= TABLET_MAX_SIZE)
@@ -42,7 +45,7 @@
             },
             render: function(){
                 let desktopView = this.state.desktopView
-                    
+                  
                 if (desktopView == true){
                     return(
                         <div>
