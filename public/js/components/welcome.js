@@ -132,6 +132,17 @@ var WelcomeDesktop = React.createClass({
 })
 
 var WelcomeMobile = React.createClass({
+	getInitialState: function(){
+		return{
+			menuItems: [
+				{ title: 'Loker Jawa', value: 'loker_jawa', url: '', className: 'fa fa-address-card' },
+				{ title: 'Loker Batam', value: 'loker_batam', url: '', className: 'fa fa-address-card-o' },
+				{ title: 'Tips Kerja', value: 'tips_kerja', url: '', className: 'fa fa-briefcase' },
+				{ title: 'Ide Bisnis', value: 'ide_bisnis', url: '', className: 'fa fa-lightbulb-o' },
+				{ title: 'Tentang Kami', value: 'tentang_kami', url: '', className: 'fa fa-users' },
+			]
+		}
+	},
 	onClickMenu: function(menuUrl){
 		if(_.includes(['loker_jawa', 'loker_batam'], menuUrl)){
 			$.ajax({
@@ -151,52 +162,27 @@ var WelcomeMobile = React.createClass({
 		window.open(textLink, '_blank')
 	},
 	render: function(){
-		let aboutUsStyle = {marginBottom: "40px"}
+		let menuItems = this.state.menuItems
+		var that = this
+		var menuItem = function(item, key){
+			return(
+				<div key={key} className="col-xs-12">
+					<div className="circle-icon pull-right" onClick={that.onClickMenu.bind(that, item.value)}>
+						<i className={item.className} />
+					</div>
+					<div className="menu-item pull-right" onClick={that.onClickMenu.bind(that, item.value)}>
+						{item.title}
+					</div>
+				</div>
+			)
+		}
 
 		return(
 			<div className="welcome-mobile">
 				<HeaderMobile />
-				<div className="greet-wall">
-					<span>Lokerjawabatam.com</span>
-					<p>Informasi Lowongan Kerja Terkini Daerah Jawa Dan Batam</p>
-				</div>
-				<div className="metro-menu">
+				<div className="content-mobile">
 					<div className="row">
-						<div className="col-xs-6">
-							<div className="box-menu" onClick={this.onClickMenu.bind(this, 'loker_jawa')}>
-								<i className="fa fa-address-card" />
-								<br />
-								<span>Loker Jawa</span>
-							</div>
-						</div>
-						<div className="col-xs-6">
-							<div className="box-menu" onClick={this.onClickMenu.bind(this, 'loker_batam')} >
-								<i className="fa fa-address-card-o" />
-								<br />
-								<span>Loker Batam</span>
-							</div>
-						</div>
-						<div className="col-xs-6">
-							<div className="box-menu" onClick={this.onClickMenu.bind(this, '/tips_kerja')}>
-								<i className="fa fa-briefcase" />
-								<br />
-								<span>Tips Kerja</span>
-							</div>
-						</div>
-						<div className="col-xs-6">
-							<div className="box-menu" onClick={this.onClickMenu.bind(this, '/ide_bisnis')}>
-								<i className="fa fa-lightbulb-o" />
-								<br />
-								<span>Ide Bisnis</span>
-							</div>
-						</div>
-						<div className="col-xs-6">
-							<div style={aboutUsStyle} className="box-menu" onClick={this.onClickMenu.bind(this, '/tentang_kami')}>
-								<i className="fa fa-users" />
-								<br />
-								<span>Tentang Kami</span>
-							</div>
-						</div>
+						{menuItems.map(menuItem)}
 					</div>
 				</div>
 				<div className="social-link text-center">

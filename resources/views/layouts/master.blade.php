@@ -16,6 +16,7 @@
         <link href="{{URL::asset('css/welcome.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/welcome_mobile.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/alert.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{URL::asset('js/assets/draft-js/Draft.min.css')}}" rel="stylesheet" type="text/css">
 
         <link href="{{URL::asset('css/navbar.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/filter.css')}}" rel="stylesheet" type="text/css">
@@ -42,7 +43,8 @@
         <script src="{{URL::asset('js/assets/flux/flux.js')}}"></script>
         <script src="{{URL::asset('js/assets/flux/fbEmitter.js')}}"></script>
         <script src="{{URL::asset('js/assets/react-bootstrap/react-bootstrap.min.js')}}"></script>
-        
+        <script src="{{URL::asset('js/assets/react-bootstrap/react-bootstrap.min.js')}}"></script>
+                
         <script src="{{URL::asset('js/service/key_generator.js')}}"></script>
 
         <script src="{{URL::asset('js/jquery.min.js')}}"></script>

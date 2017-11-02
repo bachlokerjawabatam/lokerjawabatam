@@ -3,11 +3,11 @@
 @section('title', 'Lokerjawabatam')
 
 @section('content')
+    <script type="text/javascript" src="{{URL::asset('js/stores/blog_store.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/instagram_menu.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/blog_desktop.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/blog_mobile.js')}}"></script>
-    <script type="text/javascript" src="{{URL::asset('js/stores/blog_store.js')}}"></script>
     <script type="text/javascript">
         var blogList = {!! $blogList !!}
         var populerItems = {!! $populerItems !!}

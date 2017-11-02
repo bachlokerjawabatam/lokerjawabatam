@@ -1,6 +1,9 @@
+'use strict'
+
 var PropTypes = React.PropTypes
 var OverlayTrigger = ReactBootstrap.OverlayTrigger
 var Tooltip = ReactBootstrap.Tooltip
+const {Editor, EditorState, convertToRaw, convertFromRaw, RichUtils} = Draft;
 
 var flexibleTooltip = function(textTooltip){
     return(
@@ -54,6 +57,19 @@ var LokerJawaBatamSelect = React.createClass({
         )
     }
 });
+
+
+var PreviewComponentEditor = React.createClass({
+    propTypes:{
+        contentRaw: React.PropTypes.string
+    },
+    render: function(){
+        const {contentRaw} = this.props
+        return(
+            <Editor editorState={contentRaw} readOnly />
+        )
+    }
+})
 
 var RequireDescriptionRow = React.createClass({
     onClickRemove: function(){
@@ -373,6 +389,7 @@ var ItemRequirement = React.createClass({
                             onChange={this.onChangeGender} >
                             <option key="gender-1" value="Pria">Pria</option>
                             <option key="gender-2" value="Wanita">Wanita</option>
+                            <option key="gender-3" value="Pria/Wanita">Pria/Wanita</option>
                         </select>
                     </div>
                 </div>
@@ -381,7 +398,7 @@ var ItemRequirement = React.createClass({
                     <label className="col-sm-2">Usia :</label>
                     <label className="col-sm-1">Min :</label>
                     <div className="col-sm-2">
-                        <input type="number" min={18} max={63} name={ageMinInputName} 
+                        <input type="number" min={0} max={63} name={ageMinInputName} 
                             onChange={this.onChangeAgeMin}
                             value={item.age_min}
                             className="form-control input-sm" required={true} />
@@ -976,30 +993,9 @@ var BlogForm = React.createClass({
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className="col-sm-3 control-label"></label>
-                        <div className="col-sm-8 text-left">
-                            <div className="text-editor-tool">
-                                <a href="javascript:void(0)"className="btn btn-default" onClick={this.onClickAttr.bind(this, 'bold')}>
-                                    <i className="fa fa-bold" />
-                                </a>
-                                <a href="javascript:void(0)" className="btn btn-default" onClick={this.onClickAttr.bind(this, 'italic')}>
-                                    <i className="fa fa-italic" />
-                                </a>
-                                <a href="javascript:void(0)" className="btn btn-default" onClick={this.onClickAttr.bind(this, 'underline')}>
-                                    <i className="fa fa-underline" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="form-group">
                         <label className="col-sm-3 control-label"> Konten Artikel</label>
                         <div className="col-sm-8">
-                            <textarea rows={30} className="form-control input-sm" 
-                                name="blog[content]" 
-                                required={true} 
-                                value={contentValue}
-                                onChange={this.onChangeContent} />
-                            <input type="hidden" name="post[company_id]" value="" />
+                            <LokerjawabatamEditor />
                         </div>
                     </div>
                     <button type="submit" className="btn btn-md btn-primary">Submit</button>
@@ -1036,7 +1032,9 @@ var BlogPreview = React.createClass({
                 <div className="box-preview">
                     <img src={picture} />
                     <h1>{title}</h1>
-                    <div className="content" dangerouslySetInnerHTML={{__html:blogContent}} />
+                    <div className="content">
+                        <PreviewComponentEditor contentRaw={blogContent} />
+                    </div>
                 </div>
         }else{
             var previewComponent = null

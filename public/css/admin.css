@@ -194,3 +194,21 @@
 	color: darkgrey;
 	text-align: center;
 }
+
+.editor-root{
+	font-family: sans-serif;
+	padding: 20px;
+	width: 600px;
+}
+
+.editor-box{
+	border: 1px solid #ccc;
+	cursor: text;
+	min-height: 80px;
+	padding: 10px;
+}
+
+.editor-button{
+	margin-top: 10px;
+	text-align: center;
+}

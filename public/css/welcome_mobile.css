@@ -1,59 +1,46 @@
-.welcome-mobile .greet-wall{
+.welcome-mobile .content-mobile{
+	padding: 400px 40px 400px 0px;
 	width: 100%;
-	line-height: 250px;
-	padding: 80px 50px 50px 50px;
-	text-align: center;
+	background-image: url('/image/welcome3.jpg');
+	background-repeat: no-repeat;
+	background-size: 250%;
+}
+
+.welcome-mobile .content-mobile .col-xs-12{
+	padding: 30px 0px;
+}
+
+.welcome-mobile .content-mobile .menu-item{
+	width: 400px;
+	line-height: 100px;
+	background-color: rgba(0,0,0,0.5);
 	color: #fff;
-	background-color: #008c8c;
-	top: 80px;
-}
-
-.welcome-mobile .greet-wall span{
-	font-size: 70px;
-	font-family: segoe ui;
-	font-weight: 400;
-}
-
-.welcome-mobile .greet-wall p{
-	font-size: 30px;
-	font-family: segoe ui;
-	font-weight: 400;
-	margin-top: -180px;
-}
-
-.welcome-mobile .metro-menu{
-	background-color: #222;
 	text-align: center;
-}
-
-.welcome-mobile .metro-menu .row .col-xs-6{
-	padding: 0px;
-}
-
-.welcome-mobile .metro-menu .row .col-xs-6 .box-menu{
-	width: 80%;
-	height: 500px;
-	background-color: #fff;
-	color: #008c8c;
-	border-radius: 3px;
-	border: 7px solid #ededed;
-	margin: auto;
-	margin-top: 30px;
-	padding: 50px 20px;
-}
-
-.welcome-mobile .metro-menu .row .col-xs-6 .box-menu i{
-	font-size: 100px;
-	margin-top: 120px;
-}
-
-.welcome-mobile .metro-menu .row .col-xs-6 .box-menu span{
-	font-size: 40px;
-	font-weight: 400;
+	margin-top: 15px;
+	margin-right: 100px;
+	border-radius: 50px 0px 0px 50px;
+	font-size: 32px;
 	font-family: segoe ui;
+}
+
+.welcome-mobile .content-mobile .circle-icon{
+	position: absolute;
+	right: 50px;
+	width: 130px;
+	line-height: 130px;
+	background-color: #008c8c;
+	border-radius: 50%;
+	color: #fff;
+	text-align: center;
+	font-size: 42px;
+	margin-left: -50px;
+	z-index: 9;
 }
 
 .welcome-mobile .social-link{
+	position: fixed;
+	z-index: 999;
+	bottom: 0px;
 	width: 100%;
 	background-color: #008c8c;
 }

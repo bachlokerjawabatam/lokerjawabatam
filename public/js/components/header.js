@@ -86,7 +86,7 @@ var HeaderMobile = React.createClass({
 					<img src='/image/logo-lokerjawabatam.png' />
 					<p>Informasi Lowongan kerja terkini daerah jawa dan batam</p>
 				</div>
-				<HeaderMobileMenu showMenu={showMenu} page={page} />
+				<HeaderMobileMenu showMenu={showMenu} page={page} onClickToggleMenu={this.onClickToggleMenu} />
 			</div>
 		)	
 	}
@@ -96,14 +96,18 @@ var HeaderMobileMenu = React.createClass({
 	propTypes:
 	{
 		showMenu: React.PropTypes.bool,
-		page: React.PropTypes.string
+		page: React.PropTypes.string,
+		onClickToggleMenu: React.PropTypes.func
+	},
+	onClickToggleMenu: function(){
+		this.props.onClickToggleMenu()
 	},
 	render: function(){
 		let showMenu = this.props.showMenu
 		let page = this.props.page
 		
 		if(page == 'blog'){
-			var contentMenu = <BlogSideMenu />
+			var contentMenu = <BlogSideMenu onClickToggleMenu={this.onClickToggleMenu} />
 		}
 
 		if(!showMenu){
@@ -121,18 +125,95 @@ var HeaderMobileMenu = React.createClass({
 })
 
 var BlogSideMenu = React.createClass({
+	propTypes: {
+		onClickToggleMenu: React.PropTypes.func
+	},
+	getInitialState: function(){
+		return{
+			populerItems: BlogStore.getPopulerItems(),
+			latestItems: BlogStore.getLatestItems()
+		}
+	},
+	componentDidMount: function(){
+		this.listener = BlogStore.addChangeListener(this._onChange())
+	},
+	componentWillUnmount: function(){
+		this.listener.remove()
+	},
+	_onChange: function(){
+		this.setState({
+			populerItems: BlogStore.getPopulerItems(),
+			latestItems: BlogStore.getLatestItems()
+		})
+	},
 	render: function(){
+		let populeraItems = this.state.populerItems
+		let latestItems = this.state.latestItems
+		var that = this
+		let item = function(item){
+			return(
+				<BlogSideMenuItem item={item} onClickToggleMenu={that.props.onClickToggleMenu} />
+			)
+		}
+
 		return(
 			<div className="blog-side-menu">
-				<p className="title-side-menu">Kategori</p>
+				<p className="title-side-menu">Artikel Populer</p>
 				<ul className="side-menu-item">
-					<li>
-						<i className="fa fa-arrow-circle-right" />
-						Tips dan Serba Serbi
-						<span className="badge">10</span>
-					</li>
+					{populerItems.map(item)}
+				</ul>
+				<br />
+				<p className="title-side-menu">Artikel Terbaru</p>
+				<ul className="side-menu-item">
+					{latestItems.map(item)}
 				</ul>
 			</div>
+		)
+	}
+})
+
+var BlogSideMenuItem = React.createClass({
+	propTypes:{
+		item: React.PropTypes.object,
+		onClickToggleMenu: React.PropTypes.func
+	},
+	onClickToggleMenu: function(){
+		this.props.onClickToggleMenu()
+	},
+	onClickMenuItem: function(){
+		let item = this.props.item
+
+		dispatcher.dispatch({
+			actionType: 'blog-change-selected-blog',
+			selectedBlog: this.props.item
+		})
+
+		dispatcher.dispatch({
+			actionType: 'blog-change-show-blog-detail',
+			showBlogDetail: true
+		})
+
+		$.ajax({
+            url: '/tips_kerja/update_blog_visits',
+            method: 'get',
+            data: {blog_id: item.id},
+            formatType: 'json',
+            success: function(data){
+                console.log("success update blog visits")
+            }
+        })
+
+        this.onClickToggleMenu()
+	},
+	render: function(){
+		let item = this.props.item
+		let titleDisplay = item.title.length > 30 ? item.title.substr(0, 30) + "..." : item.title
+
+		return(
+			<li onClick={this.onClickMenuItem}>
+				<i className="fa fa-arrow-circle-right" />
+				{titleDisplay}
+			</li>
 		)
 	}
 })
