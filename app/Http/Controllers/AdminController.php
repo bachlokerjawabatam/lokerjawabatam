@@ -97,7 +97,7 @@ class AdminController extends Controller
         $blog->title = $params->blog['title'];
         $blog->category_id = $params->blog['category_id'];
         $blog->user_id = $params->blog['user_id'];
-        $blog->content = $params->blog['content'];
+        $blog->content = $params->blog['raw_content'];
         $blog->source_link = $params->blog['source_link'];
         
         $blog->save();
@@ -122,11 +122,11 @@ class AdminController extends Controller
             $path = public_path('images/' . $picture_filename);
             $blog->picture_url = $picture_filename; 
         }
-
+        
         $blog->title = $params->blog['title'];
         $blog->category_id = $params->blog['category_id'];
         $blog->user_id = $params->blog['user_id'];
-        $blog->content = $params->blog['content'];
+        $blog->content = $params->blog['raw_content'];
         $blog->source_link = $params->blog['source_link'];
         $blog->save();
 

@@ -212,3 +212,31 @@
 	margin-top: 10px;
 	text-align: center;
 }
+
+.prompt-modal-confirm{
+	font-family: segoe ui;
+}
+
+.prompt-modal-confirm .box-icon{
+	width: 80px;
+	line-height: 80px;
+	border-radius: 5px;
+	border: 2px solid #ccc;
+}
+
+.prompt-modal-confirm .box-icon i{
+	margin-top: 10px;
+	font-size: 42px;
+	color: #ccc;
+}
+
+.prompt-modal-confirm .label{
+	padding-top: 10px;
+	width: 100%;
+}
+
+.prompt-modal-confirm .label p{
+	font-size: 18px;
+	font-weight: 400;
+	color: #000;
+}

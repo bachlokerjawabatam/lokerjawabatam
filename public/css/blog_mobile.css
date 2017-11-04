@@ -27,6 +27,16 @@
 	text-indent: 40px;
 }
 
+.blog-item-body ol li{
+	font-size: 43px;
+	font-family: segoe ui;
+}
+
+.blog-item-body ul li{
+	font-size: 43px;
+	font-family: segoe ui;
+}
+
 .blog-item-body span.title{
 	font-size: 85px;
 	font-family: segoe ui;

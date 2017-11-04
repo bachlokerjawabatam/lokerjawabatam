@@ -27,6 +27,8 @@ var populerItems = []
 var latestItems = []
 var isNewFormBlog = false
 var requesting = false
+var rawContent = null
+var showModalConfirm = false
 
 window.BlogStore = _.assign(new blogEventEmitter(),{ 
 	getBlog: function(){ return blog },
@@ -39,6 +41,8 @@ window.BlogStore = _.assign(new blogEventEmitter(),{
 	isNewFormBlog: function(){ return isNewFormBlog },
 	getAdminBlogList: function(){ return adminBlogList },
 	getRequesting: function(){ return requesting },
+	getRawContent: function(){ return rawContent },
+	getShowModalConfirm: function(){ return showModalConfirm },
 
 	emitChange: function(){
 		return this.emit(BLOG_CHANGE_EVENT)
@@ -110,6 +114,14 @@ dispatcher.register(
 			let _userId = blog.user_id
 			let _author = blog.author
 			blog = {user_id: _userId, author: _author , requesting: {type: null, status: false}}
+
+			BlogStore.emitChange()
+		}else if(payload.actionType == 'blog-change-raw-content'){
+			rawContent = payload.rawContent
+
+			BlogStore.emitChange()
+		}else if(payload.actionType == 'blog-change-show-modal-confirm'){
+			showModalConfirm = payload.showModalConfirm
 
 			BlogStore.emitChange()
 		}

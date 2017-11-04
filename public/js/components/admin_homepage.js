@@ -65,6 +65,7 @@ var PreviewComponentEditor = React.createClass({
     },
     render: function(){
         const {contentRaw} = this.props
+
         return(
             <Editor editorState={contentRaw} readOnly />
         )
@@ -851,7 +852,9 @@ var BlogForm = React.createClass({
     getInitialState: function(){
         return{
             blog: BlogStore.getBlog(),
-            categories: BlogStore.getCategories()
+            categories: BlogStore.getCategories(),
+            rawContent: BlogStore.getRawContent(),
+            showModalConfirm: BlogStore.getShowModalConfirm()
         }
     },
     componentDidMount: function(){
@@ -862,7 +865,9 @@ var BlogForm = React.createClass({
     },
     _onChange: function(){
         this.setState({
-            blog: BlogStore.getBlog()
+            blog: BlogStore.getBlog(),
+            rawContent: BlogStore.getRawContent(),
+            showModalConfirm: BlogStore.getShowModalConfirm()
         })
     },
     onClickUpload: function()
@@ -914,6 +919,31 @@ var BlogForm = React.createClass({
             attributes: { source_link: event.target.value }
         })
     },
+    onClickSubmit: function(){
+        let content = this.state.blog.content.getCurrentContent()
+        let rawContent = JSON.stringify(convertToRaw(content))
+        dispatcher.dispatch({
+            actionType: "blog-change-raw-content",
+            rawContent: rawContent
+        })
+        dispatcher.dispatch({
+            actionType: 'blog-change-show-modal-confirm',
+            showModalConfirm: true
+        })
+    },
+    onClickYes: function(){
+        this.onHideModalConfirm()
+        $("#button-submit-artikel").click()
+    },
+    onClickNo: function(){
+        this.onHideModalConfirm()
+    },
+    onHideModalConfirm: function(){
+        dispatcher.dispatch({
+            actionType: 'blog-change-show-modal-confirm',
+            showModalConfirm: false
+        })
+    },
     render: function(){
         let id = this.state.blog.id
         let userId = this.state.blog.user_id
@@ -923,10 +953,13 @@ var BlogForm = React.createClass({
         let categoryId = this.state.blog.category_id
         let picture_url = this.state.blog.picture_url
         let removePicture = this.state.blog.removePicture
+        let rawContent = this.state.rawContent
         let titleInputName = "blog[title]"
         let categoryIdInputName = "blog[category_id]"
         let sourceLinkInputName = "blog[source_link]"
+        let rawContentInputName = "blog[raw_content]"
         let contentValue = this.state.blog.content
+        let showModalConfirm = this.state.showModalConfirm
 
         if (id && picture_url && !removePicture){
             var pictureUrl = "/images/" + picture_url
@@ -941,7 +974,7 @@ var BlogForm = React.createClass({
         }
 
         let actionUrl = id ? "/admin/update_blog" : "/admin/post_blog"
-
+        console.log("raw content", rawContent)
         return(
             <div className="form-loker">
                 <h3>{ id ? "Edit Artikel" : "Form Artikel" }</h3>
@@ -995,12 +1028,18 @@ var BlogForm = React.createClass({
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Konten Artikel</label>
                         <div className="col-sm-8">
-                            <LokerjawabatamEditor />
+                            <LokerjawabatamEditor editMode={id ? true : false} />
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-md btn-primary">Submit</button>
+                    <input type="hidden" name={rawContentInputName} value={rawContent} />
+                    <button type="button" className="btn btn-md btn-primary" onClick={this.onClickSubmit}>Submit</button>
+                    <button type="submit" id="button-submit-artikel" className="hide" />
                 </form>
                 <BlogPreview blogContent={contentValue} title={blogTitle} picture={pictureUrl} />
+                <PromptModalConfirmation 
+                    show={showModalConfirm}
+                    onClickYes={this.onClickYes}
+                    onClickNo={this.onClickNo} />
             </div>
         )
     }

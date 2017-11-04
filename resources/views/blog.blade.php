@@ -3,6 +3,8 @@
 @section('title', 'Lokerjawabatam')
 
 @section('content')
+    <script src="{{URL::asset('js/assets/immutable/immutable.js')}}"></script>
+    <script src="{{URL::asset('js/assets/draft-js/Draft.js')}}"></script>
     <script type="text/javascript" src="{{URL::asset('js/stores/blog_store.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/instagram_menu.js')}}"></script>

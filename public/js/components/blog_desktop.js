@@ -1,5 +1,6 @@
 var OverlayTrigger = ReactBootstrap.OverlayTrigger
 var Tooltip = ReactBootstrap.Tooltip
+const {Editor, EditorState, convertFromRaw} = Draft;
 
 var flexibleTooltip = function(texTooltip){
 	return(
@@ -49,10 +50,23 @@ var BlogListItem = React.createClass({
 	render: function(){
 		let item = this.props.item
 		let imageUrl = "/images/" + item.picture_url
-		let itemContent = item.content
-		let completeContent = this.props.completeContent
+		var itemContent = item.content
+		var completeContent = this.props.completeContent
 
-		let contentStyle = !completeContent ? {display: 'none'} : {display: 'block'}   
+		let contentStyle = !completeContent ? {display: 'none'} : {display: 'block'} 
+		
+		if (itemContent.substr(0,1) == '{'){
+			let content = JSON.parse(itemContent)
+			let contentRaw = EditorState.createWithContent(convertFromRaw(content))
+
+			if (completeContent){
+				var contentDisplay = <Editor editorState={contentRaw} readOnly />
+			}else{
+				var contentDisplay = null
+			}
+		}else{
+			var contentDisplay = <div  style={contentStyle} dangerouslySetInnerHTML={{__html:itemContent}} />
+		}
 
 		if (!completeContent){
 			var buttonDisplay = 
@@ -73,7 +87,7 @@ var BlogListItem = React.createClass({
 				</div>
 				<h1>{item.title}</h1>
 				<br />
-				<div  style={contentStyle} dangerouslySetInnerHTML={{__html:itemContent}} />
+				{contentDisplay}
 				{buttonDisplay}
 				<br />
 				<hr />

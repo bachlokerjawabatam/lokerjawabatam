@@ -5,6 +5,7 @@
 @section('content')
 	<script src="{{URL::asset('js/assets/immutable/immutable.js')}}"></script>
     <script src="{{URL::asset('js/assets/draft-js/Draft.js')}}"></script>
+    <script type="text/babel" src="{{URL::asset('js/components/prompt_modal.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/rich_text_editor.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/admin_homepage.js')}}"></script>
     <script type="text/javascript" src="{{URL::asset('js/stores/post_store.js')}}"></script>

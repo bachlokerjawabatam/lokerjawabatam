@@ -84,7 +84,6 @@ var HeaderMobile = React.createClass({
 				<div className="header-mobile text-center">
 					<i style={barStyle} className={classBar} onClick={this.onClickToggleMenu} />
 					<img src='/image/logo-lokerjawabatam.png' />
-					<p>Informasi Lowongan kerja terkini daerah jawa dan batam</p>
 				</div>
 				<HeaderMobileMenu showMenu={showMenu} page={page} onClickToggleMenu={this.onClickToggleMenu} />
 			</div>

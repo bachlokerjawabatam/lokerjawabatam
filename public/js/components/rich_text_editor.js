@@ -1,10 +1,16 @@
 'use strict';
-      const {Editor, EditorState, RichUtils} = Draft;
+      const {Editor, EditorState, convertFromRaw, RichUtils} = Draft;
 
       class LokerjawabatamEditor extends React.Component {
         constructor(props) {
           super(props);
-          this.state = {editorState: EditorState.createEmpty()};
+          var content = BlogStore.getBlog().content;
+          if (this.props.editMode && content.substr(0, 1) == '{' ){
+            var contentState = convertFromRaw(JSON.parse(content));  
+            this.state = {editorState: EditorState.createWithContent(contentState)};
+          }else{
+            this.state = {editorState: EditorState.createEmpty()};
+          }
           this.focus = () => this.refs.editor.focus();
           this.onChange = (editorState) => this._onChangeEditor(editorState); 
           this.handleKeyCommand = this._handleKeyCommand.bind(this);
