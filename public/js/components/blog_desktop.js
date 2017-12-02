@@ -2,11 +2,79 @@ var OverlayTrigger = ReactBootstrap.OverlayTrigger
 var Tooltip = ReactBootstrap.Tooltip
 const {Editor, EditorState, convertFromRaw} = Draft;
 
+var formatDate = function(dateString){
+	let arrMonth = [
+		'Januari', 
+		'Februari',
+		'Maret',
+		'April',
+		'Mei',
+		'Juni',
+		'Juli',
+		'Agustus',
+		'September',
+		'Oktober',
+		'November',
+		'December'
+	]
+
+	let postDate = new Date(dateString)
+	let date = postDate.getDate()
+	let month = postDate.getMonth()
+	let year = postDate.getFullYear()
+
+	return date + ", " + arrMonth[month] + " " + year 
+}
+
 var flexibleTooltip = function(texTooltip){
 	return(
 		<Tooltip>{texTooltip}</Tooltip>
 	)
 }
+
+var BlogLabel = React.createClass({
+	propTypes: {
+		iconClass: React.PropTypes.string,
+		label: React.PropTypes.string,
+		position: React.PropTypes.string,
+		link: React.PropTypes.string,
+		tooltip: React.PropTypes.string
+	},
+	getDefaultProps: function(){
+		return{
+			position: "left",
+			link: null
+		}
+	},
+	render: function(){
+		var label = this.props.label
+		let iconClass = this.props.iconClass
+		var position = this.props.position
+		var link = this.props.link
+		var labelTooltip = this.props.tooltip
+		
+		if (position == 'left'){
+			var boxLabelClass = 'blog-label pull-left'
+		}else if(position == 'right'){
+			var boxLabelClass = 'blog-label pull-right'
+		}
+
+		if (link){
+			var labelTag = <a href={link}>{label}</a>
+		}else{
+			var labelTag = <span>{label}</span>
+		}
+
+		return(
+			<OverlayTrigger placement="bottom" overlay={flexibleTooltip(labelTooltip)}>
+				<div className={boxLabelClass}>
+					<i className={iconClass} />
+					{labelTag}
+				</div>
+			</OverlayTrigger>
+		)
+	}
+})
 
 var BlogListItem = React.createClass({
 	propTypes: {
@@ -31,6 +99,8 @@ var BlogListItem = React.createClass({
 			showBlogDetail: true
 		})
 
+		$("html").animate({scrollTop: 0}, '600');
+
 		$.ajax({
             url: '/tips_kerja/update_blog_visits',
             method: 'get',
@@ -46,6 +116,8 @@ var BlogListItem = React.createClass({
 			actionType: 'blog-change-show-blog-detail',
 			showBlogDetail: false
 		})
+
+		$("html").animate({scrollTop: 0}, '600');
 	},
 	render: function(){
 		let item = this.props.item
@@ -80,12 +152,38 @@ var BlogListItem = React.createClass({
 				</button>
 		}
 
+		if (item.category.name == 'Tips Kerja'){
+			var categoryLinkName = 'https://www.lokerjawabatam.com/tips_kerja'
+		}else if(item.category.name == 'Ide Bisnis'){
+			var categoryLinkName = 'https://www.lokerjawabatam.com/ide_bisnis'
+		}
+
+		let postDate = formatDate(item.created_at)
+		let curDate = formatDate(new Date)
+
+		if (postDate == curDate){
+			var newLabelComponent = 
+				<div className="new-label-indicator pull-right">
+					<img src="/image/blog_new_label.png" />
+				</div> 
+		}
+
 		return(
 			<div className="blog-list-item">
 				<div className="blog-image">
 					<img src={imageUrl} />
+					{newLabelComponent}
 				</div>
 				<h1>{item.title}</h1>
+				<div className="box-label">
+					<BlogLabel key="label" iconClass="fa fa-tag" label={item.category.name}
+						 link={categoryLinkName} tooltip='label' />
+					<BlogLabel key="viewers" iconClass="fa fa-eye" label={item.visits + " x dilihat"}
+						tooltip='viewers' />
+					<BlogLabel key="post-date" iconClass="fa fa-calendar-o" label={postDate}
+						position="right" tooltip='tanggal posting' />
+				</div>
+				<br />
 				<br />
 				{contentDisplay}
 				{buttonDisplay}
@@ -113,11 +211,11 @@ var BlogSideBar = React.createClass({
 
 		return(
 			<div className="blog-categories text-right">
-				<h3>Artikel Populer</h3>
+				<h3 className="category">Artikel Populer</h3>
 				<ul className="blog-category-item text-right">
 					{populerItems.map(item)}
 				</ul>
-				<h3>Artikel Terbaru</h3>
+				<h3 className="category">Artikel Terbaru</h3>
 				<ul className="blog-category-item text-right">
 					{latestItems.map(item)}
 				</ul>

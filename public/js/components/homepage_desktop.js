@@ -109,6 +109,17 @@ var PostingItem = React.createClass({
             actionType: 'homepage-change-change-item',
             item: item
         })
+
+        $("html").animate({scrollTop: 0}, '600');
+    },
+    expiredDateDisplay: function(){
+        let item = this.props.item
+
+        if(!_.isEmpty(item.expiredDate)){
+            return item.expiredDate + " (expired date)"
+        }else{
+            return "-"
+        }
     },
     render: function(){
         let item = this.props.item
@@ -119,21 +130,32 @@ var PostingItem = React.createClass({
         let province = item.province
         let itemSelected = this.props.itemSelected
         let itemClassName = ''
+        let expiredDateDisplay = this.expiredDateDisplay()
 
         if(item.id == itemSelected.id){
-            itemClassName = 'post-item active'
+            itemClassName = 'post-item-v2 active'
         }else{
-            itemClassName = 'post-item'
+            itemClassName = 'post-item-v2'
         }
 
         return(
             <div className={itemClassName} onClick={this.onClickItemSelected}>
-                <p className="position">{position.name}</p>
-                <p className="company-name">{company.name}</p>
-                <p className="location">
-                    <span className="pull-left"><strong>{expiredDate}</strong></span>
-                    <span className="pull-right">{city.name} - {province.name}</span>
-                </p>
+                <div className="row">
+                    <div className="col-sm-4">
+                        <div className="box-logo">
+                            <img src={"logos/" + item.logo} alt="logo-post-list" />
+                        </div>
+                    </div>
+                    <div className="col-sm-8">
+                        <div className="part-description">
+                            <div className="pointer" />
+                            <p><i className="fa fa-stethoscope" /> {position.name}</p>
+                            <p><i className="fa fa-home" /> {company.name}</p>
+                            <p><i className="fa fa-calendar" /> {expiredDateDisplay}</p>
+                            <p><i className="fa fa-map-marker" /> {city.name} - {province.name}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -226,16 +248,27 @@ var PostView = React.createClass({
             }else{
                 return(
                     <div className="post-view">
-                        <h1 className="text-center">{company.name}</h1>
+                        <h1>{company.name}</h1>
                         <hr/>
                         <div className="row">
-                            <div className="col-md-8">
-                                <p className="date"><label>Post Date:</label>  {postDate}</p>
-                                <p className="date"><label>Expired Date:</label>  {expiredDate}</p>
-                                <p className="date"><label>Sumber:</label>  <a href={sourceLink}>{sourceLink}</a></p>
-                                <p className="date"><label>Alamat:</label> {info.company.address}</p>
+                            <div className="post-info col-md-7">
+                                <div className="panel panel-default">
+                                    <div className="panel-heading">
+                                        Info Perusahaan
+                                    </div>
+                                    <div className="panel-body">
+                                        <p className="label">Tanggal Posting:</p>
+                                        <p className="value"><i className="fa fa-calendar" />{postDate}</p>
+                                        <p className="label">Tanggal Expired:</p>
+                                        <p className="value"><i className="fa fa-calendar-o" />{expiredDate}</p>
+                                        <p className="label">Sumber:</p>
+                                        <p className="value"><i className="fa fa-newspaper-o" /><a href={sourceLink}>{sourceLink}</a></p>
+                                        <p className="label">Alamat:</p>
+                                        <p className="value"><i className="fa fa-map-marker" />{info.company.address}</p>  
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-5 text-center">
                                 <div className="logo-view">
                                     {logoDisplay}
                                 </div>
@@ -243,8 +276,6 @@ var PostView = React.createClass({
                         </div>
                         <br/>
                         <div className="content">
-                            <p>Kami perusahaan {company.name} sedang membutuhkan tenaga kerja dengan kriteria sebagai berikut:</p>
-                            <br />
                             {requirements.map(postItemView)}
                         </div>
                     </div>
@@ -316,6 +347,27 @@ var PostItemView = React.createClass({
     propTypes: {
         requirement: React.PropTypes.object.isRequired
     },
+    ageDisplay: function(ageMin, ageMax){
+        let _ageMin = Number(ageMin)
+        let _ageMax = Number(ageMax)
+
+        if (_ageMin != 0 && _ageMax != 0){
+            return _ageMin + " - " + _ageMax + " Tahun"
+        }else if(_ageMin == 0 && _ageMax != 0){
+            return "Di Bawah " + _ageMax + " Tahun"
+        }else if(_ageMin !=0 && _ageMax == 0){
+            return "Di Atas " + _ageMin + " Tahun"
+        }else{
+            return "Tidak Ada Batasan Usia"
+        }
+    },
+    salaryDisplay: function(salary){
+        if(salary != 0){
+            return "Rp. " + (salary * 1000).toFixed(2)
+        }else{
+            return "Di Rahasiakan"
+        }
+    },
     render: function(){
         let requirement = this.props.requirement
         let gender = requirement.gender
@@ -328,34 +380,52 @@ var PostItemView = React.createClass({
         let workDescriptions = requirement.work_descriptions
         let requireDescriptions = requirement.require_descriptions
         let salary = requirement.salary
+        let ageDisplay = this.ageDisplay(age_min, age_max)
+        let salaryDisplay = this.salaryDisplay(salary)
 
         return(
             <div>
-                <h4><u>{position.name}</u></h4>
-                <div className="row">
-                    <div className="col-md-4">
-                        <ul>
-                            <li>Jenis Kelamin: {gender} </li>
-                            <li>Usia: {age_min} - {age_max} Tahun</li>
-                            <li>Pendidikan: {educationLevel.name}</li>
-                            <li>Berpengalaman: {experience} Tahun</li>
-                            <li>Gaji: <strong>Rp.{(salary * 1000).toFixed(2)}</strong></li>
-                        </ul>
+                <div className="panel panel-default">
+                    <div className="panel-heading">
+                        <i className="fa fa-stethoscope" />{position.name}
                     </div>
-                    <div className="col-md-8">
-                        <u>Description:</u>
-                        <ul>
-                            {requireDescriptions.map(function(item, key){
-                                return(<li key={key}>{item.description}</li>)
-                            })}
-                        </ul>
-                        <br/>
-                        <u>Pekerjaan:</u>
-                        <ul>
-                            {workDescriptions.map(function(item, key){
-                                return(<li key={key}>{item.description}</li>)
-                            })}
-                        </ul>
+                    <div className="panel-body">
+                        <div className="row">
+                            <div className="col-md-4">
+                                <div className="panel panel-default">
+                                    <div className="panel-body">
+                                        <p className="label">Jenis Kelamin</p>
+                                        <p className="value"><i className="fa fa-intersex" />{gender}</p>
+                                        <p className="label">Usia</p>
+                                        <p className="value"><i className="fa fa-heart" />{ageDisplay}</p>
+                                        <p className="label">Pendidikan</p>
+                                        <p className="value"><i className="fa fa-university" />{educationLevel.name}</p>
+                                        <p className="label">Pengalaman</p>
+                                        <p className="value"><i className="fa fa-briefcase" />{experience} Tahun</p>
+                                        <p className="label">Gaji</p>
+                                        <p className="value"><i className="fa fa-money" />{salaryDisplay}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-8">
+                                <div className="panel panel-default">
+                                    <div className="panel-body">
+                                        {requireDescriptions.map(function(item, key){
+                                            return(<p className="value" key={key}><i className="fa fa-check-square" />{item.description}</p>)
+                                        })}
+                                    </div>
+                                </div>
+                                <div className="panel panel-default">
+                                    <div className="panel-body">
+                                        {workDescriptions.map(function(item, key){
+                                            return(
+                                                <p  className="value" key={key}><i className="fa fa-check-circle" />{item.description}</p>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

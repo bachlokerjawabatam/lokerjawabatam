@@ -97,7 +97,7 @@ class AdminController extends Controller
         $blog->title = $params->blog['title'];
         $blog->category_id = $params->blog['category_id'];
         $blog->user_id = $params->blog['user_id'];
-        $blog->content = $params->blog['raw_content'];
+        $blog->content = $params->blog['content'];
         $blog->source_link = $params->blog['source_link'];
         
         $blog->save();
@@ -126,7 +126,7 @@ class AdminController extends Controller
         $blog->title = $params->blog['title'];
         $blog->category_id = $params->blog['category_id'];
         $blog->user_id = $params->blog['user_id'];
-        $blog->content = $params->blog['raw_content'];
+        $blog->content = $params->blog['content'];
         $blog->source_link = $params->blog['source_link'];
         $blog->save();
 

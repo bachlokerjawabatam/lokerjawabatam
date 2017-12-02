@@ -402,11 +402,11 @@ var ItemRequirement = React.createClass({
                         <input type="number" min={0} max={63} name={ageMinInputName} 
                             onChange={this.onChangeAgeMin}
                             value={item.age_min}
-                            className="form-control input-sm" required={true} />
+                            className="form-control input-sm"/>
                     </div>
                     <label className="col-sm-1">Max :</label>
                     <div className="col-sm-2">
-                        <input type="number" min={18} max={63} name={ageMaxInputName} 
+                        <input type="number" min={0} max={63} name={ageMaxInputName} 
                             onChange={this.onChangeAgeMax}
                             value={item.age_max}
                             className="form-control input-sm" />
@@ -703,7 +703,7 @@ var AdminFormLokerPost = React.createClass({
                         <div className="col-sm-8">
                             <input type="email" className="form-control input-sm" name="company[email]" 
                                 value={company.email}
-                                onChange={this.onChangeCompanyEmail} required={true} />
+                                onChange={this.onChangeCompanyEmail} />
                         </div>
                     </div>
                     <div className="form-group">
@@ -920,12 +920,6 @@ var BlogForm = React.createClass({
         })
     },
     onClickSubmit: function(){
-        let content = this.state.blog.content.getCurrentContent()
-        let rawContent = JSON.stringify(convertToRaw(content))
-        dispatcher.dispatch({
-            actionType: "blog-change-raw-content",
-            rawContent: rawContent
-        })
         dispatcher.dispatch({
             actionType: 'blog-change-show-modal-confirm',
             showModalConfirm: true
@@ -974,7 +968,7 @@ var BlogForm = React.createClass({
         }
 
         let actionUrl = id ? "/admin/update_blog" : "/admin/post_blog"
-        console.log("raw content", rawContent)
+        
         return(
             <div className="form-loker">
                 <h3>{ id ? "Edit Artikel" : "Form Artikel" }</h3>
@@ -1028,7 +1022,11 @@ var BlogForm = React.createClass({
                     <div className="form-group">
                         <label className="col-sm-3 control-label"> Konten Artikel</label>
                         <div className="col-sm-8">
-                            <LokerjawabatamEditor editMode={id ? true : false} />
+                            <textarea rows={30} className="form-control input-sm" 
+                                name="blog[content]" 
+                                required={true} 
+                                value={contentValue}
+                                onChange={this.onChangeContent} />
                         </div>
                     </div>
                     <input type="hidden" name={rawContentInputName} value={rawContent} />
@@ -1072,7 +1070,7 @@ var BlogPreview = React.createClass({
                     <img src={picture} />
                     <h1>{title}</h1>
                     <div className="content">
-                        <PreviewComponentEditor contentRaw={blogContent} />
+                        <div className="content" dangerouslySetInnerHTML={{__html:blogContent}} />
                     </div>
                 </div>
         }else{

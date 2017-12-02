@@ -8,7 +8,6 @@ var blankItem = {
 					id: null,
                     age_min: null,
                     age_max: null,
-                    position: {},
                     education_level: {},
                     education_level_id: null, 
                     position_id: null,
@@ -91,7 +90,8 @@ dispatcher.register(
 			_requireDescription.key = keygen.getUniqueKey()
 			let _workDescription = Object.assign({}, blankDescription)
 			_workDescription.key = keygen.getUniqueKey()
-			let _requirement = Object.assign({}, blankItem) 
+			let _requirement = Object.assign({}, blankItem)
+			_requirement.position = {}
 			_requirement.key = keygen.getUniqueKey()
 			_requirement.work_descriptions = []
 			_requirement.require_descriptions = []
@@ -159,6 +159,7 @@ dispatcher.register(
 		}else if(payload.actionType == 'post-add-blank-requirement'){
 			//function add blank requriement
 			let _requirement = Object.assign({}, blankItem)
+			_requirement.position = {}
 			_requirement.key = keygen.getUniqueKey()
 			_requirement.work_descriptions = []
 			_requirement.require_descriptions = []
@@ -262,7 +263,8 @@ dispatcher.register(
 			_requireDescription.key = keygen.getUniqueKey()
 			let _workDescription = Object.assign({}, blankDescription)
 			_workDescription.key = keygen.getUniqueKey()
-			let _requirement = Object.assign({}, blankItem) 
+			let _requirement = Object.assign({}, blankItem)
+			_requirement.position = {}
 			_requirement.key = keygen.getUniqueKey()
 			_requirement.work_descriptions = []
 			_requirement.require_descriptions = []

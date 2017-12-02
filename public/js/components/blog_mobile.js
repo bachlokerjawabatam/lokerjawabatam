@@ -1,3 +1,47 @@
+const {Editor, EditorState, convertFromRaw} = Draft;
+
+var BlogLabelMobile = React.createClass({
+	propTypes: {
+		iconClass: React.PropTypes.string,
+		label: React.PropTypes.string,
+		position: React.PropTypes.string,
+		link: React.PropTypes.string,
+		tooltip: React.PropTypes.string
+	},
+	getDefaultProps: function(){
+		return{
+			position: "left",
+			link: null
+		}
+	},
+	render: function(){
+		var label = this.props.label
+		let iconClass = this.props.iconClass
+		var position = this.props.position
+		var link = this.props.link
+		var labelTooltip = this.props.tooltip
+		
+		if (position == 'left'){
+			var boxLabelClass = 'blog-label-mobile pull-left'
+		}else if(position == 'right'){
+			var boxLabelClass = 'blog-label-mobile pull-right'
+		}
+
+		if (link){
+			var labelTag = <a href={link}>{label}</a>
+		}else{
+			var labelTag = <span>{label}</span>
+		}
+
+		return(
+			<div className={boxLabelClass}>
+				<i className={iconClass} />
+				{labelTag}
+			</div>
+		)
+	}
+})
+
 var BlogItemMobile = React.createClass({
 	propTypes: {
 		item: React.PropTypes.object,
@@ -16,6 +60,8 @@ var BlogItemMobile = React.createClass({
 			showBlogDetail: true
 		})
 
+		$("html").animate({scrollTop: 0}, '600');
+
 		$.ajax({
             url: '/tips_kerja/update_blog_visits',
             method: 'get',
@@ -31,6 +77,8 @@ var BlogItemMobile = React.createClass({
 			actionType: 'blog-change-show-blog-detail',
 			showBlogDetail: false
 		})
+
+		$("html").animate({scrollTop: 0}, '600');
 	},
 	render: function(){
 		let item = this.props.item
@@ -38,6 +86,19 @@ var BlogItemMobile = React.createClass({
 		let itemContent = item.content
 		let contentStyle = {marginTop: "50px"}
 		let completeContent = this.props.completeContent
+
+		if (itemContent.substr(0,1) == '{'){
+			let content = JSON.parse(itemContent)
+			let contentRaw = EditorState.createWithContent(convertFromRaw(content))
+
+			if (completeContent){
+				var contentDisplay = <Editor editorState={contentRaw} readOnly />
+			}else{
+				var contentDisplay = null
+			}
+		}else{
+			var contentDisplay = <div  style={contentStyle} dangerouslySetInnerHTML={{__html:itemContent}} />
+		}
 
 		if (completeContent){
 			contentStyle.display = "block"
@@ -53,6 +114,12 @@ var BlogItemMobile = React.createClass({
 				</button>
 		}
 
+		if (item.category.name == 'Tips Kerja'){
+			var categoryLinkName = 'https://www.lokerjawabatam.com/tips_kerja'
+		}else if(item.category.name == 'Ide Bisnis'){
+			var categoryLinkName = 'https://www.lokerjawabatam.com/ide_bisnis'
+		}
+
 		return(
 			<div className="blog-item-content">
 				<div className="blog-item-body">
@@ -61,7 +128,18 @@ var BlogItemMobile = React.createClass({
 					</div>
 					<br />
 					<span className="title">{item.title}</span>
-					<div style={contentStyle} dangerouslySetInnerHTML={{__html:itemContent}} />
+					<br />
+					<div>
+						<BlogLabelMobile key="label" iconClass="fa fa-tag" label={item.category.name}
+							 link={categoryLinkName} tooltip='label' />
+						<BlogLabelMobile key="viewers" iconClass="fa fa-eye" label={item.visits + " x dilihat"}
+							tooltip='viewers' />
+						<BlogLabelMobile key="post-date" iconClass="fa fa-calendar-o" label={item.created_at}
+							position="right" tooltip='tanggal posting' />
+					</div>
+					<div className="editor-read-only">
+						{contentDisplay}
+					</div>
 					{buttonDisplay}
 				</div>
 			</div>

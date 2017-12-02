@@ -15,7 +15,7 @@
 .header-mobile p{
 	font-size: 16px;
 	color: #008c8c;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 	margin-top: -30px;
 	margin-left: 200px;
 }
@@ -31,12 +31,13 @@
 .wall-about-us-mobile .col-xs-4{
 	background-color: #008c8c;
 	color: #fff;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 	height: 100%;
 }
 
 .wall-about-us-mobile h1{
 	font-size: 54px;
+	font-family: Archivo Black, Helvetica, sans-serif;
 }
 
 .wall-about-us-mobile h3{
@@ -44,13 +45,13 @@
 }
 
 .wall-about-us-mobile h5{
-	font-family: Freestyle Script;
-	font-size: 36px;
+	font-family: Pacifico, Helvetica, sans-serif;
+	font-size: 23px;
 }
 
 .about-us-content-mobile{
 	padding: 20px 200px;
-	font-family: segoe ui;
+	font-family: Bree Serif, Helvetica, sans-serif;
 }
 
 .about-us-content-mobile h1{
@@ -70,7 +71,7 @@
 
 .about-us-owner-mobile{
 	padding: 30px 100px;
-	font-family: segoe ui;
+	font-family: Pacifico, Helvetica, sans-serif;
 }
 
 .about-us-owner-mobile .owner-item{

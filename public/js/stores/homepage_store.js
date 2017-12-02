@@ -47,7 +47,7 @@ dispatcher.register(
 			_.each(lokerInfos, function(_item){
 				_.each(_item.requirements, function(_itemRequirement){
 					list = _itemRequirement
-					postData = {company: _item.company ,expiredDate: _item.expired_date, city: _item.city, province: _item.province}
+					postData = {company: _item.company ,expiredDate: _item.expired_date, city: _item.city, province: _item.province, logo: _item.logo}
 					_.assign(list, postData)
 					lokerList.push(list)
 				})

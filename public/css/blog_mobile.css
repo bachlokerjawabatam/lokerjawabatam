@@ -9,7 +9,7 @@
 .blog-item-header{
 	line-height: 120px;
 	border-bottom: 2px solid #dedede;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 	font-size: 45px;
 	padding-left: 50px;
 	color: #008c8c;
@@ -18,30 +18,29 @@
 
 .blog-item-body{
 	padding: 20px;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .blog-item-body p{
 	font-size: 40px;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 	text-align: justify;
 	text-indent: 40px;
 }
 
 .blog-item-body ol li{
 	font-size: 43px;
-	font-family: segoe ui;
 }
 
 .blog-item-body ul li{
 	font-size: 43px;
-	font-family: segoe ui;
 }
 
 .blog-item-body span.title{
 	font-size: 85px;
-	font-family: segoe ui;
 	text-align: left;
 	font-weight: 400;
+	font-family: Bree Serif, Helvetica, sans-serif;
 }
 
 .blog-item-body button{
@@ -49,10 +48,39 @@
 	width: 100%;
 	height: 140px;
 	font-size: 50px;
-	font-family: segoe ui;
 	margin-bottom: 30px;
 }
 
+.blog-item-body .editor-read-only span,
+.blog-item-body .editor-read-only p,
+.blog-item-body ol li,
+.blog-item-body ul li, {
+	font-size: 40px;
+}
+
+.blog-item-body .editor-read-only h1{
+	font-size: 90px;
+}
+
+.blog-item-body .editor-read-only h2{
+	font-size: 80px;
+}
+
+.blog-item-body .editor-read-only h3{
+	font-size: 70px;
+}
+
+.blog-item-body .editor-read-only h4{
+	font-size: 60px;
+}
+
+.blog-item-body .editor-read-only h5{
+	font-size: 50px;
+}
+
+.blog-item-body .editor-read-only h6{
+	font-size: 40px;
+}
 
 .blog-image-mobile{
 	width: 100%;
@@ -68,7 +96,7 @@
 
 .blog-item-more h4{
 	font-size: 40px;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 	font-weight: 100;
 }
 
@@ -94,7 +122,7 @@
 	font-size: 50px;
 	color: #fff;
 	font-weight: 400;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .side-menu-item li{
@@ -102,7 +130,7 @@
 	font-size: 40px;
 	margin: 5px 0px 15px 20px;
 	color: #fff;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .side-menu-item li i{
@@ -116,3 +144,25 @@
 	font-size: 25px;
 }
 
+.blog-label-mobile{
+	min-width: 100px;
+	line-height: 50px;
+	margin-right: 30px;
+}
+
+.blog-label-mobile i{
+	margin-right: 20px;
+	font-size: 36px;
+	color: #008c8c;
+}
+
+.blog-label-mobile span{
+	font-size: 32px;
+	color: darkgrey;
+}
+
+.blog-label-mobile a{
+	font-size: 32px;
+	color: darkgrey;
+	text-decoration: none;
+}

@@ -1,6 +1,6 @@
 .homepage-desktop {
 	font-size: 14px;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .homepage-desktop .header{ 
@@ -49,8 +49,7 @@
 }
 
 .active {
-	background-color: #008c8c;
-	color: #fff;
+	background-color: whitesmoke;
 }
 
 .post-item .position{
@@ -70,9 +69,39 @@
 	margin-top: 100px; 
 }
 
+.post-view .panel-default .panel-heading{
+	background-color: #008c8c;
+	color: #fff;
+}
+
+.post-view .panel-default .panel-heading i{
+	margin-right: 10px;
+	font-size: 14px;
+}
+
+.post-view .panel-default .panel-body{
+	color: #008c8c;
+}
+
+.post-view .panel-default .panel-body .label{
+	color: darkgrey;
+	font-size: 12px;
+}
+
+.post-view .panel-default .panel-body .value{
+	color: #008c8c;
+	font-weight: 500;
+	margin: 0px 0px 5px 10px;
+	font-size: 14px;
+}
+
+.post-view .panel-default .panel-body .value i{
+	margin-right: 10px;
+}
+
 .post-view .logo-view img{
-	width: 150px;
-	height: 150px;
+	width: 250px;
+	height: 250px;
 }
 
 .post-view .content{
@@ -101,7 +130,7 @@
 
 .menu-modal{
 	width: 800px;
-	font-family: segoe ui;
+	font-family: Bree Serif, Helvetica, sans-serif;
 }
 
 .menu-modal .box-menu-modal{
@@ -161,4 +190,48 @@
 
 .menu-modal .close-modal{
 	float: right;
+}
+
+.post-item-v2{
+	cursor: pointer;
+}
+
+.post-item-v2 .box-logo{
+	width: 140px;
+	height: 140px;
+	margin: 10px;
+	text-align: center;
+	padding: 5px;
+	border: 2px solid #008c8c;
+}
+
+.post-item-v2 .box-logo img{
+	width: 100%;
+	height: 100%;
+}
+
+.post-item-v2 .part-description{
+	width: 90%;
+	height: 140px;
+	margin: 10px;
+	padding: 10px 5px 10px 20px;
+	background-color: #008c8c;
+	color: #fff;
+	font-size: 14px;
+	font-weight: 350;
+}
+
+.post-item-v2 .part-description .pointer{
+	position: absolute;
+	margin: 35px -40px;
+	width: 0;
+	height: 0;
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+	border-right: 20px solid #008c8c;
+}
+
+.post-item-v2 .part-description p i{
+	margin-right: 15px;
+	font-size: 16px;
 }

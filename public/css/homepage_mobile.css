@@ -1,5 +1,5 @@
 .homepage-mobile{
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 	padding: 0px;
 	width: 100%;
 }
@@ -110,13 +110,53 @@
 }
 
 .job-view-mobile{
-	padding: 120px 20px 20px 20px;
+	padding: 120px 20px 100px 20px;
 	width: 100%;
 	height: 2000px;
 	background-color: #fff;
 	color: #008c8c !important;
 	z-index: 9;
 	margin-left: 100%;
+}
+
+.job-view-mobile .blank-div{
+	height: 200px;
+}
+
+.job-view-mobile .panel-default .panel-heading{
+	background-color: #008c8c;
+	color: #fff;
+}
+
+.job-view-mobile .panel.panel-default .panel-heading{
+	font-size: 40px;
+}
+
+.job-view-mobile .panel.panel-default .panel-heading i{
+	margin-right: 10px;
+	font-size: 32px;
+}
+
+.job-view-mobile .panel.panel-default .panel-body{
+	color: #008c8c;
+}
+
+.job-view-mobile .panel.panel-default .panel-body .label{
+	color: darkgrey;
+	font-size: 32px;
+}
+
+.job-view-mobile .panel.panel-default .panel-body .value{
+	color: #008c8c;
+	font-weight: 500;
+	margin: 0px 0px 5px 10px;
+	font-size: 32px;
+}
+
+.job-view-mobile .panel.panel-default .panel-body .value i{
+	margin-right: 10px;
+	color: #008c8c;
+	font-size: 32px;
 }
 
 .blank-post i{
@@ -176,4 +216,49 @@
 	font-size: 56px;
 	color: #008c8c;
 	margin: 40px 0px 40px 0px;
+}
+
+
+.item-list-v2{
+	cursor: pointer;
+}
+
+.item-list-v2 .box-logo{
+	width: 250px;
+	height: 250px;
+	margin: 10px;
+	text-align: center;
+	padding: 5px;
+	border: 2px solid #008c8c;
+}
+
+.item-list-v2 .box-logo img{
+	width: 100%;
+	height: 100%;
+}
+
+.item-list-v2 .part-description{
+	width: 100%;
+	height: 250px;
+	margin: 10px;
+	padding: 10px 5px 10px 20px;
+	background-color: #008c8c;
+	color: #fff;
+	font-size: 24px;
+	font-weight: 350;
+}
+
+.item-list-v2 .part-description .pointer{
+	position: absolute;
+	margin: 70px -55px;
+	width: 0;
+	height: 0;
+	border-top: 40px solid transparent;
+	border-bottom: 40px solid transparent;
+	border-right: 40px solid #008c8c;
+}
+
+.item-list-v2 .part-description p i{
+	margin-right: 15px;
+	font-size: 24px;
 }

@@ -2,44 +2,92 @@ var Requirement = React.createClass({
 	propTypes: {
 		item: React.PropTypes.object
 	},
+	ageDisplay: function(ageMin, ageMax){
+        let _ageMin = Number(ageMin)
+        let _ageMax = Number(ageMax)
+
+        if (_ageMin != 0 && _ageMax != 0){
+            return _ageMin + " - " + _ageMax + " Tahun"
+        }else if(_ageMin == 0 && _ageMax != 0){
+            return "Di Bawah " + _ageMax + " Tahun"
+        }else if(_ageMin !=0 && _ageMax == 0){
+            return "Di Atas " + _ageMin + " Tahun"
+        }else{
+            return "Tidak Ada Batasan Usia"
+        }
+    },
+    salaryDisplay: function(salary){
+        if(salary != 0){
+            return "Rp. " + (salary * 1000).toFixed(2)
+        }else{
+            return "Di Rahasiakan"
+        }
+    },
 	render: function(){
 		let requirement = this.props.item
 		let position = requirement.position
 		let educationLevel = requirement.education_level
+		let gender = requirement.gender
+		let age_min = requirement.age_min
+		let age_max = requirement.age_max
+		let experience = requirement.experience
+		let salary = requirement.salary
 		let requireDescriptions = requirement.require_descriptions
 		let workDescriptions = requirement.work_descriptions
+		let ageDisplay = this.ageDisplay(age_min, age_max)
+		let salaryDisplay = this.salaryDisplay(salary)
 
 		return(
 			<div>
-				<p className="position">{position.name}</p>
-				<p className="salary">Rp. {(requirement.salary * 1000).toFixed(2)}</p>
-				<p className="requirement"><u>Persyaratan Umum</u></p>	
-				<ul className="requirement-list">
-					<li>Usia: {requirement.age_min - requirement.age_max} Tahun</li>
-					<li>JenisKelamin: {requirement.gender}</li>
-					<li>Pendidikan: {educationLevel.name}</li>
-					<li>Pengalaman: min {requirement.experience} Tahun</li>
-				</ul>
-				<p className="requirement"><u>Persyaratan Khusus</u></p>	
-				<ul className="requirement-list">
-					{
-						requireDescriptions.map(function(item, key){
-							return(
-								<li ke={key}>{item.description}</li>
-							)
-						})
-					}
-				</ul>
-				<p className="requirement"><u>Deskripsi Pekerjaan</u></p>	
-				<ul className="requirement-list">
-					{
-						workDescriptions.map(function(item, key){
-							return(
-								<li key={key}>{item.description}</li>
-							)
-						})
-					}
-				</ul>
+				<div className="panel panel-default">
+					<div className="panel-heading">
+						{position.name}
+					</div>
+					<div className="panel-body">
+						<div className="panel panel-default">
+							<div className="panel-body">
+								<p className="label">Jenis Kelamin</p>
+                                <p className="value"><i className="fa fa-intersex" />{gender}</p>
+                                <p className="label">Usia</p>
+                                <p className="value"><i className="fa fa-heart" />{ageDisplay}</p>
+                                <p className="label">Pendidikan</p>
+                                <p className="value"><i className="fa fa-university" />{educationLevel.name}</p>
+                                <p className="label">Pengalaman</p>
+                                <p className="value"><i className="fa fa-briefcase" />{experience} Tahun</p>
+                                <p className="label">Gaji</p>
+                                <p className="value"><i className="fa fa-money" />{salaryDisplay}</p>
+							</div>
+						</div>
+						<div className="panel panel-default">
+							<div className="panel-heading">
+								Kualifikasi Pekerjaan
+							</div>
+							<div className="panel-body">
+								{
+									requireDescriptions.map(function(item, key){
+										return(
+											<p className="value" key={key}><i className="fa fa-check-square" />{item.description}</p>
+										)
+									})
+								}
+							</div>
+						</div>
+						<div className="panel panel-default">
+							<div className="panel-heading">
+								Deskripsi Pekerjaan
+							</div>
+							<div className="panel-body">
+								{
+									workDescriptions.map(function(item, key){
+										return(
+											<p className="value" key={key}><i className="fa fa-check-circle" />{item.description}</p>
+										)
+									})
+								}	
+							</div>
+						</div>		
+					</div>
+				</div>	
 			</div>
 		)
 	},
@@ -59,6 +107,8 @@ var JobViewMobile = React.createClass({
 		$(".job-view-mobile").animate({
 			marginLeft: '100%'
 		})
+
+		$("html").animate({scrollTop: 0}, '600');
 	},
 	render: function(){
 		let closeStyle = {color: '#008c8c'}
@@ -67,6 +117,7 @@ var JobViewMobile = React.createClass({
         let company = info.company
         let postDate = info.created_at
         let expiredDate = info.expired_date
+        let sourceLink = info.sourceLink
         let requirements = info.requirements
         let logoUrl = "/logos/" + info.logo
 
@@ -96,15 +147,26 @@ var JobViewMobile = React.createClass({
 					<div className="box-job-view text-left">
 						<p className="company">{company.name}</p>
 						{logoDisplay}
-						<p className="email">{company.email}</p>
-						<p className="address">{company.address}</p>
-						
-						<p className="basa-basi">
-							Dibutuhkan Karyawan/ Karyawati untuk mengisi posisi di bawah ini dengan beberapa persyaratan 
-							yang dijelaskan berikut :
-						</p>
+						<div className="panel panel-default">
+							<div className="panel-heading">
+								info Perusahaan
+							</div>
+							<div className="panel-body">
+								<div className="panel-body">
+                                    <p className="label">Tanggal Posting:</p>
+                                    <p className="value"><i className="fa fa-calendar" />{postDate}</p>
+                                    <p className="label">Tanggal Expired:</p>
+                                    <p className="value"><i className="fa fa-calendar-o" />{expiredDate}</p>
+                                    <p className="label">Sumber:</p>
+                                    <p className="value"><i className="fa fa-newspaper-o" /><a href={sourceLink}>{sourceLink}</a></p>
+                                    <p className="label">Alamat:</p>
+                                    <p className="value"><i className="fa fa-map-marker" />{info.company.address}</p>  
+                                </div>
+							</div>
+						</div>
 						{requirements.map(infoRequirement)}
 					</div>
+					<div className="blank-div" />
 				</div>
 			)
         }
@@ -127,7 +189,18 @@ var JobListItem = React.createClass({
 		$(".job-view-mobile").animate({
 			marginLeft: '0px'
 		})
+
+		$(".box-job-view").animate({scrollTop: 0}, '600');
 	},
+	expiredDateDisplay: function(){
+        let item = this.props.item
+
+        if(!_.isEmpty(item.expiredDate)){
+            return item.expiredDate + " (expired date)"
+        }else{
+            return "-"
+        }
+    },
 	render: function(){
 		let item = this.props.item
         let position = item.position
@@ -136,13 +209,26 @@ var JobListItem = React.createClass({
         let city = item.city
         let province = item.province
         let itemSelected = this.props.itemSelected
+        let expiredDateDisplay = this.expiredDateDisplay()
 
 		return(
-			<div className="item-list" onClick={this.onClickItemList}>
-				<div className="company">{company.name}</div>
-				<div className="position">{position.name}</div>
-				<div className="location">{province.name} - {city.name}</div>
-				<div className="location">Expired : {expiredDate}</div>
+			<div className="item-list-v2" onClick={this.onClickItemList}>
+				<div className="row">
+                    <div className="col-sm-4">
+                        <div className="box-logo">
+                            <img src={"logos/" + item.logo} alt="logo-post-list" />
+                        </div>
+                    </div>
+                    <div className="col-sm-8">
+                        <div className="part-description">
+                            <div className="pointer" />
+                            <p><i className="fa fa-stethoscope" /> {position.name}</p>
+                            <p><i className="fa fa-home" /> {company.name}</p>
+                            <p><i className="fa fa-calendar" /> {expiredDateDisplay}</p>
+                            <p><i className="fa fa-map-marker" /> {city.name} - {province.name}</p>
+                        </div>
+                    </div>
+                </div>
 			</div>
 		)
 	}

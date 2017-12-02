@@ -1,5 +1,5 @@
 .admin-page{
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .admin-page .header{
@@ -149,7 +149,7 @@
 
 .blog-preview .box-preview h1{
 	font-size: 40px;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .posting-menu{
@@ -214,7 +214,7 @@
 }
 
 .prompt-modal-confirm{
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .prompt-modal-confirm .box-icon{

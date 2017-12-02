@@ -17,21 +17,21 @@ var ContactLink = React.createClass({
 				<div className="row text-center">
 					<div className="col-sm-2">
 						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("facebook.lokerjawabatam")}>
-							<i className="fa fa-facebook" onClick={this.onClickLink.bind(this, "http://facebook.lokerjawabatam")} />
+							<i className="fa fa-facebook" onClick={this.onClickLink.bind(this, "https://www.facebook.com/lokerjawabatam")} />
 						</OverlayTrigger>
 					</div>
 					<div className="col-sm-2">
 						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("instagram.lokerjawabatam")}>
-							<i className="fa fa-instagram" onClick={this.onClickLink.bind(this, "http://instagram.lokerjawabatam")}/>
+							<i className="fa fa-instagram" onClick={this.onClickLink.bind(this, "https://www.instagram.com/lokerjawabatam")}/>
 						</OverlayTrigger>
 					</div>
 					<div className="col-sm-2">
-						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("085762635185")}>
+						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("085736763079")}>
 							<i className="fa fa-whatsapp" />
 						</OverlayTrigger>
 					</div>
 					<div className="col-sm-2">
-						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("085762635185")}>
+						<OverlayTrigger placement="bottom" overlay={flexibleTooltip("085736763079")}>
 							<i className="fa fa-phone" />
 						</OverlayTrigger>
 					</div>

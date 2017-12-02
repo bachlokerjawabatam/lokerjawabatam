@@ -2,20 +2,41 @@
 	padding: 0px;
 }
 
+.welcome-desktop{
+	font-family: lato, helvetica, sans-serif;
+}
+
 .welcome-desktop .header{
-	height: 120px;
-	border-bottom: 2px solid #008c8c;
+	height: 100px;
 	position: fixed;
 	z-index: 99;
 	width: 100%;
 	background-color: #fff;
 }
 
+.welcome-desktop .header .btn.btn-lg.btn-success{
+	margin-top: 25px;
+	margin-left: 50px;
+}
+
+.welcome-desktop .header .fa.fa-search{
+	font-size: 24px;
+	color: #dedede;
+	line-height: 100px;
+	margin-right: -120px;
+	cursor: pointer;
+}
+
+.welcome-desktop .header .fa.fa-search:hover{
+	color: #008c8c;
+}
+
 .body-image{
-	margin-top: 120px;
-	padding: 0px 40px;
+	margin-top: 100px;
 	width: 100%;
-	height: 500px;
+	height: 700px;
+	position: fixed;
+	z-index: -99;
 }
 
 .body-image img{
@@ -26,45 +47,36 @@
 .welcome-menu{
 	margin: 30px 20px 0px;
 	width: 700px;
+	color: #dedede;
+}
+
+.welcome-menu .col-sm-2 a{
+	text-decoration: none;
+	cursor: pointer;
+	color: #dedede;
+}
+
+.welcome-menu .col-sm-2 a:hover{
+	cursor: pointer;
 	color: #008c8c;
 }
 
-.welcome-menu .col-sm-2:hover{
-	font-weight: 600;
-	cursor: pointer;
-}
-
 .welcome-menu i{
-	font-size: 28px;
+	font-size: 22px;
 }
 
 .welcome-menu span{
 	font-size: 14px;
-	font-family: segoe ui;
+	font-family: Bree Serif, Helvetica, sans-serif;
 }
 
 .welcome-desktop .header img{
 	margin: 30px 50px;
 }
 
-.medsos{
-	width: 320px;
-	line-height: 60px;
-	padding: 5px 20px;
-	position: fixed;
-	z-index: 99;
-	top: 120px;
-	right: 30px;
-}
 
-.medsos i{
-	font-size: 26px;
-	color: #008c8c;
-	cursor: pointer;
-}
-
-.medsos i:hover{
-	color: #000;
+.welcome-desktop span{
+	margin-top: 30px;
 }
 
 .title-animate{
@@ -75,8 +87,155 @@
 }
 
 .title-animate h1{
-	font-family: segoe ui;
+	font-family: Archivo Black, Helvetica, sans-serif;
 	font-size: 80px;
 	color: #008c8c;
 	text-shadow: 4px 4px 8px #ededed;
+}
+
+.welcome-desktop .service-description{
+	background-color: #008c8c;
+	width: 100%;
+	height: 600px;
+	margin-top: 650px;
+	padding: 30px 40px 0px 40px;
+	color: #fff;
+}
+
+.welcome-desktop .service-description h1{
+	font-family: bree serif;
+	margin-bottom: 30px;
+}
+
+.welcome-desktop .service-description .item-service{
+	text-align: left;
+	font-family: lato;
+}
+
+.welcome-desktop .service-description .item-service h3{
+	text-align: center;
+	font-family: bree serif;
+	margin-bottom: 20px;
+}
+
+.welcome-desktop .service-description .item-service .icon{
+	min-width: 150px;
+	text-align: center;
+	margin-right: 30px;
+}
+
+.welcome-desktop .service-description .item-service i{
+	font-size: 90px;
+}
+
+.welcome-desktop .service-description .item-service .description{
+	padding: 10px 0px;
+	font-size: 16px;
+	max-width: 350px;
+	text-align: justify;
+}
+
+.welcome-desktop .summary-loker{
+	background-color: #fff;
+	padding: 40px;
+	font-family: bree serif;
+	color: #ccc;
+	text-align: center;
+}
+
+.welcome-desktop .summary-loker h1{
+	margin-bottom: 50px;
+}
+
+.welcome-desktop .summary-blog{
+	background-color: whitesmoke;
+	padding: 40px 150px;
+	font-family: bree serif;
+	color: #000;
+	text-align: center;
+}
+
+.welcome-desktop .summary-blog h1{
+	margin-bottom: 50px;
+}
+
+.welcome-desktop .summary-blog .item-blog{
+	margin-bottom: 20px;
+}
+
+.welcome-desktop .summary-blog .item-blog .body{
+	width: 100%;
+	height: 180px;
+}
+
+.welcome-desktop .summary-blog .item-blog .body img{
+	width: 100%;
+	height: 100%;
+	border-radius: 10px 10px 0px 0px;
+}
+
+.welcome-desktop .summary-blog .item-blog .footer{
+	background-color: #008c8c;
+	color: #fff;
+	font-size: 14px;
+	padding: 10px 10px 20px 10px;
+	font-family: lato;
+	border-radius: 0px 0px 10px 10px;
+}
+
+.welcome-desktop .summary-blog .item-blog .footer .category{
+	font-size: 18px;
+	font-family: bree serif;
+}
+
+.welcome-desktop .welcome-footer{
+	background-color: #fff;
+	border-top: 1px solid #dedede;
+	padding: 50px;
+}
+
+.welcome-desktop .welcom-footer{
+	font-family: lato;
+}
+
+.welcome-desktop .welcome-footer .col-md-6{
+	text-align: right;
+}
+
+.welcome-desktop .welcome-footer .logo-footer{
+	width: 220px;
+	height: 45px;
+}
+
+.welcome-footer .medsos-link i{
+	margin-top: 60px;
+	margin-left: 35px;
+	color: #ccc;
+	font-size: 26px;
+	cursor: pointer;
+}
+
+.welcome-footer .medsos-link i:hover{
+	color: #008c8c;
+}
+
+.welcome-footer .col-md-3 h3{
+	margin-bottom: 30px;
+	font-family: bree serif, helvetica, sans-serif;
+}
+
+.welcome-footer .col-md-3 ul li{
+	list-style: none;
+	font-size: 18px;
+	margin: 10px 5px 10px -30px;
+}
+
+.welcome-footer .col-md-3 ul li a{
+	text-decoration: none;
+	color: #ccc;
+}
+
+.welcome-footer .col-md-3 ul li a i{
+	font-size: 22px;
+	margin-right: 10px;
 }

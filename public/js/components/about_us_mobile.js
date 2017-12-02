@@ -79,6 +79,9 @@ var AboutUsOwner = React.createClass({
 })
 
 var AboutUsFooter = React.createClass({
+	onClickLink: function(textLink){
+		window.open(textLink, '_blank')
+	},
 	render: function(){
 		return(
 			<div className="about-us-footer-mobile text-center">
@@ -86,8 +89,8 @@ var AboutUsFooter = React.createClass({
 					<img src="/image/logo-lokerjawabatam.png" />
 				</div>
 				<div className="footer-link">
-					<i className="fa fa-facebook" />
-					<i className="fa fa-instagram" />
+					<i className="fa fa-facebook" onClick={this.onClickLink.bind(this, "https://www.facebook.com/lokerjawabatam")} />
+					<i className="fa fa-instagram" onClick={this.onClickLink.bind(this, "https://www.instagram.com/lokerjawabatam")} />
 					<i className="fa fa-whatsapp" />
 					<i className="fa fa-google" />
 					<i className="fa fa-phone" />

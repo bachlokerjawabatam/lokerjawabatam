@@ -5,11 +5,12 @@
 
 .blog-list-item{
 	padding: 30px 0px 50px 0px;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .blog-list-item h1{
 	font-size: 40px;
+	font-family: Bree Serif, Helvetica, sans-serif;
 }
 
 
@@ -24,6 +25,19 @@
 	height: 330px;
 }
 
+.blog-image .new-label-indicator{
+	position: relative;
+	margin-top: -100px;
+	margin-right: -22px;
+	width: 200px;
+	height: 70px;
+}
+
+.blog-image .new-label-indicator img{
+	width: 100%;
+	height: 100%;
+}
+
 .blog-categories{
 	position: fixed;
 	z-index: 99;
@@ -33,11 +47,15 @@
 	width: 310px;
 	height: 600px;
 	color: #fff;
-	font-family: segoe ui;
+	font-family: Lato, Helvetica, sans-serif;
 }
 
 .blog-categories h3{
 	margin: 30px 30px 10px 0px;
+}
+
+.blog-categories h3.category{
+	font-family: Bree Serif, Helvetica, sans-serif;
 }
 
 .blog-categories ul{
@@ -61,4 +79,27 @@
 .blog-categories li i{
 	margin-left: 20px;
 	font-size: 14px;
+}
+
+.blog-label{
+	min-width: 100px;
+	line-height: 35px;
+	margin-right: 20px;
+}
+
+.blog-label i{
+	margin-right: 15px;
+	font-size: 16px;
+	color: #008c8c;
+}
+
+.blog-label span{
+	font-size: 14px;
+	color: darkgrey;
+}
+
+.blog-label a{
+	font-size: 14px;
+	color: darkgrey;
+	text-decoration: none;
 }

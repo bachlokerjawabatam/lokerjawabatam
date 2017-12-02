@@ -25,13 +25,9 @@ class PostController extends Controller
         $content_type = session('content_type');
         
         if ($content_type == 'loker_batam'){
-            $loker_infos = Post::where('province_id', 1)->get();
+            $loker_infos = Post::where('province_id', 1)->orderBy('created_at', 'desc')->get();
         }else if($content_type == 'loker_jawa'){
-            $loker_infos = Post::where('province_id', '<>', 1)->get();
-        }else if ($content_type == 'blog'){
-            $loker_infos = Post::where('province_id', 1)->get();
-        }else{
-            $loker_infos = Post::where('province_id', 1)->get();
+            $loker_infos = Post::where('province_id', '<>', 1)->orderBy('created_at', 'desc')->get();
         }
 
         return view('post', [
@@ -47,9 +43,9 @@ class PostController extends Controller
         $content_type = session('content_type');
         
         if ($content_type == 'loker_batam'){
-            $loker_infos = Post::where('province_id', 1)->get();
+            $loker_infos = Post::where('province_id', 1)->orderBy('created_at', 'desc')->get();
         }else if($content_type == 'loker_jawa'){
-            $loker_infos = Post::where('province_id', '<>', 1)->get();
+            $loker_infos = Post::where('province_id', '<>', 1)->orderBy('created_at', 'desc')->get();
         }else if ($content_type == 'blog'){
             //get blog lists content
         }
