@@ -4,6 +4,7 @@
 
 @section('content')
     <script type="text/babel" src="{{URL::asset('js/components/welcome.js')}}"></script>
+    <script type="text/babel" src="{{URL::asset('js/components/welcome_desktop.js')}}"></script>
     <script type="text/babel" src="{{URL::asset('js/components/header.js')}}"></script>
     <script type="text/babel">
         const TABLET_MAX_SIZE = 991

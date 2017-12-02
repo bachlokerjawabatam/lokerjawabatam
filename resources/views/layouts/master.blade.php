@@ -3,7 +3,25 @@
     <head>
         <title>@yield('title')</title>
 
+        <meta name="description" content="Lokerjawabatam merupakan sebuah media digital serta mitra anda yang menjadi yang terdepan dan tercepat sebagai penyedia
+            informasi Lowongan Pekerjaan untuk daerah Jawa dan Batam. Kecepatan Penyebarluasan informasi menjadi
+            keunggulan kami. Kami sebagai media perantara "job search" berkualitas yang memudahkan mitra kami untuk pencarian karir 
+            yang sesuai. Kami berinisiatif untuk menambah pengetahuan anda terkait dunia kerja berharap dapat
+            meingkatkan kemampuan para pencari kerja agar lebih kompetitif. Dengan berbagai tips kami,
+            kami berharap agar para Pencari kerja dapat menggali atau mengoptimalkan potensi mereka.
+            Manfaat yang anda dapat dari artikel kami, merupakan nilai tersendiri bagi kami. Kami berharap untuk menggali potensi potensi bisnis yang sesuai dengan kemajuan dan teknologi
+            masa kini. Kami berusaha mendorong para pekerja untuk mengembangkan enterpreneurship. Kami mendorong
+            pekerja usia produktif mengembangkan bisnis kreatif." />
+        <meta name="keyword" conten="lowongan, kerja, pekerjaan, lowongan kerja, lowongan pekerjaan, lowongan-kerja, lowongan-pekerjaan, loker, loker jawa, loker batam, loker jawa tengah,
+            loker jawa barat, loker jawa timur, loker surabaya, loker solo, loker jogyakarta, loker semarang, lowongan kerja batam, lowongan kerja jawa, lowongan kerja jawa timur, lowongan kerja jawa tengah,
+            lowongan kerja surabaya, lowongan kerja solo, lowongan kerja semarang, lowongan kerja jogyakarta" />
+        <meta name="author" conten="Bachtiar Eko Wahyudi, Prihambodo Trio Agustian" />
+
+        <link href="{{URL::asset('image/favicon.png')}}" rel="shortcut icon">
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Bree Serif" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Archivo Black" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/admin.css')}}" rel="stylesheet" type="text/css">
         <link href="{{URL::asset('css/landing_page.css')}}" rel="stylesheet" type="text/css">
